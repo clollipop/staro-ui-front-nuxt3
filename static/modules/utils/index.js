@@ -25,11 +25,6 @@ function getCookie(name) {
  * @param {Date} date - 日期对象
  * @returns {string} - 格式化后的日期字符串
  */
-/**
- * 格式化日期时间
- * @param {Date|number} date - 日期对象或时间戳
- * @returns {string} - 格式化后的日期字符串
- */
 function formatDateTime(date) {
   let dateObj;
 

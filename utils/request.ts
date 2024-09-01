@@ -1,8 +1,6 @@
 import { hash } from "ohash";
 import { OuOMessage } from "@/static/modules/ouo";
-import { getUuid } from "@/static/modules/utils";
-import type { FetchError, FetchResponse, SearchParameters } from "ofetch";
-import type { AsyncData, UseFetchOptions } from "#app";
+import type { UseFetchOptions } from "#app";
 import type { KeysOf, PickFrom } from "#app/composables/asyncData";
 import type {Ref} from "vue";
 

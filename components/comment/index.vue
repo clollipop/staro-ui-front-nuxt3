@@ -8,9 +8,9 @@ import {OuOMessage} from "@/static/modules/ouo";
 const {path} = useRoute();
 const articlePath = <string>path.split("/").pop();
 const globalStore = useGlobalStore();
-const commentList = ref<CommentItem[]>([]  as CommentItem[]);
+const commentList = ref<any>();
 const comment = reactive<Comment>({} as Comment);
-const replyComment = ref<CommentItem>({} as CommentItem);
+const replyComment = ref();
 const showLoading = ref(false);
 
 /**
@@ -22,7 +22,6 @@ await getCommentList(1);
  * 正常评论弹窗
  */
 function toShowComment() {
-  replyComment.value = {} as CommentItem;
   globalStore.setShowComment(true);
 }
 

@@ -1,8 +1,6 @@
 <script lang="ts" setup>
 import {OuOPagination} from "@/static/modules/ouo";
 import {formatDateTime, getAttribute, setAttribute, tocGenerate} from "@/static/modules/utils";
-import type {Article} from "@/types/articleInterface";
-import type {PreviewColumn} from "@/types/columnInterface";
 import type {TocInterface} from "@/types/tocInterface";
 import {AuthorImpl} from "@/types/impl/author";
 import ArticleColumn from "@/components/column/ArticleColumn.vue";
@@ -11,6 +9,7 @@ import {useMenuStore} from "@/store/menuStore";
 import Prism from "prismjs";
 import {listColumnByArticleId} from "@/api/column";
 import {useArticleStore} from "@/store/articleStore";
+import {debounce} from "lodash";
 
 const {path} = useRoute();
 const menuState = useMenuStore();
@@ -19,20 +18,17 @@ const articleStore = useArticleStore();
 // 配置菜单
 menuState.setWithComment();
 const {$viewport} = useNuxtApp();
-const article = reactive<Article>({} as Article);
-const columnList = reactive<Array<PreviewColumn>>([]);
+const article = reactive<any>({});
+const columnList = reactive([]);
 const articleTocList = ref<TocInterface[]>([]);
 const authorInfo = new AuthorImpl();
 const nowIndex = ref(0);
-const articlePath = <string>path.split("/").pop();
+const articleId = <string>path.split("/").pop();
 
-/**
- * 数据获取
- */
-await getArticleByPath(articlePath);
-await getColumnByArticleId(article.id);
-
-function initToc() {
+// 获取评论
+// await getColumnByArticleId(article.id);
+// 初始化目录
+const initToc = () => {
   articleTocList.value = tocGenerate("#article-content");
   articleStore.setTocList(articleTocList.value);
   articleStore.setSelectTitle(articleTocList.value[0]?.id);
@@ -42,36 +38,37 @@ function initToc() {
  * 切换底部相关专栏滑窗
  * @param page
  */
-function switchColumn(page: any) {
+const switchColumn = (page: any) =>{
   nowIndex.value = page.value - 1;
 }
 
-async function getColumnByArticleId(articleId: string) {
+const getColumnByArticleId = async (articleId: string) =>{
   const newColumn = await listColumnByArticleId(articleId);
   Object.assign(columnList, newColumn);
 }
-
-async function getArticleByPath(path: string) {
-  const newArticle: Article = await getArticleDetail(path);
+// 获取文章数据
+const getArticleById = async (path: string) =>{
+  const newArticle = await getArticleDetail(path);
   if (!newArticle || !newArticle.id) {
     goBack();
     return;
   }
   Object.assign(article, newArticle);
+  console.log(article);
   return article;
 }
 
 /**
  * 动态修改主题
  */
-function setProperty() {
+const setProperty = ()=> {
   const articleEle = document.getElementById("article");
   if (!!article.style) {
     articleEle!.style.setProperty("--z-article-bg", article.style);
   }
 }
 
-function initStyle() {
+const initStyle = ()=> {
   const attribute = getAttribute("scroll");
   if (attribute !== "scroll") {
     setAttribute("scroll", "primary");
@@ -84,10 +81,13 @@ useSeoMeta({
 });
 
 onMounted(() => {
-  initToc();
-  Prism.highlightAll();
-  setProperty();
-  initStyle();
+  nextTick(debounce(async () => {
+    await getArticleById(articleId);
+    initToc();
+    Prism.highlightAll();
+    setProperty();
+    initStyle();
+  }, 300));
 });
 
 onUnmounted(() => {
@@ -105,7 +105,7 @@ onUnmounted(() => {
     </div>
     <div v-else class="article__mask relative h-[60vh] mobile:h-[280px]">
       <div class="article-cover h-full absolute">
-        <img :src="article.thumbnail" alt="">
+        <img :src="article.cover||article.videoUrl" alt="">
       </div>
       <div class="article__info w-full h-full absolute t-0 flex flex-col justify-center">
         <div class="article__info-title font-semibold leading-loose text-5xl mobile:text-2xl">
@@ -113,12 +113,13 @@ onUnmounted(() => {
         </div>
         <div class="font-size-small flex flex-col">
           <span class="my-2">
-            <span>创建时间：{{ formatDateTime(article?.createdDate) }}</span>
+            <span>创建时间：{{ formatDateTime(article?.createTime) }}</span>
             <span class="mx-2">|</span>
-            <span>最后更新：{{ formatDateTime(article?.updatedDate) }}</span>
+            <span>最后更新：{{ formatDateTime(article?.updateTime) }}</span>
           </span>
+          <!--    分类      -->
           <span class="article-meta__sort">
-            <span v-for="columnItem in columnList" class="sort-column">{{ columnItem.name }}</span>
+            <span v-for="(label,index) in article.labelName" :key="index" class="sort-column">{{label}}}</span>
           </span>
         </div>
       </div>
@@ -140,26 +141,28 @@ onUnmounted(() => {
     </div>
     <div class="article__container flex justify-end w-full p-5 mb-5 mobile:p-0">
       <div class="article__content px-5 w-full">
+        <!--   文章内容     -->
         <div id="article-content" class="article-content w-full rounded-t-xl leading-loose"
              v-html="article.content"
         >
         </div>
+        <!--    复制协议    -->
         <div class="copyright my-5 p-5 rounded-b-xl">
           <p v-html="authorInfo.copyright"></p>
         </div>
         <div class="column-list flex flex-col overflow-hidden relative">
-          <ArticleColumn
-              v-for="(column, index) in columnList"
-              v-show="index===nowIndex"
-              :column="column"
-          />
+<!--          <ArticleColumn-->
+<!--              v-for="(column, index) in columnList"-->
+<!--              v-show="index===nowIndex"-->
+<!--              :column="column"-->
+<!--          />-->
           <div class="w-full flex flex-row justify-center m-1">
             <OuOPagination v-if="columnList.length>=3" :total=3 :type="'dotted'" @onclick="switchColumn"/>
             <OuOPagination v-if="columnList.length===2" :total=2 :type="'dotted'" @onclick="switchColumn"/>
           </div>
         </div>
         <div class="box mt-3">
-          <Comment/>
+<!--         评论 <Comment/>-->
         </div>
       </div>
 
@@ -195,7 +198,7 @@ onUnmounted(() => {
     background: var(--z-article-bg);
 
     .article-cover {
-      opacity: .5;
+      opacity: .999;
       width: 65%;
       right: 0;
       margin: 0 -20% 0 auto;

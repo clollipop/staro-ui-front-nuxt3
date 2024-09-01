@@ -51,7 +51,7 @@ onMounted(async () => {
 <!--        </OuOTag>-->
 <!--      </div>-->
     </div>
-    <div class="grid auto-grid gap-9 gap-y-7 pc:gap-5 screen">
+    <div class="grid auto-grid gap-9 gap-y-7 pc:gap-5 screen cursor-pointer">
       <div
         v-for="article in list"
         :key="article.id"

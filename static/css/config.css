@@ -14,6 +14,7 @@ html {
     --z-select-bg: 231, 235, 240;
     --z-header-height: 60px;
     --ahzoo-menu-shadow: 4px 4px 6px 0 rgba(0, 0, 0, .1), -4px -4px 6px rgb(var(--z-common-bg));
+    --title-font-hover-color: #39c5bb;
 }
 
 [data-theme="dark"] {

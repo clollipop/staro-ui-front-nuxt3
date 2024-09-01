@@ -31,7 +31,7 @@ function scrollHandlerSetToc(scrollTop: number) {
 function scrollHandler() {
   try {
     const primary = document.getElementById("primary");
-    primary!.onscroll = (_.throttle(() => {
+    primary!.onscroll = _.throttle(() => {
       const article = document.getElementById("article");
       const column = document.getElementById("column-info");
 
@@ -49,7 +49,7 @@ function scrollHandler() {
           setAttribute("scroll", "top");
         }
       }
-    }, 200));
+    }, 200);
   } catch (e) {
     console.log(e);
   }
@@ -71,13 +71,21 @@ onMounted(() => {
 });
 </script>
 <template>
-  <NuxtLoadingIndicator/>
-  <div id="basic" class="hm-font font-size-medium w-full h-screen flex flex-col relative">
-    <div id="primary" class="w-full overflow-y-scroll">
-      <NuxtPage/>
-      <Footer/>
+  <div>
+    <NuxtLoadingIndicator />
+    <div
+      id="basic"
+      class="hm-font font-size-medium w-full h-screen flex flex-col relative"
+    >
+      <div
+        id="primary"
+        class="w-full overflow-y-scroll"
+      >
+        <NuxtPage />
+        <Footer />
+      </div>
+      <Menu />
     </div>
-    <Menu/>
   </div>
 </template>
 

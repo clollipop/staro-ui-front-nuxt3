@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {CalendarDaysIcon, RocketLaunchIcon} from "@heroicons/vue/24/solid";
 import {formatDateTime} from "@/static/modules/utils";
-import {useWebInfoStore} from "~/store/webInfoStore";
+import {useWebInfoStore} from "@/store/webInfoStore";
 
 const webInfoStore = useWebInfoStore();
 defineProps({
@@ -12,54 +12,63 @@ defineProps({
 });
 
 function showArticleDetail(article: any) {
-  navigateTo(`/p/${article.path}`);
+  navigateTo(`/p/${article.id}`);
 }
 </script>
 
 <template>
   <div
-      class="article-item block relative rounded-xl"
-      @click="showArticleDetail(article)"
+    class="article-item block relative rounded-xl"
+    @click="showArticleDetail(article)"
   >
     <div class="mask">
-      <div class="w-full h-full px-5 relative">
+      <div class="w-full h-full px-5 relative cover-article ">
         <img
-            :src="article.cover||webInfoStore.getRandomAvatar()"
-            width="100%"
-            height="100%"
-            class="cover rounded-t-2xl opacity-90"
-            alt=""
+          :src="article.cover||webInfoStore.getRandomAvatar()"
+          width="100%"
+          height="100%"
+          class="cover rounded-t-2xl opacity-90"
+          alt=""
         >
-        <div class="article-date w-full px-5 flex justify-end items-end absolute bottom-0 right-5 left-5">
+        <div class="article-date w-full px-6 flex justify-end items-end absolute bottom-1 right-7 left-6">
           <div
-              v-if="article.createdDate"
-              class="flex"
+            v-if="article.createTime"
+            class="flex"
           >
-            <span><CalendarDaysIcon class="small"/></span>
+            <span><CalendarDaysIcon class="small" /></span>
             <span>{{ formatDateTime(article.createTime) }}</span>
           </div>
           <div
-              v-else
-              class="flex"
+            v-else
+            class="flex"
           >
-            <span><RocketLaunchIcon class="small"/></span>
+            <span><RocketLaunchIcon class="small" /></span>
             <span>{{ formatDateTime(article.updateTime || "") }}</span>
           </div>
         </div>
       </div>
       <div class="label-category font-size-small flex opacity-0 absolute top-0 right-0">
-        <div class="label-category-item backdrop-blur-2 rounded-full ml-1">
+        <div class="label-category-item backdrop-blur-2 rounded-full ml-1 article-text-hover">
           {{ article.labelName || "未分类" }}
         </div>
       </div>
     </div>
-    <div class="article-info flex flex-col justify-center absolute backdrop-blur-2 rounded-b-xl px-5">
-      <div class="double-line font-semibold">
+    <div class="article-info flex flex-col justify-center absolute  rounded-b-xl px-5">
+      <div class="double-line font-semibold article-text-hover">
         {{ article.title }}
       </div>
-      <div class="article-abstract opacity-0 rounded-b-xl">
-        <p class="double-line">
+      <div class="article-abstract rounded-b-xl">
+        <p
+          class="double-line article-text-hover"
+          @click="showArticleDetail(article)"
+        >
           {{ article.digest }}
+        </p>
+        <p
+          class="double-line article-text-hover"
+          @click="showArticleDetail(article)"
+        >
+          #{{ article.sortName || "暂无" }}
         </p>
       </div>
     </div>
@@ -69,26 +78,37 @@ function showArticleDetail(article: any) {
 <style scoped lang="scss">
 .mask {
   height: 200px;
+  overflow: hidden;
 }
+.cover-article {
+  transition: transform 0.3s ease; /* 添加过渡效果 */
 
+  &:hover {
+    transform: scale(1.1); /* 鼠标悬停时放大1.1倍 */
+    ~.label-category .article-text-hover {
+      color: var(--title-font-hover-color);
+    }
+    >.article-date{
+      color: var(--title-font-hover-color) /* 添加这行 */
+    }
+  }
+}
+.article-text-hover:hover {
+  color: var(--title-font-hover-color);
+}
 .article-item {
   width: 100%;
   height: 360px;
   padding-top: 20px;
-  background-color: rgb(var(--z-common-bg));
+  background-color: rgb(var(--z-common-bg),.7);
 
     .article-info {
-      transition: all .3s;
-
       .article-date {
         display: none;
       }
-
       .article-abstract {
-        opacity: 1;
         line-height: 2;
         padding: 5px 1px 0;
-        transition: all .3s;
       }
     }
 
@@ -106,7 +126,6 @@ function showArticleDetail(article: any) {
   width: 100%;
   min-height: 90px;
   padding: 20px;
-  background-color: rgba(var(--z-common-bg), .7);
 }
 
 .article-date {
@@ -115,7 +134,6 @@ function showArticleDetail(article: any) {
   padding: 3px 5px;
   font-size: 80%;
   opacity: .7;
-  background: linear-gradient(to top, rgba(var(--z-deep-color), 55%) 0, rgba(var(--z-deep-color), 20%) 3rem, rgba(var(--z-deep-color), 10%) 4rem, #fff0);
   color: rgb(var(--z-primary-fontcolor));
 }
 

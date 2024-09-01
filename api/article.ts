@@ -28,8 +28,8 @@ export const listArticle = (pagination: number) => {
   return useDefaultRequest.getRawData(BASE_URL + "/page", params);
 };
 
-export function getArticleDetail(path: string): Promise<Article | null> {
-  return useDefaultRequest.get<Article>(BASE_URL + `/detail/${path}`);
+export function getArticleDetail(id: string): Promise<Article | null> {
+  return useDefaultRequest.get<Article>(BASE_URL + "/get", {id});
 }
 
 export function listArticleByColumnId(columnId: string, pagination: number): Promise<Article[] | null> {
