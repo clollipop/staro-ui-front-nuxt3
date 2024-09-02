@@ -2,14 +2,14 @@
 import {type PropType} from "vue";
 import type {PreviewArticle} from "@/types/articleInterface";
 import {formatDateTime} from "~/static/modules/utils";
-import {ChevronRightIcon} from "@heroicons/vue/24/solid"
+import {ChevronRightIcon} from "@heroicons/vue/24/solid";
 
 defineProps({
   index: Number,
   article: {
     type: Object as PropType<PreviewArticle>,
     required: true
-  },
+  }
 });
 </script>
 
@@ -17,11 +17,15 @@ defineProps({
   <div class="column-article-list w-full p-1 flex items-center">
     <div class="flex items-center justify-between mr-3 w-full">
       <div class="flex flex-col">
-        <div class="font-size-medium font-semibold my-1">{{ article.title }}</div>
-        <div class="opacity-80">{{ formatDateTime(article.updatedDate || "") }}</div>
+        <div class="font-size-medium font-semibold my-1">
+          {{ article.title }}
+        </div>
+        <div class="opacity-80">
+          {{ formatDateTime(article.updatedDate || "") }}
+        </div>
       </div>
       <div>
-        <ChevronRightIcon/>
+        <ChevronRightIcon />
       </div>
     </div>
   </div>

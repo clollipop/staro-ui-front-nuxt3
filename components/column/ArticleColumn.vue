@@ -19,14 +19,20 @@ function showArticleDetail(article: PreviewArticle) {
 <template>
   <div class="article-column box w-full h-full flex flex-col relative">
     <div class="column-info mx-2 pb-3 bottom-line flex flex-col justify-around">
-      <div class="title mb-3">{{ column.name }}</div>
+      <div class="title mb-3">
+        {{ column.name }}
+      </div>
       <div>{{ column.description }}</div>
     </div>
-    <div class="hover-transparent font-size-small flex flex-col justify-center pt-2 mx-1 cursor-pointer"
-         v-for="(article, index) in column.articleList"
+    <div
+      v-for="(article, index) in column.articleList"
+      :key="index"
+      class="hover-transparent font-size-small flex flex-col justify-center pt-2 mx-1 cursor-pointer"
     >
-      <ArticleSimpleItem :article="article" :index="index"
-                         @click="showArticleDetail(article)"
+      <ArticleSimpleItem
+        :article="article"
+        :index="index"
+        @click="showArticleDetail(article)"
       />
     </div>
   </div>

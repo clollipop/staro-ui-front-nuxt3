@@ -249,19 +249,20 @@ h1:after, h2:after, h3:after {
   height: 3px;
   bottom: -8px;
 }
-
+// 代码编辑器
 details {
   padding: 7px 12px;
   border-radius: 5px;
   cursor: pointer;
 }
-
 summary {
   margin: -7px -12px 7px -12px;
   padding: 7px 12px;
+  display: flex;
+  justify-content: space-between;
   background: rgb(var(--z-basic-input-color));
 }
-
+// 引用块
 blockquote {
   margin: 2px 0 11px;
   padding: 3px 15px;
@@ -292,7 +293,7 @@ blockquote {
     list-style: none;
     counter-reset: li;
 
-    li:not(.vditor-task) {
+    li:not(details) {
       position: relative;
       padding: 1.5px 1.5px 1.5px 17px;
       list-style: none;
@@ -302,7 +303,7 @@ blockquote {
     }
   }
 
-  ul li:not(.vditor-task) :before {
+  ul li:not(details) :before {
     content: "";
     display: block;
     position: absolute;

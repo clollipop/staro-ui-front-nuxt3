@@ -13,7 +13,7 @@ export const useArticleStore = defineStore("useArticleStoreId", {
     setSelectTitle(title: string) {
       this.selectTitle = title;
     },
-    setTocList(tocList: TocInterface[]) {
+    setTocList(tocList:[]) {
       this.tocList = tocList;
     },
     setOnClick(click: boolean) {

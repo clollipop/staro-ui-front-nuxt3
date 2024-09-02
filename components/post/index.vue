@@ -3,13 +3,13 @@ import {OuOPagination, OuOTag} from "@/static/modules/ouo";
 import {useMenuStore} from "@/store/menuStore";
 import {listArticle} from "@/api/article";
 import ArticleItem from "@/components/list/ArticleItem.vue";
+import {MdPreview} from "md-editor-v3";
 
 const menuState = useMenuStore();
 
 const list = ref<any>([]);
 const totalPage = ref(0);
 const lastPagination = ref(0);
-
 
 async function getArticleList(pagination: number) {
   const data = await listArticle(pagination);
@@ -51,7 +51,7 @@ onMounted(async () => {
 <!--        </OuOTag>-->
 <!--      </div>-->
     </div>
-    <div class="grid auto-grid gap-9 gap-y-7 pc:gap-5 screen cursor-pointer">
+    <div class="grid auto-grid gap-9 gap-y-7 pc:gap-5 screen">
       <div
         v-for="article in list"
         :key="article.id"

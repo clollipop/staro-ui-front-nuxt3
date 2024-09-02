@@ -72,7 +72,7 @@ export default defineNuxtConfig({
           "shell"
         ],
         plugins: ["line-numbers", "show-language", "copy-to-clipboard"],
-        theme: "tomorrow",
+        theme: "okaidia",
         css: true
       })
     ],

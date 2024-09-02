@@ -1,7 +1,6 @@
 <script lang="ts" setup>
-import {OuOPagination} from "@/static/modules/ouo";
+import {nextTick, onMounted, ref} from "vue";
 import {formatDateTime, getAttribute, setAttribute, tocGenerate} from "@/static/modules/utils";
-import type {TocInterface} from "@/types/tocInterface";
 import {AuthorImpl} from "@/types/impl/author";
 import ArticleColumn from "@/components/column/ArticleColumn.vue";
 import {getArticleDetail} from "@/api/article";
@@ -10,17 +9,17 @@ import Prism from "prismjs";
 import {listColumnByArticleId} from "@/api/column";
 import {useArticleStore} from "@/store/articleStore";
 import {debounce} from "lodash";
+import type {TocInterface} from "@/types/tocInterface";
 
 const {path} = useRoute();
 const menuState = useMenuStore();
 const articleStore = useArticleStore();
-
 // 配置菜单
 menuState.setWithComment();
 const {$viewport} = useNuxtApp();
 const article = reactive<any>({});
 const columnList = reactive([]);
-const articleTocList = ref<TocInterface[]>([]);
+const articleTocList = ref<any>([]);
 const authorInfo = new AuthorImpl();
 const nowIndex = ref(0);
 const articleId = <string>path.split("/").pop();
@@ -29,56 +28,56 @@ const articleId = <string>path.split("/").pop();
 // await getColumnByArticleId(article.id);
 // 初始化目录
 const initToc = () => {
-  articleTocList.value = tocGenerate("#article-content");
+  articleTocList.value = tocGenerate("#article-content") as TocInterface[];
   articleStore.setTocList(articleTocList.value);
   articleStore.setSelectTitle(articleTocList.value[0]?.id);
-}
+};
 
 /**
  * 切换底部相关专栏滑窗
  * @param page
  */
-const switchColumn = (page: any) =>{
+const switchColumn = (page: any) => {
   nowIndex.value = page.value - 1;
-}
+};
 
-const getColumnByArticleId = async (articleId: string) =>{
+const getColumnByArticleId = async (articleId: string) => {
   const newColumn = await listColumnByArticleId(articleId);
   Object.assign(columnList, newColumn);
-}
+};
 // 获取文章数据
-const getArticleById = async (path: string) =>{
+const getArticleById = async (path: string) => {
   const newArticle = await getArticleDetail(path);
   if (!newArticle || !newArticle.id) {
     goBack();
     return;
   }
   Object.assign(article, newArticle);
-  console.log(article);
   return article;
-}
+};
 
 /**
  * 动态修改主题
  */
-const setProperty = ()=> {
+const setProperty = () => {
   const articleEle = document.getElementById("article");
   if (!!article.style) {
     articleEle!.style.setProperty("--z-article-bg", article.style);
   }
-}
+};
 
-const initStyle = ()=> {
+const initStyle = () => {
   const attribute = getAttribute("scroll");
   if (attribute !== "scroll") {
     setAttribute("scroll", "primary");
   }
-}
+};
 
 useSeoMeta({
   title: () => `${article.title ?? authorInfo.siteName}`,
   description: () => `${article.description ?? authorInfo.description[1]}`
 });
+let scrollElement: any;
 
 onMounted(() => {
   nextTick(debounce(async () => {
@@ -87,6 +86,7 @@ onMounted(() => {
     Prism.highlightAll();
     setProperty();
     initStyle();
+    scrollElement = document.documentElement;
   }, 300));
 });
 
@@ -94,7 +94,12 @@ onUnmounted(() => {
   // 重置toc
   articleStore.setTocList([]);
 });
+// const tocHandle = (e: MouseEvent, t: TocItem) => {
+//   console.log(e);
+//   console.log(t);
+// };
 </script>
+
 <template>
   <div class="w-full">
     <Header/>
@@ -119,7 +124,15 @@ onUnmounted(() => {
           </span>
           <!--    分类      -->
           <span class="article-meta__sort">
-            <span v-for="(label,index) in article.labelName" :key="index" class="sort-column">{{label}}}</span>
+            <span class="sort-column">分类:
+              <span class="mr-1" style="color:#efdf00" v-for="(sort,index) in article.sortName" :key="index">{{ sort }}</span>
+            </span>
+          </span>
+          <!--    标签      -->
+          <span class="article-meta__label mt-2.5">
+            <span class="sort-column">标签:
+              <span class="mr-1" style="color:#efdf00"  v-for="(label,index) in article.labelName" :key="index">{{ label }}</span>
+            </span>
           </span>
         </div>
       </div>
@@ -140,35 +153,44 @@ onUnmounted(() => {
       </svg>
     </div>
     <div class="article__container flex justify-end w-full p-5 mb-5 mobile:p-0">
+
       <div class="article__content px-5 w-full">
         <!--   文章内容     -->
+        <!--        <MdPreview class="article-content w-full rounded-t-xl leading-loose" editorId="preview-only"-->
+        <!--                   :model-value="article.content"  :show-code-row-number="true"-->
+        <!--        />-->
         <div id="article-content" class="article-content w-full rounded-t-xl leading-loose"
              v-html="article.content"
-        >
-        </div>
+        ></div>
+
         <!--    复制协议    -->
         <div class="copyright my-5 p-5 rounded-b-xl">
           <p v-html="authorInfo.copyright"></p>
         </div>
+        <!--   文章跳转     -->
         <div class="column-list flex flex-col overflow-hidden relative">
-<!--          <ArticleColumn-->
-<!--              v-for="(column, index) in columnList"-->
-<!--              v-show="index===nowIndex"-->
-<!--              :column="column"-->
-<!--          />-->
+          <ArticleColumn
+              v-for="(column, index) in columnList"
+              v-show="index===nowIndex"
+              :column="column"
+          />
           <div class="w-full flex flex-row justify-center m-1">
-            <OuOPagination v-if="columnList.length>=3" :total=3 :type="'dotted'" @onclick="switchColumn"/>
-            <OuOPagination v-if="columnList.length===2" :total=2 :type="'dotted'" @onclick="switchColumn"/>
+            <OuoPagination v-if="columnList.length>=3" :total=3 :type="'dotted'" @onclick="switchColumn"/>
+            <OuoPagination v-if="columnList.length===2" :total=2 :type="'dotted'" @onclick="switchColumn"/>
           </div>
         </div>
+        <!--    评论     -->
         <div class="box mt-3">
-<!--         评论 <Comment/>-->
+          <!--<Comment/>-->
         </div>
       </div>
 
       <div class="article__aside box mobile:hidden">
+        <!--目录-->
+        <!--                <ClientOnly>-->
+        <!--                  <md-catalog editorId="preview-only" :scrollElement="scrollElement" @click="tocHandle"/>-->
+        <!--                </ClientOnly>-->
         <ClientOnly>
-          <!--          目录-->
           <div v-for="articleTocItem in articleTocList"
                id="article-toc"
           >
@@ -181,6 +203,8 @@ onUnmounted(() => {
 </template>
 
 <style lang="scss" scoped>
+@import "@/static/css/md-style.css";
+
 #article {
   --z-article-bg: rgba(var(--z-primary-color), .8);
 }
@@ -234,10 +258,33 @@ onUnmounted(() => {
   &__aside {
     top: 66px;
     position: sticky;
-    overflow: hidden;
-    width: 25%;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    width: 23%;
+    height: -moz-fit-content;
     height: fit-content;
+    max-height: calc(100vh - 100px);
     min-width: 200px;
+    margin-left: 39px
+  }
+
+  @media (min-width: 1201px) {
+    .article__aside {
+      width: 17%;
+      margin-left: 50px
+    }
+  }
+
+  @media (min-width: 600px) and (max-width: 767px) {
+    .article__aside {
+      display: none
+    }
+  }
+
+  @media (min-width: 0) and (max-width: 599px) {
+    .article__aside {
+      display: none
+    }
   }
 
   &__info {
@@ -251,8 +298,7 @@ onUnmounted(() => {
   filter: brightness(0.9);
 }
 
-.sort-category,
-.sort-column {
+.sort-category, .sort-column {
   padding: 4px 8px;
   margin-right: 6px;
   background: #ffffff52;
@@ -292,7 +338,6 @@ onUnmounted(() => {
 </style>
 
 <style lang="scss">
-
 .article__content {
   a {
     padding: 0 3px;

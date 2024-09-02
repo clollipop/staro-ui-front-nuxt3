@@ -18,7 +18,7 @@ function showArticleDetail(article: any) {
 
 <template>
   <div
-    class="article-item block relative rounded-xl"
+    class="article-item block relative rounded-xl cursor-pointer"
     @click="showArticleDetail(article)"
   >
     <div class="mask">

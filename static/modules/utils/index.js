@@ -60,7 +60,7 @@ function tocGenerate(selector) {
       const tagName = element.tagName.toLowerCase();
       if (tagName.startsWith("h") && !tagName.startsWith("hr")) {
         tocItems.push({
-          id: `header-${tocItems.length}`,
+          id: element.textContent,
           name: element.textContent,
           className: `toc-item-${tagName}`,
           offsetTop: element.offsetTop
