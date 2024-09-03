@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import '@/static/css/md-style.scss'
 import {nextTick, onMounted, ref} from "vue";
 import {formatDateTime, getAttribute, setAttribute, tocGenerate} from "@/static/modules/utils";
 import {AuthorImpl} from "@/types/impl/author";
@@ -203,8 +204,6 @@ onUnmounted(() => {
 </template>
 
 <style lang="scss" scoped>
-@import "@/static/css/md-style.css";
-
 #article {
   --z-article-bg: rgba(var(--z-primary-color), .8);
 }
