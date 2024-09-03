@@ -32,30 +32,41 @@ function goSearch(item: string) {
 
 <template>
   <Teleport to="body">
-    <div class="search backdrop-blur-2 flex justify-center fixed top-0 left-0 w-full h-full"
-         v-if="globalState.showSearch">
+    <div
+      v-if="globalState.showSearch"
+      class="search backdrop-blur-2 flex justify-center fixed top-0 left-0 w-full h-full"
+    >
       <div
-          class="search-container flex flex-col relative w-4/6 pad:w-10/12 mobile:w-full h-48 m-5 mt-28 py-1.5 rounded-xl">
+        class="search-container flex flex-col relative w-4/6 pad:w-10/12 mobile:w-full h-48 m-5 mt-28 py-1.5 rounded-xl"
+      >
         <div class="search-container__basic flex flex-col w-full h-full">
           <div class="search-container__input bottom-line flex items-center">
-            <MagnifyingGlassIcon/>
-            <input class="w-full" v-model="keyword" maxlength="15" placeholder="搜索"/>
-            <XMarkIcon class="hover-color cursor-pointer" @click="closeSearch"/>
+            <MagnifyingGlassIcon />
+            <input
+              v-model="keyword"
+              class="w-full"
+              maxlength="15"
+              placeholder="搜索"
+            >
+            <XMarkIcon
+              class="hover-color cursor-pointer"
+              @click="closeSearch"
+            />
           </div>
           <div class="search-container__select">
-            <div class="hover-transparent select-item flex items-center justify-between cursor-pointer"
-                 v-for="item in selectList"
-                 @click="goSearch(item)">
+            <div
+              v-for="item in selectList"
+              class="hover-transparent select-item flex items-center justify-between cursor-pointer"
+              @click="goSearch(item)"
+            >
               <span>“{{ keyword }}”</span>
               <span class="opacity-60">{{ item }}</span>
             </div>
           </div>
-
         </div>
       </div>
     </div>
   </Teleport>
-
 </template>
 
 <style scoped lang="scss">

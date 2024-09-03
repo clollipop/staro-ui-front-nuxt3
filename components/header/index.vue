@@ -65,17 +65,31 @@ function openSearch() {
   z-index: 9;
   letter-spacing: 0.08em;
   color: rgb(var(--z-fontcolor));
-  background-color: transparent;
-  border-bottom: none;
-  transition: all .3s;
 }
 
+/* 添加背景渐变的动画 */
+@keyframes backgroundGradient {
+  0% {
+    background: linear-gradient(120deg, #ffd1dc 0%, #a1eafb 50%, #ffcef3 100%);
+  }
+  50% {
+    background: linear-gradient(120deg, #ffa3b1 0%, #7cd2ff 50%, #ff9fd6 100%);
+  }
+  100% {
+    background: linear-gradient(120deg, #ffd1dc 0%, #a1eafb 50%, #ffcef3 100%);
+  }
+}
+// 滚动
 [scroll="scroll"] #nav {
-  background-color: rgba(var(--z-common-bg), .8);
-  backdrop-filter: saturate(180%) blur(20px);
   border-bottom: 1px solid rgba(102, 102, 102, .05);
+  background: linear-gradient(120deg, #ffd1dc 0%, #a1eafb 50%, #ffcef3 100%);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(8px);
+  transition: all 0.5s ease-in-out; /* 添加动画过渡效果 */
+  border-bottom: none;
+  animation: backgroundGradient 15s ease infinite; /* 背景渐变动画 */
 }
-
+// 未滚动
 [scroll="primary"] #nav {
   color: rgb(var(--z-primary-fontcolor));
   background-color: transparent;
