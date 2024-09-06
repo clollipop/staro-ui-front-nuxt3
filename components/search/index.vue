@@ -1,12 +1,14 @@
 <script setup lang="ts">
-import {MagnifyingGlassIcon, XMarkIcon} from "@heroicons/vue/24/solid";
-import {useGlobalStore} from "@/store/globalStore";
-import {useSearchStore} from "@/store/searchStore";
+import { ref, onMounted, onUnmounted } from "vue";
+import { MagnifyingGlassIcon, XMarkIcon } from "@heroicons/vue/24/solid";
+import { useGlobalStore } from "@/store/globalStore";
+import { useSearchStore } from "@/store/searchStore";
 
 const globalState = useGlobalStore();
 const searchStore = useSearchStore();
 const keyword = ref("");
 const selectList = ["在标题中搜索", "在内容中搜索", "全文搜索"];
+const searchContainerRef = ref<HTMLElement | null>(null);
 
 function closeSearch() {
   keyword.value = "";
@@ -37,6 +39,7 @@ function goSearch(item: string) {
       class="search backdrop-blur-2 flex justify-center fixed top-0 left-0 w-full h-full"
     >
       <div
+        ref="searchContainerRef"
         class="search-container flex flex-col relative w-4/6 pad:w-10/12 mobile:w-full h-48 m-5 mt-28 py-1.5 rounded-xl"
       >
         <div class="search-container__basic flex flex-col w-full h-full">
@@ -72,7 +75,7 @@ function goSearch(item: string) {
 <style scoped lang="scss">
 .search {
   z-index: 99;
-  color: rgb(var(--z-fontcolor));
+  color: rgb(var(--z-search-fontcolor));
   background-color: rgba(var(--z-common-bg), .3);
 }
 
@@ -100,9 +103,7 @@ function goSearch(item: string) {
   }
 }
 
-
 .select-item {
   padding: 8px 15px;
-
 }
 </style>

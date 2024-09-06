@@ -30,7 +30,7 @@ onMounted(() => {
       </div>
       <span
         ref="typedElement"
-        class="landing-info-description typing"
+        class="landing-info-description typing neon-text"
       />
     </div>
     <OuOStar />
@@ -46,19 +46,17 @@ onMounted(() => {
 
 .landing-info {
   z-index: 1;
-  opacity: .7;
-  font-weight: 700;
   -webkit-box-reflect: below 1px linear-gradient(transparent, rgba(0, 0, 0, 0.1));
   animation: animate 5s linear infinite;
 
   &-landing {
     margin: 30px;
-    font-size: 19px;
+    font-size: 2.85em;
     letter-spacing: 7px;
   }
 
   &-description {
-    font-size: 27px;
+    font-size: 1.72em;
     height: 50px;
     letter-spacing: 6px;
   }
@@ -70,6 +68,37 @@ onMounted(() => {
 
 .typing {
   font-size: 1.5em;
-  color: #333;
+  color: #ffff;
+}
+
+.neon-text {
+  color: rgb(var(--z-fontcolor));
+}
+/*黑夜字体*/
+[data-theme="dark"] .neon-text {
+  font-weight: bold;
+  color: var(--z-fontcolor); /* 默认文字颜色 */
+  animation: breathe 4s ease-in-out infinite; /* 动画设置 */
+  text-shadow: 0 0 5px rgba(255, 255, 255, 0.3), /* 柔和的白色阴影 */
+  0 0 10px rgba(255, 0, 255, 0.5), /* 紫色光晕 */
+  0 0 15px rgba(0, 255, 255, 0.3); /* 青色光晕 */
+}
+
+@keyframes breathe {
+  0% {
+    text-shadow: 0 0 10px rgba(255, 140, 0, 0.5), /* 温和的橙色阴影 */
+    0 0 20px rgba(255, 0, 255, 0.3), /* 柔和的紫色 */
+    0 0 30px rgba(0, 255, 255, 0.2); /* 柔和的青色 */
+  }
+  50% {
+    text-shadow: 0 0 10px rgba(30, 144, 255, 0.5), /* 温和的蓝色阴影 */
+    0 0 20px rgba(0, 255, 255, 0.4), /* 更明亮的青色 */
+    0 0 30px rgba(0, 255, 255, 0.2);
+  }
+  100% {
+    text-shadow: 0 0 10px rgba(0, 255, 127, 0.5), /* 温和绿色阴影 */
+    0 0 20px rgba(0, 255, 255, 0.3), /* 柔和的青色 */
+    0 0 30px rgba(255, 140, 0, 0.2); /* 柔和的橙色 */
+  }
 }
 </style>

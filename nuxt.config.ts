@@ -19,6 +19,19 @@ export default defineNuxtConfig({
           href: "https://npm.elemecdn.com/@fortawesome/fontawesome-free/css/all.min.css",
           media: "all",
           onload: "this.media='all'"
+        },
+        {
+          rel: "stylesheet",
+          href: "https://cdn.jsdelivr.net/npm/font-awesome-animation@0.2.1/dist/font-awesome-animation.min.css",
+          media: "all",
+          onload: "this.media='all'"
+        }
+      ],
+      script: [
+        {
+          src: "",
+          type: "text/javascript",
+          async: true
         }
       ]
     }
@@ -34,12 +47,13 @@ export default defineNuxtConfig({
     "@pinia/nuxt",
     "nuxt-svgo",
     "nuxt-viewport",
-    '@pinia/nuxt',
-    "@pinia-plugin-persistedstate/nuxt"
+    "@pinia/nuxt",
+    "@pinia-plugin-persistedstate/nuxt",
     // "@nuxtjs/stylelint-module",
+    "@nuxt/icon"
   ],
   piniaPersistedstate: {
-    storage: 'localStorage' // 持久化
+    storage: "localStorage" // 持久化
   },
   svgo: {
     autoImportPath: "./static/svg/"

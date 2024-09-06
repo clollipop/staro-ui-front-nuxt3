@@ -1,0 +1,144 @@
+/*动画效果*/
+/*
+hvr-wobble-to-top-right hvr-icon-wobble-vertical
+ */
+/* Wobble To Top Right */
+@-webkit-keyframes hvr-wobble-to-top-right {
+  16.65% {
+    -webkit-transform: translate(8px, -8px);
+    transform: translate(8px, -8px);
+  }
+  33.3% {
+    -webkit-transform: translate(-6px, 6px);
+    transform: translate(-6px, 6px);
+  }
+  49.95% {
+    -webkit-transform: translate(4px, -4px);
+    transform: translate(4px, -4px);
+  }
+  66.6% {
+    -webkit-transform: translate(-2px, 2px);
+    transform: translate(-2px, 2px);
+  }
+  83.25% {
+    -webkit-transform: translate(1px, -1px);
+    transform: translate(1px, -1px);
+  }
+  100% {
+    -webkit-transform: translate(0, 0);
+    transform: translate(0, 0);
+  }
+}
+@keyframes hvr-wobble-to-top-right {
+  16.65% {
+    -webkit-transform: translate(8px, -8px);
+    transform: translate(8px, -8px);
+  }
+  33.3% {
+    -webkit-transform: translate(-6px, 6px);
+    transform: translate(-6px, 6px);
+  }
+  49.95% {
+    -webkit-transform: translate(4px, -4px);
+    transform: translate(4px, -4px);
+  }
+  66.6% {
+    -webkit-transform: translate(-2px, 2px);
+    transform: translate(-2px, 2px);
+  }
+  83.25% {
+    -webkit-transform: translate(1px, -1px);
+    transform: translate(1px, -1px);
+  }
+  100% {
+    -webkit-transform: translate(0, 0);
+    transform: translate(0, 0);
+  }
+}
+.hvr-wobble-to-top-right {
+  display: inline-block;
+  vertical-align: middle;
+  -webkit-transform: perspective(1px) translateZ(0);
+  transform: perspective(1px) translateZ(0);
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+}
+.hvr-wobble-to-top-right:hover, .hvr-wobble-to-top-right:focus, .hvr-wobble-to-top-right:active {
+  -webkit-animation-name: hvr-wobble-to-top-right;
+  animation-name: hvr-wobble-to-top-right;
+  -webkit-animation-duration: 1s;
+  animation-duration: 1s;
+  -webkit-animation-timing-function: ease-in-out;
+  animation-timing-function: ease-in-out;
+  -webkit-animation-iteration-count: 1;
+  animation-iteration-count: 1;
+}
+/* 图标 上下 hover 动画 */
+.hvr-icon-ud {
+  .hvr-icon {
+    display: inline-block; /* 使得图标可以应用动画 */
+    transition: transform 0.5s ease; /* 添加过渡效果 */
+
+    /* 鼠标悬停时触发动画 */
+    animation: none; /* 初始无动画 */
+  }
+
+  &:hover .hvr-icon {
+    animation: hvr-icon-wobble-vertical 1s ease-in-out infinite; /* 添加动画 */
+  }
+}
+
+/* 定义上下动画 */
+@keyframes hvr-icon-wobble-vertical {
+  0% {
+    transform: translateY(0);
+  }
+  16.65% {
+    transform: translateY(6px);
+  }
+  33.3% {
+    transform: translateY(-5px);
+  }
+  49.95% {
+    transform: translateY(4px);
+  }
+  66.6% {
+    transform: translateY(-2px);
+  }
+  83.25% {
+    transform: translateY(1px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+/* 图标 缩放加晃动 hover 动画 */
+.hvr-icon-scale-shake {
+  .hvr-icon {
+    display: inline-block; /* 使得图标可以应用动画 */
+    transition: transform 0.5s ease; /* 添加过渡效果 */
+
+    /* 鼠标悬停时触发动画 */
+    animation: none; /* 初始无动画 */
+  }
+
+  &:hover .hvr-icon {
+    animation: hvr-icon-scale-spin 1s ease-in-out infinite; /* 添加动画 */
+  }
+}
+
+/* 定义缩放加晃动动画 */
+@keyframes hvr-icon-scale-spin {
+  0%, 100% {
+    transform: scale(1) rotate(0deg);
+  }
+  25% {
+    transform: scale(1.1) rotate(10deg);
+  }
+  50% {
+    transform: scale(1.1) rotate(-10deg);
+  }
+  75% {
+    transform: scale(1.1) rotate(10deg);
+  }
+}
+

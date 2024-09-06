@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import {MagnifyingGlassIcon} from "@heroicons/vue/24/solid";
 import {useGlobalStore} from "@/store/globalStore";
 
 const globalState = useGlobalStore();
@@ -37,24 +36,45 @@ function openSearch() {
     </div>
     <div class="center items-center cursor-pointer">
       <span
-        class="center__item hover-shadow mr-8"
+        class="center__item hover-shadow mr-8 hvr-icon-scale-shake"
         @click="back2Home()"
-      >首页</span>
+      >
+        <span class="hvr-icon">🏖️</span>
+        首页
+      </span>
       <span
-        class="center__item hover-shadow mr-8"
+        class="center__item hover-shadow mr-8 hvr-icon-scale-shake"
         @click="skip('category')"
-      >分 类</span>
+      >
+        <span class="hvr-icon">🎉</span>
+        分 类
+      </span>
       <span
-        class="center__item hover-shadow mr-8"
+        class="center__item hover-shadow mr-8 hvr-icon-scale-shake"
         @click="skip('comment')"
-      >留 言</span>
+      >
+        <span class="hvr-icon">🍵</span>
+        留 言
+      </span>
       <span
-        class="center__item hover-shadow mr-8"
+        class="center__item hover-shadow  hvr-icon-scale-shake"
         @click="skip('friends')"
-      >友 链</span>
+      >
+        <span class="hvr-icon">💤</span>
+        友 链
+      </span>
     </div>
     <div class="right cursor-pointer absolute right-7">
-      <span class="normal-svg right__item hover-shadow"><MagnifyingGlassIcon @click="openSearch()" /></span>
+      <span
+        class="normal-svg right__item hover-shadow hvr-icon-scale-shake"
+        @click="openSearch()"
+      >
+        <Icon
+          class="hvr-icon text-lg"
+          name="fxemoji:leftmagnifyingglass"
+        />
+        搜索
+      </span>
     </div>
   </div>
 </template>
@@ -79,6 +99,7 @@ function openSearch() {
     background: linear-gradient(120deg, #ffd1dc 0%, #a1eafb 50%, #ffcef3 100%);
   }
 }
+
 // 滚动
 [scroll="scroll"] #nav {
   border-bottom: 1px solid rgba(102, 102, 102, .05);
@@ -89,6 +110,7 @@ function openSearch() {
   border-bottom: none;
   animation: backgroundGradient 15s ease infinite; /* 背景渐变动画 */
 }
+
 // 未滚动
 [scroll="primary"] #nav {
   color: rgb(var(--z-primary-fontcolor));

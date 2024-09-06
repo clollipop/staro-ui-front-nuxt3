@@ -1223,7 +1223,7 @@
 .star-container[data-v-c3fff255] {
     display: none;
     position: relative;
-    background-color: rgba(var(--z-deep-color), 1);
+    background-color: rgba(var(--z-deep-color), 0);
     overflow: hidden
 }
 

@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import {OuOLanding} from "@/static/modules/ouo";
 
 onMounted(() => {
   const primary = document.getElementById("primary");
@@ -17,7 +16,7 @@ onBeforeUnmount(() => {
     <div class="w-full">
       <Header />
     </div>
-    <OuOLanding />
+    <!--    <OuOLanding />-->
     <Welcome />
     <main id="main">
       <Post />

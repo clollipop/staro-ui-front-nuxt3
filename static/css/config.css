@@ -1,10 +1,13 @@
-/* 主题 */
+/* 默认白天主题 */
 html {
+    /*主题色*/
     --z-primary-color: 94, 114, 228;
     --z-primary-select-color: 61, 85, 223;
     --z-gray-color: 231, 234, 237;
     --z-deep-color: 18, 20, 22;
-    --z-fontcolor: 51, 51, 51;
+    /*字体颜色*/
+    --z-fontcolor: 255,255,255;
+    --z-search-fontcolor: 153, 164, 178;
     --z-fontcolor-gray: 153, 164, 178;
     --z-primary-fontcolor: 255, 255, 255;
     --z-basic-input-color: 233, 237, 242;
@@ -15,8 +18,10 @@ html {
     --z-header-height: 60px;
     --ahzoo-menu-shadow: 4px 4px 6px 0 rgba(0, 0, 0, .1), -4px -4px 6px rgb(var(--z-common-bg));
     --title-font-hover-color: #39c5bb;
+    --bg-img: url('https://cdn.staro.cc/blog/pic/bg/A7545BD33A89DAB6F995462E48FBB02E.webp');
+    --heard-text-color: #39c5bb;
 }
-
+/* 夜间模式 */
 [data-theme="dark"] {
     --z-primary-color: 67, 75, 77;
     --z-primary-select-color: 43, 50, 51;
@@ -29,5 +34,7 @@ html {
     --z-common-bg: 40, 44, 47;
     --z-select-bg: 42, 46, 47;
     --ahzoo-menu-shadow: 4px 4px 6px 0 rgba(48, 48, 48, .1), -4px -4px 6px rgb(var(--z-common-bg));
+    --heard-text-color: #39c5bb;
+    --bg-img: url('https://cdn.staro.cc/blog/pic/bg/965DB4D7CBE85E8C82BB8F709D5E9575.webp');
 }
 
