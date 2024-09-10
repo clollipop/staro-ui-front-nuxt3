@@ -1,28 +1,39 @@
 <script setup lang="ts">
-import type {PropType} from "vue";
-import type {PreviewColumn} from "@/types/columnInterface";
+import {useWebInfoStore} from "~/store/webInfoStore";
 
 const props = defineProps({
-  column: {
-    type: Object as PropType<PreviewColumn>,
+  label: {
+    type: Object,
     required: true
   }
 });
+const webInfoStore = useWebInfoStore();
 
 function getColumnDetail() {
-  navigateTo(`/column/${props.column.name}`);
+  navigateTo(`/column/${props.label.name}`);
 }
 </script>
 
 <template>
   <div class="column-item relative box flex flex-col">
-    <div @click="getColumnDetail()" class="h-16 flex cursor-pointer">
+    <div
+      class="h-16 flex cursor-pointer"
+      @click="getColumnDetail()"
+    >
       <div class="column-item-thumbnail h-full w-20">
-        <img :src="column.thumbnail" class="cover rounded-md" alt="">
+        <img
+          :src="webInfoStore.getRandomAvatar()"
+          class="cover rounded-md"
+          alt=""
+        >
       </div>
       <div class="mx-3">
-        <div class="column-item-title title relative pb-0.5 mb-1">{{ column.name }}</div>
-        <div class="three-line mt-1">{{ column.description }}</div>
+        <div class="column-item-title title relative pb-0.5 mb-1">
+          {{ label.name }}
+        </div>
+        <div class="three-line mt-1">
+          {{ label.description }}
+        </div>
       </div>
     </div>
   </div>
@@ -31,7 +42,7 @@ function getColumnDetail() {
 <style scoped lang="scss">
 .column-item {
   overflow: hidden;
-  max-width: 300px;
+  min-width: 300px;
 
   &-thumbnail {
     position: absolute;

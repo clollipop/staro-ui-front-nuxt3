@@ -17,7 +17,12 @@ async function getTopComment() {
 </script>
 <template>
   <div class="top-comment box mt-5">
-    <div class="box-header bottom-line pb-1.5 mt-1">最新评论</div>
-    <SuSTop v-for="commentItem in commentList" :comment="commentItem"/>
+    <div class="box-header bottom-line pb-1.5 mt-1">
+      最新评论
+    </div>
+    <SuSTop
+      v-for="commentItem in commentList"
+      :comment="commentItem"
+    />
   </div>
 </template>

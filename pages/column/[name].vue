@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import {getColumnInfo} from "@/api/column";
+import {getLabelInfo} from "~/api/label";
 import {listArticleByColumnId} from "@/api/article";
 import type {Article} from "@/types/articleInterface";
 import type {WebInfoInterface} from "@/types/webInfoInterface";
@@ -21,7 +21,7 @@ const columnInfoTemp: PreviewColumn = await getColumnInfoByName(articlePath);
 await getArticleListByColumnId(columnInfoTemp.id, 1);
 
 async function getColumnInfoByName(name: string) {
-  const newColumnInfo: PreviewColumn = await getColumnInfo(name);
+  let newColumnInfo = await getLabelInfo(name);
   previewColumn.value = unref(newColumnInfo);
   columnInfo.title = newColumnInfo.name;
   columnInfo.thumbnail = newColumnInfo.thumbnail;

@@ -38,9 +38,34 @@ onMounted(() => {
 </template>
 
 <style scoped lang="scss">
+@media (max-width: 768px) {
+  #landing {
+    margin-top: 5vh !important;
+    height: 15vh !important;
+    min-height: 15vh !important;
+  }
+
+  .landing-info {
+    &-landing {
+      font-size: 2em !important;
+      letter-spacing: 4px !important;
+    }
+
+    &-description {
+      font-size: 1.5em !important;
+      height: 40px !important;
+      letter-spacing: 4px !important;
+    }
+  }
+
+  .typing {
+    font-size: 1.2em; // 降低打字效果字体大小
+  }
+}
+
 #landing {
-  height: 25vh;
-  min-height: 25vh;
+  height: 40vh;
+  min-height: 30vh;
   width: inherit;
 }
 
@@ -74,6 +99,7 @@ onMounted(() => {
 .neon-text {
   color: rgb(var(--z-fontcolor));
 }
+
 /*黑夜字体*/
 [data-theme="dark"] .neon-text {
   font-weight: bold;

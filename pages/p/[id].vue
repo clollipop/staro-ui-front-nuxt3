@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import '@/static/css/md-style.scss'
+import "@/static/css/md-style.scss";
 import {nextTick, onMounted, ref} from "vue";
 import {formatDateTime, getAttribute, setAttribute, tocGenerate} from "@/static/modules/utils";
 import {AuthorImpl} from "@/types/impl/author";
@@ -7,7 +7,7 @@ import ArticleColumn from "@/components/column/ArticleColumn.vue";
 import {getArticleDetail} from "@/api/article";
 import {useMenuStore} from "@/store/menuStore";
 import Prism from "prismjs";
-import {listColumnByArticleId} from "@/api/column";
+import {listLabelByArticleId} from "~/api/label";
 import {useArticleStore} from "@/store/articleStore";
 import {debounce} from "lodash";
 import type {TocInterface} from "@/types/tocInterface";
@@ -43,7 +43,7 @@ const switchColumn = (page: any) => {
 };
 
 const getColumnByArticleId = async (articleId: string) => {
-  const newColumn = await listColumnByArticleId(articleId);
+  const newColumn = await listLabelByArticleId(articleId);
   Object.assign(columnList, newColumn);
 };
 // 获取文章数据
@@ -73,7 +73,28 @@ const initStyle = () => {
     setAttribute("scroll", "primary");
   }
 };
-
+const codeEditor = () => {
+  const codeHeard: any = document.querySelectorAll(".md-editor-code");
+  codeHeard.forEach((item: any) => {
+    const flog = item.hasAttribute("open");
+    const codeFlag = item.querySelector(".md-editor-code-flag");
+    const querySelector = codeFlag.querySelector("span");
+    if (flog) {
+      querySelector.innerHTML = `🔽关闭代码`;
+    } else {
+      querySelector.innerHTML = "▶️打开代码";
+    }
+    item.addEventListener("click", () => {
+      if (querySelector.innerHTML === "▶️打开代码") {
+        querySelector.innerHTML = `🔽关闭代码`;
+        // 此处可添加代码来展开代码块
+      } else {
+        querySelector.innerHTML = "▶️打开代码";
+        // 此处可添加代码来折叠代码块
+      }
+    });
+  });
+};
 useSeoMeta({
   title: () => `${article.title ?? authorInfo.siteName}`,
   description: () => `${article.description ?? authorInfo.description[1]}`
@@ -84,6 +105,7 @@ onMounted(() => {
   nextTick(debounce(async () => {
     await getArticleById(articleId);
     initToc();
+    codeEditor();
     Prism.highlightAll();
     setProperty();
     initStyle();
@@ -126,13 +148,17 @@ onUnmounted(() => {
           <!--    分类      -->
           <span class="article-meta__sort">
             <span class="sort-column">分类:
-              <span class="mr-1" style="color:#efdf00" v-for="(sort,index) in article.sortName" :key="index">{{ sort }}</span>
+              <span class="mr-1" style="color:#efdf00" v-for="(sort,index) in article.sortName" :key="index">{{
+                  sort
+                }}</span>
             </span>
           </span>
           <!--    标签      -->
           <span class="article-meta__label mt-2.5">
             <span class="sort-column">标签:
-              <span class="mr-1" style="color:#efdf00"  v-for="(label,index) in article.labelName" :key="index">{{ label }}</span>
+              <span class="mr-1" style="color:#efdf00" v-for="(label,index) in article.labelName" :key="index">{{
+                  label
+                }}</span>
             </span>
           </span>
         </div>
@@ -155,7 +181,7 @@ onUnmounted(() => {
     </div>
     <div class="article__container flex justify-end w-full p-5 mb-5 mobile:p-0">
 
-      <div class="article__content px-5 w-full">
+      <div class="article__content w-full">
         <!--   文章内容     -->
         <!--        <MdPreview class="article-content w-full rounded-t-xl leading-loose" editorId="preview-only"-->
         <!--                   :model-value="article.content"  :show-code-row-number="true"-->
@@ -187,10 +213,6 @@ onUnmounted(() => {
       </div>
 
       <div class="article__aside box mobile:hidden">
-        <!--目录-->
-        <!--                <ClientOnly>-->
-        <!--                  <md-catalog editorId="preview-only" :scrollElement="scrollElement" @click="tocHandle"/>-->
-        <!--                </ClientOnly>-->
         <ClientOnly>
           <div v-for="articleTocItem in articleTocList"
                id="article-toc"
@@ -210,7 +232,7 @@ onUnmounted(() => {
 
 .article-content,
 .copyright {
-  background-color: rgb(var(--z-common-bg));
+  background-color: rgb(var(--z-common-bg), 0.78);
 }
 
 .article {
@@ -219,6 +241,7 @@ onUnmounted(() => {
     max-height: 450px;
     overflow: hidden;
     background: var(--z-article-bg);
+    border-radius: 0 0 5% 5%;
 
     .article-cover {
       opacity: .999;
@@ -231,6 +254,7 @@ onUnmounted(() => {
   }
 
   &__container {
+    margin-top: 10px;
     animation: bottom-top 1s;
   }
 

@@ -8,6 +8,7 @@ interface webInfoStore {
   notices: string
   footer: string
   backgroundImage: string
+  other:[]
   avatar: string
   randomAvatar: []
   randomName: []

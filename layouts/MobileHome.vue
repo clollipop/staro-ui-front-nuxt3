@@ -3,6 +3,7 @@
     <div class="w-full">
       <Header />
     </div>
+    <Welcome />
     <main id="main">
       <Post />
     </main>
@@ -13,6 +14,5 @@
 </script>
 <style lang="scss" scoped>
 #main {
-  margin-top: var(--z-header-height);
 }
 </style>

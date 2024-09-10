@@ -86,6 +86,9 @@ onBeforeUnmount(() => {
     color: rgb(var(--z-primary-color));
   }
 }
+[data-theme="dark"] .active {
+  color: #0084FF;
+}
 .toc-item-h2 {
   margin-left: 0.5em;
 }

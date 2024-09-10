@@ -18,133 +18,112 @@ function showArticleDetail(article: any) {
 
 <template>
   <div
-    class="article-item block relative rounded-xl cursor-pointer"
+    class="article-item relative rounded-xl overflow-hidden cursor-pointer"
     @click="showArticleDetail(article)"
   >
-    <div class="mask">
-      <div class="w-full h-full px-5 relative cover-article ">
-        <img
-          :src="article.cover||webInfoStore.getRandomAvatar()"
-          width="100%"
-          height="100%"
-          class="cover rounded-t-2xl opacity-90"
-          alt=""
-        >
-        <div class="article-date w-full px-6 flex justify-end items-end absolute bottom-1 right-7 left-6">
-          <div
-            v-if="article.createTime"
-            class="flex"
-          >
-            <span><CalendarDaysIcon class="small" /></span>
-            <span>{{ formatDateTime(article.createTime) }}</span>
-          </div>
-          <div
-            v-else
-            class="flex"
-          >
-            <span><RocketLaunchIcon class="small" /></span>
-            <span>{{ formatDateTime(article.updateTime || "") }}</span>
-          </div>
-        </div>
-      </div>
-      <div class="label-category font-size-small flex opacity-0 absolute top-0 right-0">
-        <div class="label-category-item backdrop-blur-2 rounded-full ml-1 article-text-hover">
-          {{ article.labelName || "未分类" }}
+    <div class="cover-article">
+      <div class="overlay-article" />
+      <img
+        :src="article.cover || webInfoStore.getRandomAvatar()"
+        class="cover"
+        alt=""
+      >
+      <div class="title-overlay">
+        <div class="title">
+          {{ article.title }}
         </div>
       </div>
     </div>
-    <div class="article-info flex flex-col justify-center absolute  rounded-b-xl px-5">
-      <div class="double-line font-semibold article-text-hover">
-        {{ article.title }}
+    <div class="article-info h-36 w-auto flex flex-col items-center p-5 rounded-b-2xl shadow-lg">
+      <div class="double-line font-semibold mb-1 line-clamp-2">
+        {{ article.digest }}
       </div>
-      <div class="article-abstract rounded-b-xl">
-        <p
-          class="double-line article-text-hover"
-          @click="showArticleDetail(article)"
-        >
-          {{ article.digest }}
-        </p>
-        <p
-          class="double-line article-text-hover"
-          @click="showArticleDetail(article)"
-        >
-          #{{ article.sortName || "暂无" }}
-        </p>
+      <div class="flex items-center text-gray-600 mb-2">
+        <CalendarDaysIcon class="icon" />
+        <span style="color: red">{{ formatDateTime(article.createTime) }}</span>
+        <RocketLaunchIcon class="icon ml-4" />
+        <span>{{ formatDateTime(article.updateTime || "") }}</span>
+      </div>
+      <div class="article-tags text-sm text-gray-600">
+        <p>{{ article.sortName || "暂无" }}</p>
       </div>
     </div>
   </div>
 </template>
 
 <style scoped lang="scss">
-.mask {
-  height: 200px;
-  overflow: hidden;
-}
-.cover-article {
-  transition: transform 0.3s ease; /* 添加过渡效果 */
-
-  &:hover {
-    transform: scale(1.1); /* 鼠标悬停时放大1.1倍 */
-    ~.label-category .article-text-hover {
-      color: var(--title-font-hover-color);
-    }
-    >.article-date{
-      color: var(--title-font-hover-color) /* 添加这行 */
-    }
-  }
-}
-.article-text-hover:hover {
-  color: var(--title-font-hover-color);
-}
 .article-item {
   width: 100%;
-  height: 360px;
-  padding-top: 20px;
-  background-color: rgb(var(--z-common-bg),.7);
-
-    .article-info {
-      .article-date {
-        display: none;
-      }
-      .article-abstract {
-        line-height: 2;
-        padding: 5px 1px 0;
-      }
-    }
-
-    .label-category {
-      opacity: 1;
-      transition: all .3s;
-    }
+  max-width: 300px;
+  transition: transform 0.3s ease;
+  background: rgba(var(--z-global-bg),0.9);
+  &:hover {
+    transform: translateY(-5px);
+  }
 }
 
-.article-abstract {
-  line-height: 0;
+.cover-article {
+  position: relative;
+  height: 200px;
+  overflow: hidden;
+  clip-path: polygon(0 0, 105% 0, 100% 60%, 50% 100%, 0 60%); /* V 形遮罩 */
+
+  .cover {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+
+    &:hover {
+      transform: scale(1.05);
+    }
+  }
+
+  .overlay-article {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.2); /* 调整透明度 */
+    z-index: 1; /* 确保遮罩在图片上方 */
+  }
+}
+
+.title-overlay {
+  position: absolute;
+  top: 30px; /* 更接近底部 */
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 5px 10px;
+  z-index: 2; /* 确保标题在遮罩上方 */
+}
+
+.title {
+  font-size: 1rem;
+  font-weight: bold;
+  text-align: center;
 }
 
 .article-info {
-  width: 100%;
-  min-height: 90px;
-  padding: 20px;
-}
+  padding: 1rem;
+  color: #1f2d3d;
+  border-bottom-left-radius: 1rem;
+  border-bottom-right-radius: 1rem;
 
-.article-date {
-  width: auto;
-  height: inherit;
-  padding: 3px 5px;
-  font-size: 80%;
-  opacity: .7;
-  color: rgb(var(--z-primary-fontcolor));
-}
+  .icon {
+    width: 1em;
+    height: 1em;
+    margin-right: 5px;
+  }
 
-.label-category {
-  right: 27px;
-  top: 27px;
-  color: rgb(var(--z-primary-fontcolor));
+  .double-line {
+    font-size: 1rem;
+  }
 
-  .label-category-item {
-    padding: 3px 9px;
-    background-color: rgba(var(--z-basic-color), .4);
+  .article-tags {
+    margin-top: 0.5rem;
+    color: #666;
   }
 }
 </style>

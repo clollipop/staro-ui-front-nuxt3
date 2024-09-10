@@ -16,12 +16,6 @@ export default defineNuxtConfig({
       link: [
         {
           rel: "stylesheet",
-          href: "https://npm.elemecdn.com/@fortawesome/fontawesome-free/css/all.min.css",
-          media: "all",
-          onload: "this.media='all'"
-        },
-        {
-          rel: "stylesheet",
           href: "https://cdn.jsdelivr.net/npm/font-awesome-animation@0.2.1/dist/font-awesome-animation.min.css",
           media: "all",
           onload: "this.media='all'"
@@ -50,7 +44,12 @@ export default defineNuxtConfig({
     "@pinia/nuxt",
     "@pinia-plugin-persistedstate/nuxt",
     // "@nuxtjs/stylelint-module",
-    "@nuxt/icon"
+    "@nuxt/icon",
+    "nuxt-icons",
+    "@element-plus/nuxt"
+  ],
+  css: [
+    'element-plus/dist/index.css',
   ],
   piniaPersistedstate: {
     storage: "localStorage" // 持久化
@@ -66,7 +65,7 @@ export default defineNuxtConfig({
   nitro: {
     devProxy: {
       "/blog-api": {
-        target: "http://localhost:48080/blog-api",
+        target: "http://192.168.0.105:48080/blog-api",
         changeOrigin: true,
         prependPath: true
       }
@@ -85,7 +84,7 @@ export default defineNuxtConfig({
           "yaml",
           "shell"
         ],
-        plugins: ["line-numbers", "show-language", "copy-to-clipboard"],
+        plugins: ["line-numbers", "show-language", "copy-to-clipboard","toolbar"],
         theme: "okaidia",
         css: true
       })

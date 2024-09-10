@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import {OuOPagination, OuOTag} from "@/static/modules/ouo";
+import {OuOPagination} from "@/static/modules/ouo";
 import {useMenuStore} from "@/store/menuStore";
 import {listArticle} from "@/api/article";
 import ArticleItem from "@/components/list/ArticleItem.vue";
-import {MdPreview} from "md-editor-v3";
 
+const {$viewport} = useNuxtApp();
 const menuState = useMenuStore();
 
 const list = ref<any>([]);
@@ -38,43 +38,77 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div id="post">
-    <div class="box-header flex justify-between">
-<!--      <div class="filter flex">-->
-<!--        <OuOTag-->
-<!--          class="mr-2"-->
-<!--          :size="'small'"-->
-<!--          :checked="true"-->
-<!--          @click="getArticleList(1)"-->
-<!--        >-->
-<!--          全部文章-->
-<!--        </OuOTag>-->
-<!--      </div>-->
+  <div
+    id="post"
+    class="flex"
+  >
+    <div
+      v-if="!$viewport.isLessThan('tablet')"
+      class="profile-card-container"
+    >
+      <ProfileCard />
     </div>
-    <div class="grid auto-grid gap-9 gap-y-7 pc:gap-5 screen">
-      <div
-        v-for="article in list"
-        :key="article.id"
-      >
-        <ArticleItem :article="article" />
+    <div class="article-list-container flex-grow">
+      <div class="box-header flex justify-between" />
+      <div class="grid auto-grid gap-9 gap-y-7 pc:gap-5 screen">
+        <div
+          v-for="article in list"
+          :key="article.id"
+        >
+          <ArticleItem :article="article" />
+        </div>
       </div>
-    </div>
-    <div class="pagination flex justify-center w-full mt-4">
-      <OuOPagination
-        v-if="totalPage>1"
-        :total="totalPage"
-        @onclick="switchPage"
-      />
+      <div class="pagination flex justify-center w-full mt-4">
+        <OuOPagination
+          v-if="totalPage > 1"
+          :total="totalPage"
+          @onclick="switchPage"
+        />
+      </div>
     </div>
   </div>
 </template>
 
 <style lang="scss">
 #post {
-  padding: 10px 8vw;
+  display: flex;
+  padding: 10px 5vw;
 }
 
+.profile-card-container {
+  width: 250px;
+  margin-right: 70px;
+}
+
+.article-list-container {
+  flex-grow: 1; // Allow the article list to take remaining space
+}
+
+// 原有文章列表样式
 .pagination {
   color: rgb(var(--z-fontcolor-gray));
+}
+
+// 媒体查询：针对手机和小屏幕进行优化
+@media (max-width: 768px) {
+  #post {
+    flex-direction: column; /* 让文章和侧边栏在手机上纵向排列 */
+    padding: 10px; /* 调整内边距 */
+  }
+
+  .profile-card-container {
+    width: 100%; /* 使侧边栏在手机上占满宽度 */
+    margin-right: 0; /* 移除右边距 */
+    margin-bottom: 20px; /* 为侧边栏和文章之间添加下边距 */
+  }
+
+  .article-list-container {
+    padding: 0 50px; /* 调整文章列表的内边距 */
+  }
+
+  .grid.auto-grid {
+    grid-template-columns: 1fr; /* 在小屏幕下使用单列布局 */
+    gap: 15px; /* 调整间距 */
+  }
 }
 </style>

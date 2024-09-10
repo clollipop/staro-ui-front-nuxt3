@@ -9,7 +9,7 @@ import TopComment from "@/components/sidebar/TopComment.vue";
     class="w-1/3 ml-9 rounded-tr-md block mobile:hidden"
   >
     <Info />
-    <TopComment />
+<!--    <TopComment />-->
   </aside>
 </template>
 

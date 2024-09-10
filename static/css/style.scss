@@ -207,3 +207,12 @@ svg {
   fill: currentColor;
   overflow: hidden;
 }
+.box {
+  color:  #1f2d3d;
+  background-color: rgba(var(--z-common-bg), .9);
+  border-radius: 0.75rem;
+  padding: 1.25rem;
+}
+.box-header {
+  margin-bottom: 13px;
+}

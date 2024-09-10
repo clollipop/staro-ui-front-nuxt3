@@ -31,6 +31,7 @@
     "preinstall": "npx only-allow pnpm"
   },
   "devDependencies": {
+    "@element-plus/nuxt": "^1.0.10",
     "@nuxt/devtools": "latest",
     "@nuxt/eslint-config": "^0.3.12",
     "@nuxtjs/eslint-config-typescript": "^12.1.0",
@@ -57,10 +58,12 @@
     "@ahzoo/ouo": "^1.0.3",
     "@ahzoo/sus": "^1.1.0",
     "@ahzoo/utils": "^1.0.3",
+    "@element-plus/icons-vue": "^2.3.1",
     "@heroicons/vue": "^2.1.1",
     "@nuxt/icon": "^1.5.1",
     "@nuxt/kit-edge": "3.8.0-28284309.b3d3d7f4",
     "@pinia-plugin-persistedstate/nuxt": "^1.2.1",
+    "element-plus": "^2.8.2",
     "font-awesome": "^4.7.0",
     "lodash": "^4.17.21",
     "md-editor-v3": "^4.19.2",
