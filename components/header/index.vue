@@ -37,7 +37,10 @@ function openSearch() {
       Star博客
     </div>
     <!--  导航  -->
-    <div v-if="!isMobile" class="center items-center cursor-pointer">
+    <div
+      v-if="!isMobile"
+      class="center items-center cursor-pointer"
+    >
       <span
         class="center__item hover-shadow mr-8 hvr-icon-scale-shake"
         @click="back2Home()"

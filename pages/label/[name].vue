@@ -17,11 +17,11 @@ const columnInfo = reactive<WebInfoInterface>({
 const previewColumn = ref<PreviewColumn>();
 
 const articlePath = <string>path.split("/").pop();
-const columnInfoTemp: PreviewColumn = await getColumnInfoByName(articlePath);
+const columnInfoTemp: PreviewColumn = await getColumnInfoByName(Number(articlePath));
 await getArticleListByColumnId(columnInfoTemp.id, 1);
 
-async function getColumnInfoByName(name: string) {
-  let newColumnInfo = await getLabelInfo(name);
+async function getColumnInfoByName(labelId: number) {
+  const newColumnInfo = await getLabelInfo(labelId);
   previewColumn.value = unref(newColumnInfo);
   columnInfo.title = newColumnInfo.name;
   columnInfo.thumbnail = newColumnInfo.thumbnail;

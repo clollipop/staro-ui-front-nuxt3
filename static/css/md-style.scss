@@ -219,7 +219,7 @@ h1, h2, h3, h4, h5, h6 {
   background: linear-gradient(to bottom, transparent 60%, rgba(189, 202, 219, .3) 10%) no-repeat;
   display: flex;
   position: relative;
-  margin: 5px 0 10px;
+  margin: 5px 0 10px !important;
   width: fit-content;
   font-weight: bold;
   transition: all 0.2s ease-out;

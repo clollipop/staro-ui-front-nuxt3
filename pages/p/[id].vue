@@ -131,6 +131,7 @@ onUnmounted(() => {
     <div v-if="!article.title" id="show" class="w-full h-full">
       <Loading/>
     </div>
+    <!--  大标题banner  -->
     <div v-else class="article__mask relative h-[60vh] mobile:h-[280px]">
       <div class="article-cover h-full absolute">
         <img :src="article.cover||article.videoUrl" alt="">
@@ -148,9 +149,9 @@ onUnmounted(() => {
           <!--    分类      -->
           <span class="article-meta__sort">
             <span class="sort-column">分类:
-              <span class="mr-1" style="color:#efdf00" v-for="(sort,index) in article.sortName" :key="index">{{
-                  sort
-                }}</span>
+              <span class="mr-1" style="color:#efdf00" v-for="(sort,index) in article.sortName" :key="index">
+                {{ sort }}
+              </span>
             </span>
           </span>
           <!--    标签      -->
@@ -179,48 +180,48 @@ onUnmounted(() => {
         </g>
       </svg>
     </div>
-    <div class="article__container flex justify-end w-full p-5 mb-5 mobile:p-0">
+    <!-- 内容   -->
+    <div class="article__container rounded-tr-3xl">
+      <div class="basic__container flex justify-center w-full">
+        <!--    文字    -->
+        <div class="article__content ">
+          <!--   文章内容     -->
+          <div id="article-content" class="article-content w-full rounded-t-xl leading-loose"
+               v-html="article.content"></div>
 
-      <div class="article__content w-full">
-        <!--   文章内容     -->
-        <!--        <MdPreview class="article-content w-full rounded-t-xl leading-loose" editorId="preview-only"-->
-        <!--                   :model-value="article.content"  :show-code-row-number="true"-->
-        <!--        />-->
-        <div id="article-content" class="article-content w-full rounded-t-xl leading-loose"
-             v-html="article.content"
-        ></div>
-
-        <!--    复制协议    -->
-        <div class="copyright my-5 p-5 rounded-b-xl">
-          <p v-html="authorInfo.copyright"></p>
-        </div>
-        <!--   文章跳转     -->
-        <div class="column-list flex flex-col overflow-hidden relative">
-          <ArticleColumn
-              v-for="(column, index) in columnList"
-              v-show="index===nowIndex"
-              :column="column"
-          />
-          <div class="w-full flex flex-row justify-center m-1">
-            <OuoPagination v-if="columnList.length>=3" :total=3 :type="'dotted'" @onclick="switchColumn"/>
-            <OuoPagination v-if="columnList.length===2" :total=2 :type="'dotted'" @onclick="switchColumn"/>
+          <!--    复制协议    -->
+          <div class="copyright my-5 p-5 rounded-b-xl">
+            <p v-html="authorInfo.copyright"></p>
+          </div>
+          <!--   文章跳转     -->
+          <div class="column-list flex flex-col overflow-hidden relative">
+            <ArticleColumn
+                v-for="(column, index) in columnList"
+                v-show="index===nowIndex"
+                :column="column"
+            />
+            <div class="w-full flex flex-row justify-center m-1">
+              <OuoPagination v-if="columnList.length>=3" :total=3 :type="'dotted'" @onclick="switchColumn"/>
+              <OuoPagination v-if="columnList.length===2" :total=2 :type="'dotted'" @onclick="switchColumn"/>
+            </div>
+          </div>
+          <!--    评论     -->
+          <div class="box mt-3">
+            <!--<Comment/>-->
           </div>
         </div>
-        <!--    评论     -->
-        <div class="box mt-3">
-          <!--<Comment/>-->
+        <!--   文章导航     -->
+        <div class="article__aside box mobile:hidden">
+          <ClientOnly>
+            <div v-for="articleTocItem in articleTocList"
+                 id="article-toc"
+            >
+              <TocItem :toc="articleTocItem"/>
+            </div>
+          </ClientOnly>
         </div>
       </div>
 
-      <div class="article__aside box mobile:hidden">
-        <ClientOnly>
-          <div v-for="articleTocItem in articleTocList"
-               id="article-toc"
-          >
-            <TocItem :toc="articleTocItem"/>
-          </div>
-        </ClientOnly>
-      </div>
     </div>
   </div>
 </template>
@@ -232,7 +233,7 @@ onUnmounted(() => {
 
 .article-content,
 .copyright {
-  background-color: rgb(var(--z-common-bg), 0.78);
+  background-color: rgb(var(--z-common-bg), 0.9);
 }
 
 .article {
@@ -241,7 +242,7 @@ onUnmounted(() => {
     max-height: 450px;
     overflow: hidden;
     background: var(--z-article-bg);
-    border-radius: 0 0 5% 5%;
+    border-radius: 0 0 10px 10px;
 
     .article-cover {
       opacity: .999;
@@ -262,6 +263,7 @@ onUnmounted(() => {
     .article-content {
       padding: 18px 25px;
       min-height: 50vh;
+      width: 100%;
       overflow-x: scroll;
       overflow-wrap: break-word;
     }
@@ -393,5 +395,16 @@ onUnmounted(() => {
 .ouo-pagination__item.inactive {
   background-color: rgba(var(--ouo-primary-color), .1) !important;
   border: 1px solid rgb(var(--z-basic-input-color));
+}
+.basic__container{
+  width: 100%;
+  margin: 0 auto;
+  max-width: 1200px;
+}
+@media (min-width: 0) and (max-width: 599px) {
+  .article-content {
+    margin: 0 auto;
+    width: 60% !important;
+  }
 }
 </style>

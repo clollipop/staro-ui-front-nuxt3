@@ -99,7 +99,7 @@ onMounted(() => {
 }
 
 #primary {
-  --z-bg: linear-gradient(to top right, rgba(var(--z-primary-color)), rgba(var(--z-primary-color), .8), rgba(var(--z-primary-color), .5) 150%);
-  background-color: rgba(var(--z-global-bg), .7);
+  //--z-bg: linear-gradient(to top right, rgba(var(--z-primary-color)), rgba(var(--z-primary-color), .8), rgba(var(--z-primary-color), .5) 150%);
+  //background-color: rgba(var(--z-global-bg), .7);
 }
 </style>

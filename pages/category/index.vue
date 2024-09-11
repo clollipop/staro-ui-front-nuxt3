@@ -1,19 +1,21 @@
 <script lang="ts" setup>
-import { ref, onMounted, nextTick, watch } from "vue";
-import { OuOLanding, OuOTag } from "@/static/modules/ouo";
-import { listSort } from "@/api/sort";
-import { listLabelBySortId } from "@/api/label";
+import {nextTick, onMounted, ref} from "vue";
+import {OuOLanding} from "@/static/modules/ouo";
+import {listSort} from "@/api/sort";
+import {listLabelBySortId} from "@/api/label";
 import ColumnItem from "@/components/list/ColumnItem.vue";
-import { debounce } from "lodash";
+import {debounce} from "lodash";
+import {formatDateTime} from "~/static/modules/utils";
 
 const sortList = ref<any>([]);
 const labelList = ref<any>([]);
-
+const {$viewport} = useNuxtApp();
 const activeSort = ref<string | null>(null); // 管理活动分类状态
 
 onMounted(() => {
   nextTick(async () => {
     await getSortList();
+    handleSortClick("");
   });
 });
 
@@ -53,10 +55,60 @@ function handleSortClick(sortId: string) {
     <div class="w-full">
       <Header />
     </div>
-    <OuOLanding />
+    <!--  封面标题  -->
+    <div class="sort_mask relative h-[30vh] mobile:h-[280px]">
+      <div class="article-cover h-full absolute" />
+      <div class="article__info w-full h-full absolute t-0 flex flex-col justify-center">
+        <div class="article__info-title font-semibold leading-loose text-5xl mobile:text-2xl text-center">
+          分类
+        </div>
+        <div class="font-size-small flex flex-col">
+          <span class="my-2" />
+        </div>
+      </div>
+      <svg
+        v-if="$viewport.isGreaterThan('mobileMedium')"
+        class="article-waves w-full absolute bottom-0"
+        preserveAspectRatio="none"
+        shape-rendering="auto"
+        viewBox="0 24 150 28"
+        xmlns="http://www.w3.org/2000/svg"
+        xmlns:xlink="http://www.w3.org/1999/xlink"
+      >
+        <defs>
+          <path
+            id="waves-gentle"
+            d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z"
+          />
+        </defs>
+        <g class="waves-parallax">
+          <use
+            x="48"
+            xlink:href="#waves-gentle"
+            y="0"
+          />
+          <use
+            x="48"
+            xlink:href="#waves-gentle"
+            y="3"
+          />
+          <use
+            x="48"
+            xlink:href="#waves-gentle"
+            y="5"
+          />
+          <use
+            x="48"
+            xlink:href="#waves-gentle"
+            y="7"
+          />
+        </g>
+      </svg>
+    </div>
+
     <div
       id="main"
-      class="page flex"
+      class="page  flex"
     >
       <div class="page-content w-full">
         <div
@@ -93,11 +145,26 @@ function handleSortClick(sortId: string) {
 </template>
 
 <style lang="scss" scoped>
+.page{
+ padding-top: 10px;
+}
+.sort_mask{
+  min-height: 300px;
+  max-height: 450px;
+  overflow: hidden;
+  background: var(--z-article-bg);
+  border-radius: 0 0 10px 10px;
+}
 .label-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
 }
-
+.page-content{
+  padding: 20px 30px;
+  border-radius: 10px;
+  --z-bg: linear-gradient(to top right, rgba(var(--z-primary-color)), rgba(var(--z-primary-color), .8), rgba(var(--z-primary-color), .5) 150%);
+  background-color: rgba(var(--z-global-bg), .9);
+}
 .custom-tag-button {
   border: 0;
   margin: 0 5px;
@@ -132,6 +199,23 @@ function handleSortClick(sortId: string) {
   color: white; /* 保持白色文本 */
   box-shadow: 0 10px 10px rgba(var(--z-primary-color), 0.3);
   transform: translateY(-2px); /* 点击时轻微向下移动 */
+}
+.waves-parallax {
+  &:nth-child(1) {
+    fill: rgba(var(--z-basic-color), .7);
+  }
+
+  &:nth-child(2) {
+    fill: rgba(var(--z-basic-color), .5);
+  }
+
+  &:nth-child(3) {
+    fill: rgba(var(--z-basic-color), .3);
+  }
+
+  &:nth-child(3) {
+    fill: rgb(var(--z-basic-color));
+  }
 }
 </style>
 

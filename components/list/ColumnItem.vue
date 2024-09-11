@@ -10,7 +10,7 @@ const props = defineProps({
 const webInfoStore = useWebInfoStore();
 
 function getColumnDetail() {
-  navigateTo(`/column/${props.label.name}`);
+  navigateTo(`/label/${props.label.id}`);
 }
 </script>
 
