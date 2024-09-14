@@ -16,6 +16,7 @@ function skip(path: string) {
   navigateTo(`/${path}`);
 }
 
+const isHovered = ref(false);
 /**
  * 打开搜索功能
  */
@@ -33,8 +34,17 @@ function openSearch() {
     <div
       class="left hover-shadow absolute left-7 cursor-pointer"
       @click="back2Home()"
+      @mouseover="isHovered = true"
+      @mouseleave="isHovered = false"
     >
-      Star博客
+      <div
+        v-if="!isHovered"
+      >
+        Star博客
+      </div>
+      <div v-else>
+        🏠
+      </div>
     </div>
     <!--  导航  -->
     <div

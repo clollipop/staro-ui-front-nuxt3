@@ -16,7 +16,6 @@ onBeforeUnmount(() => {
     <div class="w-full">
       <Header />
     </div>
-    <!--    <OuOLanding />-->
     <Welcome />
     <main id="main">
       <Post />

@@ -68,14 +68,13 @@
 
 <script setup lang="ts">
 import {useWebInfoStore} from "~/store/webInfoStore";
+
 const data = ref<any>({}); // 初始化数据的 ref
 
-onMounted(() => {
-  nextTick( async () => {
-    const webInfoStore = await useWebInfoStore();
-    // 直接从 store 获取数据
-    data.value = webInfoStore.webInfo;
-  });
+nextTick(async () => {
+  const webInfoStore = await useWebInfoStore();
+  // 直接从 store 获取数据
+  data.value = webInfoStore.webInfo;
 });
 </script>
 

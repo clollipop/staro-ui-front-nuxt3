@@ -1,9 +1,7 @@
 <script lang="ts" setup>
 import {getLabelInfo} from "~/api/label";
-import {listArticleByColumnId} from "@/api/article";
+import { listArticleByLabelId} from "@/api/article";
 import type {Article} from "@/types/articleInterface";
-import type {WebInfoInterface} from "@/types/webInfoInterface";
-import type {PreviewColumn} from "@/types/columnInterface";
 import CategoryItem from "@/components/list/CategoryItem.vue";
 import ArticleItem from "@/components/list/ArticleItem.vue";
 import {getAttribute, setAttribute} from "@/static/modules/utils";
@@ -11,27 +9,26 @@ import {getAttribute, setAttribute} from "@/static/modules/utils";
 const {path} = useRoute();
 
 const articleList = ref<Article[]>([]);
-const columnInfo = reactive<WebInfoInterface>({
-  title: ""
-});
-const previewColumn = ref<PreviewColumn>();
+const columnInfo = reactive<any>({});
+const previewColumn = ref<any>();
 
 const articlePath = <string>path.split("/").pop();
-const columnInfoTemp: PreviewColumn = await getColumnInfoByName(Number(articlePath));
-await getArticleListByColumnId(columnInfoTemp.id, 1);
 
-async function getColumnInfoByName(labelId: number) {
+async function getLabelInfoById(labelId: number) {
   const newColumnInfo = await getLabelInfo(labelId);
+  console.log(newColumnInfo);
   previewColumn.value = unref(newColumnInfo);
   columnInfo.title = newColumnInfo.name;
-  columnInfo.thumbnail = newColumnInfo.thumbnail;
   columnInfo.description = newColumnInfo.description;
-  columnInfo.style = newColumnInfo.style;
+  // columnInfo.thumbnail = newColumnInfo.thumbnail;
+  // columnInfo.style = newColumnInfo.style;
+  columnInfo.thumbnail = "https://s.ahzoo.cn/demo/img/82.png";
+  columnInfo.style = "linear-gradient(to top right, #BB63BD, #4C71C1, #CEDFF4 150%)";
   return newColumnInfo;
 }
 
-async function getArticleListByColumnId(columnId: string, pagination: number) {
-  const newArticleList = await listArticleByColumnId(columnId, pagination);
+async function getArticleListByLabelId(labelId: number, pagination: number) {
+  const newArticleList = await listArticleByLabelId(labelId, pagination);
   articleList.value = unref(newArticleList);
 }
 
@@ -47,8 +44,12 @@ useSeoMeta({
   description: () => `${columnInfo.description ?? "专栏页"}`
 });
 
-onMounted(() => {
+onMounted( () => {
   initStyle();
+  nextTick( async () => {
+    const labelInfoTemp = await getLabelInfoById(Number(articlePath));
+    await getArticleListByLabelId(labelInfoTemp.id, 1);
+  });
 });
 </script>
 
@@ -56,13 +57,15 @@ onMounted(() => {
   <div class="w-full">
     <Header/>
   </div>
-  <div id="column-info" class="mb-2">
-    <Landing :landing="columnInfo">
-      <CategoryItem v-for="category in previewColumn?.categoryList"
-                    :category="category" :style="columnInfo.style"
-      />
-    </Landing>
+  <!-- label 信息 -->
+  <div id="column-info" class="mb-2 mobile:hidden">
+    <!--  标题封面  -->
+    <title-cover
+        :title="columnInfo.title"
+        :subtitle="columnInfo.description"
+    />
   </div>
+  <!-- label 文章列表 -->
   <div id="main" class="page flex">
     <div class="page-content w-full">
       <div class="grid auto-grid gap-7 gap-y-5 pc:gap-5">
@@ -74,3 +77,6 @@ onMounted(() => {
     <Sidebar/>
   </div>
 </template>
+
+<style lang="scss" scoped>
+</style>

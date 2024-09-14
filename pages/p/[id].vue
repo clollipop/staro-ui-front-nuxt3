@@ -117,10 +117,6 @@ onUnmounted(() => {
   // 重置toc
   articleStore.setTocList([]);
 });
-// const tocHandle = (e: MouseEvent, t: TocItem) => {
-//   console.log(e);
-//   console.log(t);
-// };
 </script>
 
 <template>
@@ -128,11 +124,9 @@ onUnmounted(() => {
     <Header/>
   </div>
   <div id="article" class="w-full">
-    <div v-if="!article.title" id="show" class="w-full h-full">
-      <Loading/>
-    </div>
+    <Loading :show="!article.title"/>
     <!--  大标题banner  -->
-    <div v-else class="article__mask relative h-[60vh] mobile:h-[280px]">
+    <div v-if="article.title" class="article__mask relative h-[60vh] mobile:h-[280px]">
       <div class="article-cover h-full absolute">
         <img :src="article.cover||article.videoUrl" alt="">
       </div>
@@ -187,7 +181,8 @@ onUnmounted(() => {
         <div class="article__content ">
           <!--   文章内容     -->
           <div id="article-content" class="article-content w-full rounded-t-xl leading-loose"
-               v-html="article.content"></div>
+               v-html="article.content"
+          ></div>
 
           <!--    复制协议    -->
           <div class="copyright my-5 p-5 rounded-b-xl">
@@ -396,11 +391,13 @@ onUnmounted(() => {
   background-color: rgba(var(--ouo-primary-color), .1) !important;
   border: 1px solid rgb(var(--z-basic-input-color));
 }
-.basic__container{
+
+.basic__container {
   width: 100%;
   margin: 0 auto;
   max-width: 1200px;
 }
+
 @media (min-width: 0) and (max-width: 599px) {
   .article-content {
     margin: 0 auto;

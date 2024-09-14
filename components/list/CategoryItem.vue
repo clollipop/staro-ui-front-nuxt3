@@ -15,7 +15,7 @@ const props = defineProps({
  */
 function setProperty() {
   const primary = document.getElementById("primary");
-  if (!!props.style) {
+  if (props.style) {
     primary!.style.setProperty("--z-bg", props.style);
   }
 }
@@ -28,10 +28,11 @@ onMounted(() => {
 <template>
   <div class="category-item backdrop-blur-2 relative mx-3">
     <div class="h-10 cursor-pointer">
-      <div class="category-item-svg h-full w-20">
-      </div>
+      <div class="category-item-svg h-full w-20" />
       <div class="mx-3">
-        <div class="category-item-title flex flex-col title relative pb-0.5 mb-1">{{ category.name }}</div>
+        <div class="category-item-title flex flex-col title relative pb-0.5 mb-1">
+          {{ category.name }}
+        </div>
       </div>
     </div>
   </div>

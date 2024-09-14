@@ -55,7 +55,7 @@ function showArticleDetail(article: any) {
 .article-item {
   width: 100%;
   max-width: 300px;
-  transition: transform 0.3s ease;
+  transition: transform 0.3s ease ;
   background: rgba(var(--z-global-bg),0.9);
   &:hover {
     transform: translateY(-5px);
@@ -73,10 +73,6 @@ function showArticleDetail(article: any) {
     height: 100%;
     object-fit: cover;
     transition: transform 0.3s ease;
-
-    &:hover {
-      transform: scale(1.05);
-    }
   }
 
   .overlay-article {

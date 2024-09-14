@@ -28,14 +28,14 @@ export const listArticle = (pagination: number) => {
   return useDefaultRequest.getRawData(BASE_URL + "/page", params);
 };
 
-export function getArticleDetail(id: string): Promise<Article | null> {
-  return useDefaultRequest.get<Article>(BASE_URL + "/get", {id});
-}
+export const getArticleDetail = (id: string) =>  {
+  return useDefaultRequest.get(BASE_URL + "/get", {id});
+};
 
-export function listArticleByColumnId(columnId: string, pagination: number): Promise<Article[] | null> {
+export const listArticleByLabelId = (labelId: number, pagination: number) => {
   const params = {
     p: pagination
   };
-  return useDefaultRequest.get<Article[]>(BASE_URL + `/column/list/${columnId}`, params);
+  return useDefaultRequest.get(BASE_URL + `/list/label/${labelId}`, params);
 }
 

@@ -39,18 +39,34 @@ function clickMenu(menuItem: Menu) {
 </script>
 
 <template>
-  <div id="menu" class="absolute">
-    <div class="menu-container relative flex items-center" :class="active?'active':''">
+  <div
+    id="menu"
+    class="absolute"
+  >
+    <div
+      class="menu-container relative flex items-center"
+      :class="active?'active':''"
+    >
       <ul class="menu-button-list backdrop-blur-2 -mr-3 -mt-11">
-        <li class="menu-button-list-item" v-for="menuItem in menuState.menu" @click="clickMenu(menuItem)">
-          <span :title="menuItem.title" class="normal-svg"><component :is="menuMap.get(menuItem.icon)"/></span>
+        <li
+          v-for="menuItem in menuState.menu"
+          class="menu-button-list-item"
+          @click="clickMenu(menuItem)"
+        >
+          <span
+            :title="menuItem.title"
+            class="normal-svg"
+          ><component :is="menuMap.get(menuItem.icon)" /></span>
         </li>
       </ul>
-      <button class="menu-button w-10 h-10 flex items-center justify-center" @click="active=!active">
+      <button
+        class="menu-button w-10 h-10 flex items-center justify-center"
+        @click="active=!active"
+      >
         <span class="menu-icon-wrapper w-3.5 h-3.5 flex flex-col justify-between">
-          <span class="menu-icon-line half first"></span>
-          <span class="menu-icon-line"></span>
-          <span class="menu-icon-line half last"></span>
+          <span class="menu-icon-line half first" />
+          <span class="menu-icon-line" />
+          <span class="menu-icon-line half last" />
         </span>
       </button>
     </div>

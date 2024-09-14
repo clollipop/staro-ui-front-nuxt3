@@ -1,6 +1,4 @@
 <script setup lang="ts">
-/* import "@/assets/iconfont/iconfont.css";
-import "@/assets/iconfont/iconfont.js"; */
 import "@/static/css/style.scss";
 import "@/static/css/hover.scss";
 import _ from "lodash";
@@ -65,17 +63,18 @@ onMounted(() => {
     } else {
       scrollHandler();
     }
-    // 加载网站信息
-    nextTick(async () => {
-      const webInfo = await getWebInfo();
-      webInfoStore.setWebInfoStore(webInfo);
-    });
   }
+});
+// 加载网站信息
+nextTick(async () => {
+  const webInfo = await getWebInfo();
+  webInfoStore.setWebInfoStore(webInfo);
 });
 </script>
 <template>
   <div>
     <NuxtLoadingIndicator />
+    <loading :show="!webInfoStore.webInfo" />
     <div
       id="basic"
       class="hm-font font-size-medium w-full h-screen flex flex-col relative"

@@ -4,10 +4,11 @@ const BASE_URL = "label";
 
 /**
  * 根据标签id 获取标签信息
- * @param columnId
+ * @param labelId
  */
-export async function getLabelInfo(columnId: number): Promise<any> {
-  return useDefaultRequest.get<any>(BASE_URL + `/info/${columnId}`);
+export async function getLabelInfo(labelId: number): Promise<any> {
+  console.log(labelId);
+  return useDefaultRequest.get<any>(BASE_URL + `/get/${labelId}`);
 }
 
 /**

@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import {OuOStar} from "@/static/modules/ouo";
 import Typed from "typed.js";
 import {AuthorImpl} from "@/types/impl/author";
 
@@ -33,7 +32,43 @@ onMounted(() => {
         class="landing-info-description typing neon-text"
       />
     </div>
-    <OuOStar />
+    <svg
+      class="article-waves w-full absolute bottom-0"
+      preserveAspectRatio="none"
+      shape-rendering="auto"
+      viewBox="0 24 150 28"
+      xmlns="http://www.w3.org/2000/svg"
+      xmlns:xlink="http://www.w3.org/1999/xlink"
+    >
+      <defs>
+        <path
+          id="waves-gentle"
+          d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z"
+        />
+      </defs>
+      <g class="waves-parallax">
+        <use
+          x="48"
+          xlink:href="#waves-gentle"
+          y="0"
+        />
+        <use
+          x="48"
+          xlink:href="#waves-gentle"
+          y="3"
+        />
+        <use
+          x="48"
+          xlink:href="#waves-gentle"
+          y="5"
+        />
+        <use
+          x="48"
+          xlink:href="#waves-gentle"
+          y="7"
+        />
+      </g>
+    </svg>
   </div>
 </template>
 
@@ -64,7 +99,7 @@ onMounted(() => {
 }
 
 #landing {
-  height: 40vh;
+  height: 25vh;
   min-height: 30vh;
   width: inherit;
 }
@@ -125,6 +160,24 @@ onMounted(() => {
     text-shadow: 0 0 10px rgba(0, 255, 127, 0.5), /* 温和绿色阴影 */
     0 0 20px rgba(0, 255, 255, 0.3), /* 柔和的青色 */
     0 0 30px rgba(255, 140, 0, 0.2); /* 柔和的橙色 */
+  }
+}
+/* 波浪效果 */
+.waves-parallax {
+  &:nth-child(1) {
+    fill: rgba(var(--z-basic-color), .7);
+  }
+
+  &:nth-child(2) {
+    fill: rgba(var(--z-basic-color), .5);
+  }
+
+  &:nth-child(3) {
+    fill: rgba(var(--z-basic-color), .3);
+  }
+
+  &:nth-child(3) {
+    fill: rgb(var(--z-basic-color));
   }
 }
 </style>

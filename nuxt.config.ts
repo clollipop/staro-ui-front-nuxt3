@@ -49,7 +49,7 @@ export default defineNuxtConfig({
     "@element-plus/nuxt"
   ],
   css: [
-    'element-plus/dist/index.css',
+    "element-plus/dist/index.css"
   ],
   piniaPersistedstate: {
     storage: "localStorage" // 持久化
@@ -65,7 +65,7 @@ export default defineNuxtConfig({
   nitro: {
     devProxy: {
       "/blog-api": {
-        target: "http://192.168.0.105:48080/blog-api",
+        target: "http://localhost:48080/blog-api",
         changeOrigin: true,
         prependPath: true
       }

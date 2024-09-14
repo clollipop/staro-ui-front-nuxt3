@@ -42,12 +42,6 @@ onMounted(async () => {
     id="post"
     class="flex"
   >
-    <div
-      v-if="!$viewport.isLessThan('tablet')"
-      class="profile-card-container"
-    >
-      <ProfileCard />
-    </div>
     <div class="article-list-container flex-grow">
       <div class="box-header flex justify-between" />
       <div class="grid auto-grid gap-9 gap-y-7 pc:gap-5 screen">
@@ -66,6 +60,12 @@ onMounted(async () => {
         />
       </div>
     </div>
+    <div
+      v-if="!$viewport.isLessThan('tablet')"
+      class="profile-card-container"
+    >
+      <ProfileCard />
+    </div>
   </div>
 </template>
 
@@ -77,7 +77,6 @@ onMounted(async () => {
 
 .profile-card-container {
   width: 250px;
-  margin-right: 70px;
 }
 
 .article-list-container {
