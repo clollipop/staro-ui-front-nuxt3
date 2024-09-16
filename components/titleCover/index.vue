@@ -1,6 +1,6 @@
 <template>
   <!--  封面标题  -->
-  <div class="mask relative h-[30vh] mobile:h-[280px]">
+  <div class="mask relative h-[25vh] mobile:h-[280px]">
     <div class="title-cover h-full absolute" />
     <div class="title-info w-full h-full absolute t-0 flex flex-col justify-center ss-font">
       <div class="article__info-title font-semibold leading-loose text-5xl text-center">
@@ -63,7 +63,7 @@ const props = defineProps({
 </script>
 <style lang="scss" scoped>
 .mask {
-  min-height: 300px;
+  min-height: 25vh;
   max-height: 450px;
   overflow: hidden;
   background: var(--z-article-bg);

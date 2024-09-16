@@ -23,9 +23,10 @@ function getCookie(name) {
 /**
  * 格式化日期时间
  * @param {Date} date - 日期对象
+ * @param type int - 0: 年/月/日, 1: 年-月-日 2: 年-月-日  时:分:秒
  * @returns {string} - 格式化后的日期字符串
  */
-function formatDateTime(date) {
+function formatDateTime(date,type=0) {
   let dateObj;
 
   // 如果是时间戳，则创建 Date 对象
@@ -41,12 +42,64 @@ function formatDateTime(date) {
     throw new TypeError("Invalid date object");
   }
 
+  // 格式化日期时间
   const year = dateObj.getFullYear();
-  const month = dateObj.getMonth() + 1;
-  const day = dateObj.getDate();
-  return `${year}/${month}/${day}`;
+  const month = String(dateObj.getMonth() + 1).padStart(2, "0");
+  const day = String(dateObj.getDate()).padStart(2, "0");
+  const hours = String(dateObj.getHours()).padStart(2, "0");
+  const minutes = String(dateObj.getMinutes()).padStart(2, "0");
+  const seconds = String(dateObj.getSeconds()).padStart(2, "0");
+  switch (type){
+  case 0:
+    return `${year}/${month}/${day}`;
+  case 1:
+    return `${year}-${month}-${day}`;
+  case 2:
+    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+  }
 }
+/**
+ * 计算日期与当前日期的天数差，并返回年、月、日的差值
+ * @param {Date | number} date - 日期对象或时间戳
+ * @returns {{years: number, months: number, days: number}} - 年、月、日的差值
+ */
+function calculateDateDifference(date) {
+  let dateObj;
 
+  // 如果是时间戳，则创建 Date 对象
+  if (typeof date === "number") {
+    dateObj = new Date(date);
+  } else if (date instanceof Date) {
+    dateObj = date;
+  } else {
+    throw new TypeError("无效的日期或时间戳");
+  }
+
+  if (isNaN(dateObj.getTime())) {
+    throw new TypeError("无效日期对象");
+  }
+
+  const currentDate = new Date();
+  const timeDifference = dateObj.getTime() - currentDate.getTime();
+  const daysDifference = Math.ceil(Math.abs(timeDifference) / (1000 * 60 * 60 * 24));
+
+  // 计算年、月、日的差值
+  let years = 0;
+  let months = 0;
+  let days = daysDifference;
+
+  if (days >= 365) {
+    years = Math.floor(days / 365);
+    days -= years * 365;
+  }
+
+  if (days >= 30) {
+    months = Math.floor(days / 30);
+    days -= months * 30;
+  }
+
+  return { years, months, days };
+}
 
 /**
  * 生成目录
@@ -117,5 +170,6 @@ export {
   getCookie,
   scrollSetToc,
   setAttribute,
-  tocGenerate
+  tocGenerate,
+  calculateDateDifference
 };

@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import {CalendarDaysIcon, RocketLaunchIcon} from "@heroicons/vue/24/solid";
 import {formatDateTime} from "@/static/modules/utils";
 import {useWebInfoStore} from "@/store/webInfoStore";
 
@@ -28,25 +27,116 @@ function showArticleDetail(article: any) {
         class="cover"
         alt=""
       >
+      <!--   标题   -->
       <div class="title-overlay">
-        <div class="title">
+        <div class="title line-clamp-2">
           {{ article.title }}
         </div>
       </div>
     </div>
     <div class="article-info h-36 w-auto flex flex-col items-center p-5 rounded-b-2xl shadow-lg">
-      <div class="double-line font-semibold mb-1 line-clamp-2">
-        {{ article.digest }}
+      <!--  时间    -->
+      <div class="date-info flex  justify-between text-gray-600 mb-2">
+        <span class="text-center">
+          <p>
+            <SvgIcon
+              class="icon-rili"
+              icon="rili"
+            />
+            发布于
+          </p>
+
+          {{ formatDateTime(article.createTime, 1) }}
+        </span>
+        <span class="text-center">
+          <p>
+            <SvgIcon
+              style="font-size: 14px"
+              class="icon-lishijilu"
+              icon="lishijilu"
+            />
+            更新于
+          </p>
+          {{ formatDateTime(article.updateTime || "", 1) }}
+        </span>
       </div>
-      <div class="flex items-center text-gray-600 mb-2">
-        <CalendarDaysIcon class="icon" />
-        <span style="color: red">{{ formatDateTime(article.createTime) }}</span>
-        <RocketLaunchIcon class="icon ml-4" />
-        <span>{{ formatDateTime(article.updateTime || "") }}</span>
+      <!--  摘要    -->
+      <div
+        class="digest"
+      >
+        <text-ellipsis>
+          {{
+            article.digest || "暂无摘要"
+          }}
+        </text-ellipsis>
       </div>
-      <div class="article-tags text-sm text-gray-600">
-        <p>{{ article.sortName || "暂无" }}</p>
-      </div>
+      <p class="mt-3 w-full  line-clamp-2">
+        <!--  是否置顶    -->
+        <span v-if="article.recommendStatus">
+          <SvgIcon
+            style="font-size: 14px"
+            class="icon-tuding article-tags text-sm text-gray-600"
+            icon="tuding"
+          />
+          置顶
+        </span>
+        <!--  间隔符      -->
+        <span
+          v-if="article.recommendStatus"
+          class="text-gray-600 mx-1"
+        >|</span>
+        <!--  分类    -->
+        <span class="article-tags text-sm text-gray-600">
+          <span>
+            <SvgIcon
+              style="font-size: 14px"
+              class="icon-fenlei1 article-tags text-sm text-gray-600"
+              icon="fenlei1"
+            />
+            <span
+              v-for="(tag, index) in article.sortName"
+              :key="index"
+              class="ml-1"
+            >
+              {{ index > 0 ? " • "+tag: tag|| "暂无" }}
+            </span>
+          </span>
+        </span>
+        <!--  间隔符      -->
+        <span
+          class="text-gray-600 mx-1"
+        >|</span>
+        <!--  标签    -->
+        <span class="article-tags text-sm text-gray-600">
+          <span>
+            <SvgIcon
+              style="font-size: 14px"
+              class="icon-biaoqian1 article-tags text-sm text-gray-600"
+              icon="biaoqian1"
+            />
+            <span
+              v-for="(tag, index) in article.labelName"
+              :key="index"
+              class="ml-1"
+            >
+              {{ index > 0 ? " • "+tag: tag|| "暂无" }}
+            </span>
+          </span>
+          <!--    分隔符      -->
+          <span
+            class="text-gray-600 mx-1"
+          >|</span>
+          <!--    评论      -->
+          <span>
+            <SvgIcon
+              style="font-size: 14px"
+              class="icon-shequpinglun article-tags text-sm text-gray-600"
+              icon="shequpinglun"
+            />
+            0 条评论
+          </span>
+        </span>
+      </p>
     </div>
   </div>
 </template>
@@ -55,8 +145,9 @@ function showArticleDetail(article: any) {
 .article-item {
   width: 100%;
   max-width: 300px;
-  transition: transform 0.3s ease ;
-  background: rgba(var(--z-global-bg),0.9);
+  transition: transform 0.3s ease;
+  background: rgba(var(--z-global-bg), 0.9);
+
   &:hover {
     transform: translateY(-5px);
   }
@@ -88,8 +179,9 @@ function showArticleDetail(article: any) {
 
 .title-overlay {
   position: absolute;
-  top: 30px; /* 更接近底部 */
+  top: 30%;
   left: 50%;
+  width: 17em;
   transform: translateX(-50%);
   padding: 5px 10px;
   z-index: 2; /* 确保标题在遮罩上方 */
@@ -103,7 +195,7 @@ function showArticleDetail(article: any) {
 
 .article-info {
   padding: 1rem;
-  color: #1f2d3d;
+  color: #969797;
   border-bottom-left-radius: 1rem;
   border-bottom-right-radius: 1rem;
 
@@ -115,11 +207,32 @@ function showArticleDetail(article: any) {
 
   .double-line {
     font-size: 1rem;
+    line-height: 1.5;
+    width: 50%;
   }
+}
 
-  .article-tags {
-    margin-top: 0.5rem;
-    color: #666;
+.date-info {
+  position: absolute;
+  bottom: 35%;
+  left: 1px;
+  right: 5px;
+  z-index: 3;
+  padding: 5px;
+  border-radius: 4px;
+}
+
+.digest {
+  display: flex;
+  width: 260px;
+  margin-top: 10px;
+  font-size: 16px;
+  color: #1f2d3d;
+  line-height: 1.5;
+  text-align: justify;
+  justify-content: center;
+  &:hover {
+    color: #409eff;
   }
 }
 </style>

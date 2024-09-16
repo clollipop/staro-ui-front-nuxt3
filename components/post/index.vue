@@ -80,7 +80,7 @@ onMounted(async () => {
 }
 
 .article-list-container {
-  flex-grow: 1; // Allow the article list to take remaining space
+  flex-grow: 1; // 允许文章列表占用剩余空间
 }
 
 // 原有文章列表样式

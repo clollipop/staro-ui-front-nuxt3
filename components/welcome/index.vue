@@ -100,7 +100,7 @@ onMounted(() => {
 
 #landing {
   height: 25vh;
-  min-height: 30vh;
+  min-height: 15vh;
   width: inherit;
 }
 
@@ -110,7 +110,7 @@ onMounted(() => {
   animation: animate 5s linear infinite;
 
   &-landing {
-    margin: 30px;
+    margin-top: 10px;
     font-size: 2.85em;
     letter-spacing: 7px;
   }
