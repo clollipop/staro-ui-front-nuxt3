@@ -233,18 +233,18 @@ onUnmounted(() => {
 
 .article {
   &__mask {
-    min-height: 390px;
-    max-height: 450px;
+    min-height: 25vh;
+    max-height: 35vh;
     overflow: hidden;
     background: var(--z-article-bg);
     border-radius: 0 0 10px 10px;
 
     .article-cover {
       opacity: .999;
-      width: 65%;
+      width: 70%;
       right: 0;
       margin: 0 -20% 0 auto;
-      transform: rotate(10deg) translateY(-10%) scale(2);
+      transform: rotate(10deg) translateY(40%) scale(2);
       filter: blur(10px);
     }
   }
@@ -401,7 +401,7 @@ onUnmounted(() => {
 @media (min-width: 0) and (max-width: 599px) {
   .article-content {
     margin: 0 auto;
-    width: 60% !important;
+    width: 95% !important;
   }
 }
 </style>

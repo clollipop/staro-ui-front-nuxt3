@@ -6,7 +6,7 @@ export class AuthorImpl implements AuthorInterface {
   avatar: string = "https://q1.qlogo.cn/g?b=qq&nk=1792945133&s=640";
   description: string[] = ["欢迎来到我的博客☄️☄️", "分享技术与生活", "Stay curious, keep learning!!"];
   website: string = "https://ouo.pub";
-  icp: string = "京ICP备xxxxxxxx号";
+  icp: string = "黔ICP备2022009237号-1";
   saying: string = "每天进步多一点👏";
   email: string = "staro.cc";
   github: string = "https://github.com/clollipop";

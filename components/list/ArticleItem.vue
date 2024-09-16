@@ -29,7 +29,10 @@ function showArticleDetail(article: any) {
       >
       <!--   标题   -->
       <div class="title-overlay">
-        <div class="title line-clamp-2">
+        <div
+          class="title line-clamp-2"
+          :title=" article.title "
+        >
           {{ article.title }}
         </div>
       </div>
@@ -144,12 +147,15 @@ function showArticleDetail(article: any) {
 <style scoped lang="scss">
 .article-item {
   width: 100%;
-  max-width: 300px;
+  max-width: 290px;
+  border: 1px solid rgb(255,255,255); /*border为2*/
   transition: transform 0.3s ease;
   background: rgba(var(--z-global-bg), 0.9);
 
   &:hover {
     transform: translateY(-5px);
+    border: 1px solid rgb(255,255,255); /*border为2*/
+
   }
 }
 
@@ -226,8 +232,8 @@ function showArticleDetail(article: any) {
   display: flex;
   width: 260px;
   margin-top: 10px;
-  font-size: 16px;
-  color: #1f2d3d;
+  font-size: 18px;
+  font-weight: 520;
   line-height: 1.5;
   text-align: justify;
   justify-content: center;
