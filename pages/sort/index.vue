@@ -1,15 +1,12 @@
 <script lang="ts" setup>
 import {nextTick, onMounted, ref} from "vue";
-import {OuOLanding} from "@/static/modules/ouo";
 import {listSort} from "@/api/sort";
 import {listLabelBySortId} from "@/api/label";
 import ColumnItem from "@/components/list/ColumnItem.vue";
 import {debounce} from "lodash";
-import {formatDateTime} from "~/static/modules/utils";
 
 const sortList = ref<any>([]);
 const labelList = ref<any>([]);
-const {$viewport} = useNuxtApp();
 const activeSort = ref<string | null>(null); // 管理活动分类状态
 
 onMounted(() => {
@@ -48,6 +45,7 @@ function handleSortClick(sortId: string) {
   activeSort.value = sortId; // 设置活动状态
   safeGetLabelListBySortId(sortId, 1); // 调用获取标签列表
 }
+const {$viewport} = useNuxtApp();
 </script>
 
 <template>
@@ -65,25 +63,28 @@ function handleSortClick(sortId: string) {
       class="page flex"
     >
       <div class="page-content w-full">
-        <div
-          v-if="sortList.length > 0"
-          class="box-header"
-        >
-          <el-button
-            :class="['custom-tag-button', { active: activeSort === '' }]"
-            @click="handleSortClick('')"
+        <div class="scrollable .custom-tag-button box-header">
+          <div
+            v-if="sortList.length > 0"
+            class="box-header"
           >
-            全部
-          </el-button>
-          <el-button
-            v-for="sort in sortList"
-            :key="sort.id"
-            :class="['custom-tag-button', { active: activeSort === sort.id }]"
-            @click="handleSortClick(sort.id)"
-          >
-            {{ sort.name }}
-          </el-button>
+            <el-button
+              :class="['custom-tag-button', { active: activeSort === '' }]"
+              @click="handleSortClick('')"
+            >
+              全部
+            </el-button>
+            <el-button
+              v-for="sort in sortList"
+              :key="sort.id"
+              :class="['custom-tag-button', { active: activeSort === sort.id }]"
+              @click="handleSortClick(sort.id)"
+            >
+              {{ sort.name }}
+            </el-button>
+          </div>
         </div>
+        <!--  分类列表  -->
         <div class="sort-label grid label-grid gap-6 gap-y-4 pc:gap-4">
           <ColumnItem
             v-for="label in labelList"
@@ -91,14 +92,28 @@ function handleSortClick(sortId: string) {
             :label="label"
           />
         </div>
+        <div class="flex justify-center items-center mt-10">
+          <el-pagination
+            background
+            layout="prev, pager, next"
+            :page-size="12"
+            :total="10"
+          />
+        </div>
       </div>
       <!--  侧边栏 信息    -->
-      <Sidebar />
+      <div
+        v-if="!$viewport.isLessThan('tablet')"
+        class="profile-card-container"
+      >
+        <ProfileCard />
+      </div>
     </div>
   </div>
 </template>
 
 <style lang="scss" scoped>
+@import "@/static/css/elementPlus.scss";
 .page{
  padding-top: 10px;
 }
@@ -154,6 +169,25 @@ function handleSortClick(sortId: string) {
   box-shadow: 0 10px 10px rgba(var(--z-primary-color), 0.3);
   transform: translateY(-2px); /* 点击时轻微向下移动 */
 }
+.profile-card-container {
+  margin-left: 20px;
+}
+/*分类按钮 超出宽度 滚动条*/
+.scrollable {
+  display: flex;  /* 使用 flexbox 布局 */
+  overflow-x: auto;  /* 允许横向滚动 */
+  white-space: nowrap;  /* 防止内容换行 */
+  padding: 10px 0;  /* 可选，增加上下内边距 */
+}
+
+.custom-tag-button {
+  margin-right: 10px;
+}
+
+.box-header {
+  flex-shrink: 0;
+}
+
 </style>
 
 

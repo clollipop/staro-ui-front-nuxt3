@@ -1,0 +1,10 @@
+/*element-plus分页器样式*/
+::v-deep(.el-pagination .btn-prev){
+    border-radius: 5px;
+}
+::v-deep(.el-pagination .btn-next) {
+    border-radius: 5px;
+}
+::v-deep(.el-pagination li) {
+    border-radius: 5px;
+}

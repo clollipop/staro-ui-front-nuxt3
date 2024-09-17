@@ -148,14 +148,13 @@ function showArticleDetail(article: any) {
 .article-item {
   width: 100%;
   max-width: 290px;
-  border: 1px solid rgb(255,255,255); /*border为2*/
+  border: 1px solid rgb(255,255,255);
   transition: transform 0.3s ease;
   background: rgba(var(--z-global-bg), 0.9);
 
   &:hover {
     transform: translateY(-5px);
-    border: 1px solid rgb(255,255,255); /*border为2*/
-
+    border: 1px solid rgb(255,255,255);
   }
 }
 

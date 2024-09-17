@@ -2,7 +2,6 @@
 import {getLabelInfo} from "~/api/label";
 import { listArticleByLabelId} from "@/api/article";
 import type {Article} from "@/types/articleInterface";
-import CategoryItem from "@/components/list/CategoryItem.vue";
 import ArticleItem from "@/components/list/ArticleItem.vue";
 import {getAttribute, setAttribute} from "@/static/modules/utils";
 
@@ -66,17 +65,37 @@ onMounted( () => {
     />
   </div>
   <!-- label 文章列表 -->
-  <div id="main" class="page flex">
+  <div id="main" class="flex">
     <div class="page-content w-full">
-      <div class="grid auto-grid gap-7 gap-y-5 pc:gap-5">
+      <div class="grid auto-grid gap-9 gap-y-7 pc:gap-5 screen">
         <div v-for="article in articleList">
           <ArticleItem :article="article"/>
         </div>
       </div>
+      <div class="pagination flex justify-center w-full mt-4">
+        <el-pagination
+            background
+            layout="prev, pager, next"
+            :page-size="12"
+            :total="12"
+            @current-change=""
+        />
+      </div>
     </div>
-    <Sidebar/>
+    <div
+        v-if="!$viewport.isLessThan('tablet')"
+        class="profile-card-container"
+    >
+      <ProfileCard />
+
+    </div>
+
   </div>
 </template>
 
 <style lang="scss" scoped>
+@import "@/static/css/elementPlus.scss";
+#main {
+  padding: 10px 5vw;
+}
 </style>

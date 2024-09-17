@@ -40,10 +40,23 @@ function getColumnDetail() {
 </template>
 
 <style scoped lang="scss">
+$light-color: #1f2d3d;
+$dark-color:  #A7B1BE;
 .column-item {
+  border: 1px solid rgb(255,255,255);
   overflow: hidden;
   min-width: 300px;
-
+  color: $light-color;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  [data-theme="dark"] & {
+    color: $dark-color;
+  }
+  &:hover {
+    transform: translateY(-3px);
+    border: 1px solid rgb(255,255,255);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  }
   &-thumbnail {
     position: absolute;
     right: 0;

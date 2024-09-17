@@ -42,8 +42,11 @@ function openSearch() {
       >
         Star博客
       </div>
-      <div v-else>
-        🏠
+      <div
+        v-else
+        class="bg-light-blue rounded-md w-20 h-10 flex justify-center items-center shadow-md"
+      >
+        <span style="font-size: 1.2rem">🏠</span>
       </div>
     </div>
     <!--  导航  -->
@@ -60,7 +63,7 @@ function openSearch() {
       </span>
       <span
         class="center__item hover-shadow mr-8 hvr-icon-scale-shake"
-        @click="skip('category')"
+        @click="skip('sort')"
       >
         <span class="hvr-icon">🎉</span>
         分 类
@@ -96,6 +99,11 @@ function openSearch() {
   </div>
 </template>
 <style scoped lang="scss">
+.bg-light-blue {
+  background-color: #39c5bb;
+  border: 1px solid rgba(0, 0, 0, 0.1); /* 添加轻微的实线边框 */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* 添加虚化的阴影 */
+}
 #nav {
   height: 58px;
   width: inherit;

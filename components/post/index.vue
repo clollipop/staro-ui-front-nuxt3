@@ -53,10 +53,12 @@ onMounted(async () => {
         </div>
       </div>
       <div class="pagination flex justify-center w-full mt-4">
-        <OuOPagination
-          v-if="totalPage > 1"
+        <el-pagination
+          background
+          layout="prev, pager, next"
+          :page-size="12"
           :total="totalPage"
-          @onclick="switchPage"
+          @current-change="switchPage"
         />
       </div>
     </div>
@@ -69,7 +71,8 @@ onMounted(async () => {
   </div>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
+@import "@/static/css/elementPlus.scss";
 #post {
   display: flex;
   padding: 10px 5vw;

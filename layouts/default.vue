@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import "@/static/css/style.scss";
 import "@/static/css/hover.scss";
+import "@/static/css/elementPlus.scss";
 import _ from "lodash";
 import "@/static/modules/ouo/style.css";
 import "font-awesome/css/font-awesome.css";

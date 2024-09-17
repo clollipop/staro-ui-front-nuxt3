@@ -195,6 +195,7 @@ onUnmounted(() => {
                 v-show="index===nowIndex"
                 :column="column"
             />
+            <!--     推荐文章       -->
             <div class="w-full flex flex-row justify-center m-1">
               <OuoPagination v-if="columnList.length>=3" :total=3 :type="'dotted'" @onclick="switchColumn"/>
               <OuoPagination v-if="columnList.length===2" :total=2 :type="'dotted'" @onclick="switchColumn"/>

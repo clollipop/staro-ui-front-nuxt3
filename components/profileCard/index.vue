@@ -72,7 +72,7 @@
 </template>
 
 <script setup lang="ts">
-import {useWebInfoStore} from "~/store/webInfoStore";
+import {useWebInfoStore} from "@/store/webInfoStore";
 
 const data = ref<any>({}); // 初始化数据的 ref
 
@@ -85,6 +85,7 @@ nextTick(async () => {
 
 <style scoped lang="scss">
 .profile-card {
+  border: 1px solid rgb(255,255,255);
   position: relative; /* 使伪元素定位相对于这个元素 */
   min-width: 300px;
   min-height: 350px;
