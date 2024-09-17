@@ -7,6 +7,11 @@
           :src="data.avatar"
           alt="avatar"
         >
+        <div class="author-status-box">
+          <div class="author-status">
+            📙<span>认真学习中</span>
+          </div>
+        </div>
       </div>
       <div class="card-body">
         <h2 class="name">
@@ -97,7 +102,10 @@ nextTick(async () => {
     min-height: 350px;
   }
 }
-
+[data-theme="dark"] .card {
+  background-image: none;
+  background-color: #222222;
+}
 .profile-card::before {
   content: ""; /* 创建伪元素 */
   position: absolute; /* 绝对定位 */
@@ -231,4 +239,104 @@ nextTick(async () => {
   }
 }
 
+/*头像旋转动画*/
+.avatar {
+  -webkit-transition: filter 375ms ease-in .2s, -webkit-transform .3s;
+  -moz-transition: filter 375ms ease-in .2s, -moz-transform .3s;
+  -o-transition: filter 375ms ease-in .2s, -o-transform .3s;
+  -ms-transition: filter 375ms ease-in .2s, -ms-transform .3s;
+  transition: filter 375ms ease-in .2s, transform .3s;
+  object-fit: cover
+}
+
+.avatar:hover {
+  -webkit-transform: rotate(360deg);
+  -moz-transform: rotate(360deg);
+  -o-transform: rotate(360deg);
+  -ms-transform: rotate(360deg);
+  transform: rotate(360deg)
+}
+
+/*头像光晕动画*/
+.card-header img {
+  animation: huxi_light 4s ease-in-out infinite
+}
+
+[data-theme="dark"] img {
+  animation: huxi_dark 4s ease-in-out infinite;
+}
+
+@keyframes huxi_light {
+  0% {
+    box-shadow: 0 0 1px 1px #e9f5fa
+  }
+
+  50% {
+    box-shadow: 0 0 5px 5px #e9f5fa
+  }
+
+  100% {
+    box-shadow: 0 0 1px 1px #e9f5fa
+  }
+}
+
+@keyframes huxi_dark {
+  0% {
+    box-shadow: 0 0 1px 1px #39c5bb
+  }
+
+  50% {
+    box-shadow: 0 0 5px 5px #39c5bb
+  }
+
+  100% {
+    box-shadow: 0 0 1px 1px #39c5bb
+  }
+}
+
+/*卡片信息头像*/
+.card-header .author-status-box {
+  position: absolute;
+  bottom: 0;
+  left: calc(100% - 130px);
+  width: 28px;
+  height: 28px;
+  border: 1px solid #d0d7de;
+  color: #4c4948;
+  border-radius: 2em;
+  background-color: #f8f8f8f8;
+  transition: .4s;
+  overflow: hidden
+}
+
+[data-theme=dark] .card-header .author-status-box {
+  background-color: #222222f2;
+  border: 1px solid #5c6060
+}
+
+.card-header .author-status-box .author-status {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 26px;
+  padding: 0 5px
+}
+
+.card-header .author-status-box:hover {
+  width: 105px
+}
+
+.card-header .author-status-box:hover .author-status span {
+  width: 105px;
+  margin-left: 4px
+}
+
+.card-header .author-status-box .author-status span {
+  width: 0;
+  font-size: 12px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  transition: .4s
+}
 </style>
