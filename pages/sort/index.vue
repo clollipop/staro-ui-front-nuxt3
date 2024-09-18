@@ -7,8 +7,8 @@ import {debounce} from "lodash";
 
 const sortList = ref<any>([]);
 const labelList = ref<any>([]);
+const labelTotal = ref(0);
 const activeSort = ref<string | null>(null); // 管理活动分类状态
-
 onMounted(() => {
   nextTick(async () => {
     await getSortList();
@@ -31,7 +31,8 @@ async function getSortList() {
  */
 async function getLabelListBySortId(sortId: string, pagination: number) {
   const newColumnList = await listLabelBySortId(sortId, pagination);
-  labelList.value = unref(newColumnList);
+  labelList.value = unref(newColumnList.list);
+  labelTotal.value = unref(newColumnList.total);
 }
 
 const safeGetLabelListBySortId = debounce(getLabelListBySortId, 10);
@@ -41,9 +42,22 @@ useSeoMeta({
 });
 
 // 点击处理逻辑
-function handleSortClick(sortId: string) {
-  activeSort.value = sortId; // 设置活动状态
-  safeGetLabelListBySortId(sortId, 1); // 调用获取标签列表
+async function handleSortClick(sortId: string) {
+  activeSort.value = sortId; // 设置按钮状态
+  await safeGetLabelListBySortId(sortId, 1); // 调用获取标签列表
+}
+// 分页
+const lastPagination = ref(0);
+async function switchPage(pagination: any) {
+  const newPagination = pagination;
+  if (newPagination === lastPagination.value) {
+    return;
+  }
+  if (newPagination < 1 || newPagination > labelTotal.value) {
+    return;
+  }
+  lastPagination.value = newPagination;
+  await safeGetLabelListBySortId(activeSort.value||"" ,newPagination);
 }
 const {$viewport} = useNuxtApp();
 </script>
@@ -97,7 +111,8 @@ const {$viewport} = useNuxtApp();
             background
             layout="prev, pager, next"
             :page-size="12"
-            :total="10"
+            :total="labelTotal"
+            @current-change="switchPage"
           />
         </div>
       </div>

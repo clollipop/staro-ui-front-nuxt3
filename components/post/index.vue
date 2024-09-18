@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import {OuOPagination} from "@/static/modules/ouo";
 import {useMenuStore} from "@/store/menuStore";
 import {listArticle} from "@/api/article";
 import ArticleItem from "@/components/list/ArticleItem.vue";
@@ -18,7 +17,7 @@ async function getArticleList(pagination: number) {
 }
 
 async function switchPage(pagination: any) {
-  const newPagination = pagination.value;
+  const newPagination = pagination;
   if (newPagination === lastPagination.value) {
     return;
   }
@@ -94,23 +93,23 @@ onMounted(async () => {
 // 媒体查询：针对手机和小屏幕进行优化
 @media (max-width: 768px) {
   #post {
-    flex-direction: column; /* 让文章和侧边栏在手机上纵向排列 */
-    padding: 10px; /* 调整内边距 */
+    flex-direction: column;
+    padding: 10px;
   }
 
   .profile-card-container {
-    width: 100%; /* 使侧边栏在手机上占满宽度 */
-    margin-right: 0; /* 移除右边距 */
-    margin-bottom: 20px; /* 为侧边栏和文章之间添加下边距 */
+    width: 100%;
+    margin-right: 0;
+    margin-bottom: 20px;
   }
 
   .article-list-container {
-    padding: 0 50px; /* 调整文章列表的内边距 */
+    padding: 0 50px;
   }
 
   .grid.auto-grid {
-    grid-template-columns: 1fr; /* 在小屏幕下使用单列布局 */
-    gap: 15px; /* 调整间距 */
+    grid-template-columns: 1fr;
+    gap: 15px;
   }
 }
 </style>

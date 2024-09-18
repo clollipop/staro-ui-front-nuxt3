@@ -4,6 +4,7 @@ import { listArticleByLabelId} from "@/api/article";
 import type {Article} from "@/types/articleInterface";
 import ArticleItem from "@/components/list/ArticleItem.vue";
 import {getAttribute, setAttribute} from "@/static/modules/utils";
+import {ref} from "vue";
 
 const {path} = useRoute();
 
@@ -15,22 +16,32 @@ const articlePath = <string>path.split("/").pop();
 
 async function getLabelInfoById(labelId: number) {
   const newColumnInfo = await getLabelInfo(labelId);
-  console.log(newColumnInfo);
   previewColumn.value = unref(newColumnInfo);
   columnInfo.title = newColumnInfo.name;
   columnInfo.description = newColumnInfo.description;
-  // columnInfo.thumbnail = newColumnInfo.thumbnail;
-  // columnInfo.style = newColumnInfo.style;
-  columnInfo.thumbnail = "https://s.ahzoo.cn/demo/img/82.png";
-  columnInfo.style = "linear-gradient(to top right, #BB63BD, #4C71C1, #CEDFF4 150%)";
   return newColumnInfo;
 }
-
+const labelTotal = ref<number>(0);
+const lastPagination = ref(0);
+const newLabelId = ref(0);
 async function getArticleListByLabelId(labelId: number, pagination: number) {
   const newArticleList = await listArticleByLabelId(labelId, pagination);
-  articleList.value = unref(newArticleList);
+  articleList.value = unref(newArticleList.list);
+  labelTotal.value = unref(newArticleList.total);
+  newLabelId.value = labelId;
 }
-
+// 分页切换点击
+async function switchPage(pagination: any) {
+  const newPagination = pagination;
+  if (newPagination === lastPagination.value) {
+    return;
+  }
+  if (newPagination < 1 || newPagination > lastPagination.value) {
+    return;
+  }
+  lastPagination.value = newPagination;
+  await getArticleListByLabelId(newLabelId.value,newPagination);
+}
 function initStyle() {
   const attribute = getAttribute("scroll");
   if (attribute !== "scroll") {
@@ -77,8 +88,8 @@ onMounted( () => {
             background
             layout="prev, pager, next"
             :page-size="12"
-            :total="12"
-            @current-change=""
+            :total="labelTotal"
+            @current-change="switchPage"
         />
       </div>
     </div>
@@ -87,7 +98,6 @@ onMounted( () => {
         class="profile-card-container"
     >
       <ProfileCard />
-
     </div>
 
   </div>

@@ -19,9 +19,10 @@ export async function getLabelInfo(labelId: number): Promise<any> {
 export async function listLabelBySortId(sortId: string, pagination: number): Promise<any> {
   const params = {
     id: sortId,
-    p: pagination
+    pageNo: pagination,
+    pageSize: 12
   };
-  return useDefaultRequest.get<[]>(BASE_URL + "/list/sort/id", params);
+  return useDefaultRequest.get<[]>(BASE_URL + "/page", params);
 }
 
 /**

@@ -21,21 +21,34 @@ export interface ArticleVO {
 
 
 const BASE_URL = "/article";
+/**
+ * 获取文章列表 分页
+ * @param pagination
+ */
 export const listArticle = (pagination: number) => {
   const params = {
-    p: pagination
+    pageNo: pagination,
+    pageSize: 12
   };
   return useDefaultRequest.getRawData(BASE_URL + "/page", params);
 };
-
+/**
+ * 获取文章详情
+ * @param id
+ */
 export const getArticleDetail = (id: string) =>  {
   return useDefaultRequest.get(BASE_URL + "/get", {id});
 };
-
+/**
+ * 根据标签ID获取文章列表 分页
+ * @param labelId
+ * @param pagination
+ */
 export const listArticleByLabelId = (labelId: number, pagination: number) => {
   const params = {
-    p: pagination
+    pageNo: pagination,
+    pageSize: 12
   };
-  return useDefaultRequest.get(BASE_URL + `/list/label/${labelId}`, params);
+  return useDefaultRequest.get(BASE_URL + `/page/label/${labelId}`, params);
 }
 

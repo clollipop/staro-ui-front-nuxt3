@@ -7,7 +7,7 @@ import ArticleColumn from "@/components/column/ArticleColumn.vue";
 import {getArticleDetail} from "@/api/article";
 import {useMenuStore} from "@/store/menuStore";
 import Prism from "prismjs";
-import {listLabelByArticleId} from "~/api/label";
+import {listLabelByArticleId} from "@/api/label";
 import {useArticleStore} from "@/store/articleStore";
 import {debounce} from "lodash";
 import type {TocInterface} from "@/types/tocInterface";
@@ -73,6 +73,7 @@ const initStyle = () => {
     setAttribute("scroll", "primary");
   }
 };
+/* md 编辑器 */
 const codeEditor = () => {
   const codeHeard: any = document.querySelectorAll(".md-editor-code");
   codeHeard.forEach((item: any) => {
