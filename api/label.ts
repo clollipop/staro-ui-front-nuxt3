@@ -7,7 +7,6 @@ const BASE_URL = "label";
  * @param labelId
  */
 export async function getLabelInfo(labelId: number): Promise<any> {
-  console.log(labelId);
   return useDefaultRequest.get<any>(BASE_URL + `/get/${labelId}`);
 }
 

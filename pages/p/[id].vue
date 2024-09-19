@@ -152,9 +152,11 @@ onUnmounted(() => {
           <!--    标签      -->
           <span class="article-meta__label mt-2.5">
             <span class="sort-column">标签:
-              <span class="mr-1" style="color:#efdf00" v-for="(label,index) in article.labelName" :key="index">{{
+              <span class="mr-1" style="color:#efdf00" v-for="(label,index) in article.labelName" :key="index">
+                {{
                   label
-                }}</span>
+                }}
+              </span>
             </span>
           </span>
         </div>

@@ -5,7 +5,7 @@ import type {Article} from "@/types/articleInterface";
 import ArticleItem from "@/components/list/ArticleItem.vue";
 import {getAttribute, setAttribute} from "@/static/modules/utils";
 import {ref} from "vue";
-
+const {$viewport} = useNuxtApp();
 const {path} = useRoute();
 
 const articleList = ref<Article[]>([]);

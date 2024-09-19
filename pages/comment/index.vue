@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import Comment from "@/components/comment/index.vue";
-import {OuOLanding} from "@/static/modules/ouo";
 
 const comment = ref();
 
@@ -11,15 +10,19 @@ useSeoMeta({
 </script>
 
 <template>
-  <div class="w-full">
-    <Header/>
-  </div>
-  <OuOLanding/>
-  <div id="main" class="page flex">
-    <div class="comment-content w-full h-screen p-5 rounded-lg">
-      <Comment/>
+  <div>
+    <div class="w-full">
+      <Header />
     </div>
-    <Sidebar/>
+    <div
+      id="main"
+      class="page flex"
+    >
+      <div class="comment-content w-full h-screen p-5 rounded-lg">
+        <Comment />
+      </div>
+      <Sidebar />
+    </div>
   </div>
 </template>
 <style lang="scss" scoped>

@@ -2,7 +2,6 @@
 import {useGlobalStore} from "@/store/globalStore";
 import {FriendItem} from "#components";
 import type {Friend} from "@/types/friendInterface";
-import {OuOLanding} from "@/static/modules/ouo";
 import {listFriend} from "@/api/friend";
 const globalStore = useGlobalStore();
 const friendList = ref<Friend[]>([]);
@@ -31,7 +30,6 @@ useSeoMeta({
     <div class="w-full">
       <Header />
     </div>
-    <OuOLanding />
     <Friend />
     <div
       id="main"

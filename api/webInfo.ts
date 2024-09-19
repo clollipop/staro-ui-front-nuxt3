@@ -23,5 +23,5 @@ export interface WebInfoVo {
 const BASE_URL = "/web-info";
 export const getWebInfo = ()=> {
   return useDefaultRequest.get(BASE_URL + "/get");
-}
+};
 
