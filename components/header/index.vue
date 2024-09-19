@@ -70,7 +70,7 @@ function openSearch() {
       </span>
       <span
         class="center__item hover-shadow mr-8 hvr-icon-scale-shake"
-        @click="skip('comment')"
+        @click="skip('barrage')"
       >
         <span class="hvr-icon">🍵</span>
         留 言
