@@ -8,13 +8,25 @@ defineProps({
 </script>
 
 <template>
-  <a :href="friend?.website" class="friends flex flex-wrap">
+  <a
+    :href="friend?.website"
+    class="friends flex flex-wrap"
+  >
     <div class="friends-img relative">
-      <img :src="friend?.avatar" alt=""/>
+      <img
+        :src="friend?.avatar"
+        alt=""
+      >
     </div>
     <div class="friends-info flex flex-col items-center w-full">
-      <p class="friends-description" :title="friend?.description">{{ friend?.description }}</p>
-      <p class="friends-title" :title="friend?.website">{{ friend?.name }}</p>
+      <p
+        class="friends-description"
+        :title="friend?.description"
+      >{{ friend?.description }}</p>
+      <p
+        class="friends-title"
+        :title="friend?.website"
+      >{{ friend?.name }}</p>
     </div>
   </a>
 </template>

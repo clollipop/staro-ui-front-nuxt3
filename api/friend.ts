@@ -1,16 +1,35 @@
 import {useDefaultRequest} from "@/utils/request";
 import type {Result} from "@/types/resultInterface";
-import type {Friend} from "@/types/friendInterface";
 
-const BASE_URL = "/blog/v1/friends";
+export interface Friend {
+  website: string;
+  oldWebsite: string;
+  name: string;
+  description: string;
+  email: string;
+  avatar: string;
+  type: string;
+}
+/**
+ * @description: 友链
+  */
+const BASE_URL = "/friends";
 
-export function saveFriend(friend: Friend, isUpdate: boolean): Promise<Result<any>> {
-  const params = {
-    u: isUpdate
-  };
-  return useDefaultRequest.post<Result<any>>(BASE_URL, friend, params);
+/**
+ * @description: 保存
+ * @param friend
+ */
+export function saveFriend(friend: Friend): Promise<any> {
+  return useDefaultRequest.post<any>(BASE_URL+"/save", friend);
+}
+/**
+ * @description: 更新
+ * @param friend
+ */
+export function updateFriend(friend: Friend): Promise<any> {
+  return useDefaultRequest.post<any>(BASE_URL+"/save", friend);
 }
 
-export function listFriend(): Promise<Friend[]> {
-  return useDefaultRequest.get<Friend[]>(BASE_URL);
+export function listFriend(): Promise<any> {
+  return useDefaultRequest.get<any>(BASE_URL+"/list");
 }

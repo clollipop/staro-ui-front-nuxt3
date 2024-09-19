@@ -1,15 +1,15 @@
 <script setup lang="ts">
-import {OuOInput, OuOTextarea, OuOButton, OuOMessage, OuOTag} from "@/static/modules/ouo";
+import {OuOButton, OuOInput, OuOMessage, OuOTag, OuOTextarea} from "@/static/modules/ouo";
 import {useGlobalStore} from "@/store/globalStore";
 import type {Friend} from "@/types/friendInterface";
-import {saveFriend} from "@/api/friend";
+import {saveFriend, updateFriend} from "@/api/friend";
 import {AuthorImpl} from "@/types/impl/author";
 
 const globalStore = useGlobalStore();
 const authorInfo = new AuthorImpl();
 const friend = reactive<Friend>({} as Friend);
 const websiteTitle = ref("友链网址");
-const updateFriend = ref(false);
+const flogUpdateFriend = ref(false);
 
 async function onSend() {
   const isSend = sessionStorage.getItem("friend");
@@ -21,7 +21,7 @@ async function onSend() {
     OuOMessage.warning("友链名称、网址、头像不能为空");
     return;
   }
-  if (updateFriend.value && !friend.oldWebsite) {
+  if (flogUpdateFriend.value && !friend.oldWebsite) {
     OuOMessage.warning("请填写原来的友链地址");
     return;
   }
@@ -33,8 +33,14 @@ async function onSend() {
     OuOMessage.warning("头像地址需以http或https开头");
     return;
   }
-  const res = await saveFriend(friend, updateFriend.value);
-  if (res.state === "success") {
+  let data;
+  if (flogUpdateFriend.value) {
+    data = await updateFriend(friend);
+  } else {
+    data = await saveFriend(friend);
+  }
+
+  if (data.state === "success") {
     OuOMessage.success("友链信息已提交");
     globalStore.showFriendForm = false;
     sessionStorage.setItem("friend", "true");
@@ -47,10 +53,14 @@ function onCancel() {
 </script>
 
 <template>
-  <div v-show="globalStore.showFriendForm"
-       class="friend flex flex-row items-center justify-center absolute top-0 left-0  w-full">
+  <div
+    v-show="globalStore.showFriendForm"
+    class="friend flex flex-row items-center justify-center absolute top-0 left-0  w-full"
+  >
     <div class="friend__owner-info mx-11">
-      <div class="friend__owner-info-title">博主信息</div>
+      <div class="friend__owner-info-title">
+        博主信息
+      </div>
       <div class="timeline">
         <span class="friend__owner-title">名称：</span>{{ authorInfo.name }}
       </div>
@@ -69,46 +79,130 @@ function onCancel() {
     </div>
     <div class="m-7">
       <div class="friend-tips my-5">
-        <p class="title mb-2">友链交换说明：</p>
-        <p>此站点为演示站点，友链仅作演示</p>
+        <p class="title mb-2">
+          友链交换说明：
+        </p>
+        <p>不做任何广告，友链交换仅供交换友链，不得用于任何商业用途。</p>
       </div>
       <div class="my-3">
-        <OuOTag class="mr-3" :size="'small'" :checked="'true'" @click="updateFriend=false">新增</OuOTag>
-        <OuOTag :size="'small'" @click="updateFriend=true">更新</OuOTag>
+        <OuOTag
+          class="mr-3"
+          :size="'small'"
+          :checked="'true'"
+          @click="flogUpdateFriend=false"
+        >
+          新增
+        </OuOTag>
+        <OuOTag
+          :size="'small'"
+          @click="flogUpdateFriend=true"
+        >
+          更新
+        </OuOTag>
       </div>
       <div class="my-3">
-        <div class="my-3">博客类型：</div>
-        <OuOTag class="mr-3" :size="'small'" :checked="'true'" :group="'type'" @click="friend.type='1'">默认</OuOTag>
-        <OuOTag class="mr-3" :size="'small'" :group="'type'" @click="friend.type='2'">技术</OuOTag>
-        <OuOTag :size="'small'" :group="'type'" @click="friend.type='3'">生活</OuOTag>
+        <div class="my-3">
+          博客类型：
+        </div>
+        <OuOTag
+          class="mr-3"
+          :size="'small'"
+          :checked="'true'"
+          :group="'type'"
+          @click="friend.type='0'"
+        >
+          默认
+        </OuOTag>
+        <OuOTag
+          class="mr-3"
+          :size="'small'"
+          :group="'type'"
+          @click="friend.type='1'"
+        >
+          技术
+        </OuOTag>
+        <OuOTag
+          class="mr-3"
+          :size="'small'"
+          :group="'type'"
+          @click="friend.type='2'"
+        >
+          学习
+        </OuOTag>
+        <OuOTag
+          class="mr-3"
+          :size="'small'"
+          :group="'type'"
+          @click="friend.type='3'"
+        >
+          艺术
+        </OuOTag>
       </div>
 
       <div class="friend__form flex flex-col overflow-y-scroll">
         <div class="m-1 friend__form-input">
-          <OuOInput :placeholder="'名称'" v-model="friend.name" :border="true"></OuOInput>
+          <OuOInput
+            v-model="friend.name"
+            :placeholder="'名称'"
+            :border="true"
+          />
         </div>
-        <div class="m-1 friend__form-input"
-             v-show="updateFriend">
-          <OuOInput :placeholder="'原来的友链网址'" v-model="friend.oldWebsite" :border="true"></OuOInput>
+        <div
+          v-show="flogUpdateFriend"
+          class="m-1 friend__form-input"
+        >
+          <OuOInput
+            v-model="friend.oldWebsite"
+            :placeholder="'原来的友链网址'"
+            :border="true"
+          />
         </div>
         <div class="m-1 friend__form-input">
-          <OuOInput :placeholder="websiteTitle" v-model="friend.website" :border="true"></OuOInput>
+          <OuOInput
+            v-model="friend.website"
+            :placeholder="websiteTitle"
+            :border="true"
+          />
         </div>
         <div class="m-1 friend__form-input">
-          <OuOInput :placeholder="'头像地址'" v-model="friend.avatar" :border="true"></OuOInput>
+          <OuOInput
+            v-model="friend.avatar"
+            :placeholder="'头像地址'"
+            :border="true"
+          />
         </div>
         <div class="m-1 friend__form-input">
-          <OuOInput :placeholder="'邮箱'" v-model="friend.email" :border="true"></OuOInput>
+          <OuOInput
+            v-model="friend.email"
+            :placeholder="'邮箱'"
+            :border="true"
+          />
         </div>
         <div class="m-1 friend__form-textarea">
-          <OuOTextarea :placeholder="'简介'" :border="true" :rows="3"
-                       v-model="friend.description"></OuOTextarea>
+          <OuOTextarea
+            v-model="friend.description"
+            :placeholder="'简介'"
+            :border="true"
+            :rows="3"
+          />
         </div>
         <div class="friend__footer">
           <div class="friend__footer-send flex justify-end my-4 mr-1">
-            <OuOButton @click="onCancel" :size="'middle'" :color="'danger'" :type="'transparent'" class="mr-2">取消
+            <OuOButton
+              :size="'middle'"
+              :color="'danger'"
+              :type="'transparent'"
+              class="mr-2"
+              @click="onCancel"
+            >
+              取消
             </OuOButton>
-            <OuOButton @click="onSend" :size="'middle'">提交</OuOButton>
+            <OuOButton
+              :size="'middle'"
+              @click="onSend"
+            >
+              提交
+            </OuOButton>
           </div>
         </div>
       </div>
@@ -123,7 +217,7 @@ function onCancel() {
 
 .friend {
   z-index: 11;
-  background-color: rgba(var(--z-common-bg), .8);
+  background-color: rgba(var(--z-common-bg), .2);
   -webkit-backdrop-filter: saturate(180%) blur(20px);
   backdrop-filter: saturate(180%) blur(20px);
   -webkit-transition: all .25s ease;

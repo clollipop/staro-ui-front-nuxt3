@@ -3,13 +3,16 @@ import {useGlobalStore} from "@/store/globalStore";
 import {FriendItem} from "#components";
 import type {Friend} from "@/types/friendInterface";
 import {listFriend} from "@/api/friend";
+
 const globalStore = useGlobalStore();
 const friendList = ref<Friend[]>([]);
 
 /**
  * 数据获取
  */
-await getFriendList();
+nextTick(async () => {
+  await getFriendList();
+});
 
 function showFriendForm() {
   globalStore.setShowFriendForm(true);
@@ -55,7 +58,9 @@ useSeoMeta({
           />
         </div>
       </div>
-      <Sidebar />
+      <div style="margin-left: 15px;">
+        <ProfileCard />
+      </div>
     </div>
   </div>
 </template>
