@@ -3,7 +3,7 @@
     v-bind="$attrs"
     v-model:visible="tooltipVisible"
     :disabled="disabledTooltip"
-    placement="top"
+    :placement="placement||'top'"
   >
     <template #content>
       <slot :name="$slots.content ? 'content' : 'default'" />
@@ -29,6 +29,7 @@ import { computed, ref, type HTMLAttributes } from "vue";
 
 interface Props {
   lineClamp?: number
+  placement?: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
