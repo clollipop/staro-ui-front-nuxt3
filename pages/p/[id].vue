@@ -1,16 +1,16 @@
 <script lang="ts" setup>
+import {type HeadList, MdCatalog, MdPreview} from "md-editor-v3";
+import "md-editor-v3/lib/preview.css";
 import "@/static/css/md-style.scss";
-import {nextTick, onMounted, ref} from "vue";
+import {nextTick, onMounted, reactive, ref} from "vue";
 import {formatDateTime, getAttribute, setAttribute, tocGenerate} from "@/static/modules/utils";
 import {AuthorImpl} from "@/types/impl/author";
 import ArticleColumn from "@/components/column/ArticleColumn.vue";
 import {getArticleDetail} from "@/api/article";
 import {useMenuStore} from "@/store/menuStore";
-import Prism from "prismjs";
 import {listLabelByArticleId} from "@/api/label";
 import {useArticleStore} from "@/store/articleStore";
 import {debounce} from "lodash";
-import type {TocInterface} from "@/types/tocInterface";
 
 const {path} = useRoute();
 const menuState = useMenuStore();
@@ -24,28 +24,22 @@ const articleTocList = ref<any>([]);
 const authorInfo = new AuthorImpl();
 const nowIndex = ref(0);
 const articleId = <string>path.split("/").pop();
-
 // 获取评论
 // await getColumnByArticleId(article.id);
-// 初始化目录
-const initToc = () => {
-  articleTocList.value = tocGenerate("#article-content") as TocInterface[];
-  articleStore.setTocList(articleTocList.value);
-  articleStore.setSelectTitle(articleTocList.value[0]?.id);
-};
 
-/**
- * 切换底部相关专栏滑窗
- * @param page
- */
+// 切换底部相关专栏滑窗
 const switchColumn = (page: any) => {
   nowIndex.value = page.value - 1;
 };
 
+// 获取与文章ID相关的专栏
 const getColumnByArticleId = async (articleId: string) => {
   const newColumn = await listLabelByArticleId(articleId);
-  Object.assign(columnList, newColumn);
+  if (newColumn) {
+    Object.assign(columnList, newColumn);
+  }
 };
+
 // 获取文章数据
 const getArticleById = async (path: string) => {
   const newArticle = await getArticleDetail(path);
@@ -57,63 +51,52 @@ const getArticleById = async (path: string) => {
   return article;
 };
 
-/**
- * 动态修改主题
- */
+// 动态修改主题
 const setProperty = () => {
   const articleEle = document.getElementById("article");
-  if (!!article.style) {
+  if (article.style) {
     articleEle!.style.setProperty("--z-article-bg", article.style);
   }
 };
 
+const id = "preview-only";
+
+// 初始化样式
 const initStyle = () => {
   const attribute = getAttribute("scroll");
   if (attribute !== "scroll") {
     setAttribute("scroll", "primary");
   }
 };
-/* md 编辑器 */
-const codeEditor = () => {
-  const codeHeard: any = document.querySelectorAll(".md-editor-code");
-  codeHeard.forEach((item: any) => {
-    const flog = item.hasAttribute("open");
-    const codeFlag = item.querySelector(".md-editor-code-flag");
-    const querySelector = codeFlag.querySelector("span");
-    if (flog) {
-      querySelector.innerHTML = `🔽关闭代码`;
-    } else {
-      querySelector.innerHTML = "▶️打开代码";
-    }
-    item.addEventListener("click", () => {
-      if (querySelector.innerHTML === "▶️打开代码") {
-        querySelector.innerHTML = `🔽关闭代码`;
-        // 此处可添加代码来展开代码块
-      } else {
-        querySelector.innerHTML = "▶️打开代码";
-        // 此处可添加代码来折叠代码块
-      }
-    });
-  });
-};
+
+
+// SEO元数据设置
 useSeoMeta({
   title: () => `${article.title ?? authorInfo.siteName}`,
   description: () => `${article.description ?? authorInfo.description[1]}`
 });
-let scrollElement: any;
-
+// 初始化目录
+const initToc = () => {
+  const observer = new MutationObserver(() => {
+    if (document.querySelector("#preview-only-preview")) {
+      articleTocList.value = tocGenerate("#preview-only-preview");
+      console.log("articleTocList:", articleTocList.value);
+      articleStore.setTocList(articleTocList.value);
+      articleStore.setSelectTitle(articleTocList.value[0]?.id);
+      observer.disconnect();
+    }
+  });
+  observer.observe(document.body, { childList: true, subtree: true });
+};
+// 组件挂载完成后执行获取文章数据的操作
 onMounted(() => {
   nextTick(debounce(async () => {
     await getArticleById(articleId);
-    initToc();
-    codeEditor();
-    Prism.highlightAll();
     setProperty();
+    initToc();
     initStyle();
-    scrollElement = document.documentElement;
   }, 300));
 });
-
 onUnmounted(() => {
   // 重置toc
   articleStore.setTocList([]);
@@ -126,10 +109,9 @@ onUnmounted(() => {
   </div>
   <div id="article" class="w-full">
     <Loading :show="!article.title"/>
-    <!--  大标题banner  -->
     <div v-if="article.title" class="article__mask relative h-[60vh] mobile:h-[280px]">
       <div class="article-cover h-full absolute">
-        <img :src="article.cover||article.videoUrl" alt="">
+        <img :src="article.cover || article.videoUrl" alt=""/>
       </div>
       <div class="article__info w-full h-full absolute t-0 flex flex-col justify-center">
         <div class="article__info-title font-semibold leading-loose text-5xl mobile:text-2xl">
@@ -141,33 +123,29 @@ onUnmounted(() => {
             <span class="mx-2">|</span>
             <span>最后更新：{{ formatDateTime(article?.updateTime) }}</span>
           </span>
-          <!--    分类      -->
           <span class="article-meta__sort">
             <span class="sort-column">分类:
-              <span class="mr-1" style="color:#efdf00" v-for="(sort,index) in article.sortName" :key="index">
+              <span class="mr-1" style="color:#efdf00" v-for="(sort, index) in article.sortName" :key="index">
                 {{ sort }}
               </span>
             </span>
           </span>
-          <!--    标签      -->
           <span class="article-meta__label mt-2.5">
             <span class="sort-column">标签:
-              <span class="mr-1" style="color:#efdf00" v-for="(label,index) in article.labelName" :key="index">
-                {{
-                  label
-                }}
+              <span class="mr-1" style="color:#efdf00" v-for="(label, index) in article.labelName" :key="index">
+                {{ label }}
               </span>
             </span>
           </span>
         </div>
       </div>
-      <svg v-if="$viewport.isGreaterThan('mobileMedium')"
-           class="article-waves w-full absolute bottom-0" preserveAspectRatio="none"
-           shape-rendering="auto"
-           viewBox="0 24 150 28" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+      <svg v-if="$viewport.isGreaterThan('mobileMedium')" class="article-waves w-full absolute bottom-0"
+           preserveAspectRatio="none"
+           shape-rendering="auto" viewBox="0 24 150 28" xmlns="http://www.w3.org/2000/svg"
+           xmlns:xlink="http://www.w3.org/1999/xlink"
       >
         <defs>
-          <path id="waves-gentle" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z"/>
+          <path id="waves-gentle" d="M-160 44c30 0 58-18 88-18s58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z"/>
         </defs>
         <g class="waves-parallax">
           <use x="48" xlink:href="#waves-gentle" y="0"/>
@@ -177,34 +155,32 @@ onUnmounted(() => {
         </g>
       </svg>
     </div>
-    <!-- 内容   -->
     <div class="article__container rounded-tr-3xl">
       <div class="basic__container flex justify-center w-full">
-        <!--    文字    -->
         <div class="article__content ">
-          <!--   文章内容     -->
-          <div id="article-content" class="article-content w-full rounded-t-xl leading-loose"
-               v-html="article.content"
-          ></div>
-
-          <!--    复制协议    -->
+          <MdPreview id="article-content"
+                     class="article-content w-full rounded-t-xl leading-loose"
+                     :editorId="id"
+                     :modelValue="article.content"
+                     :code-theme="'gradient'"
+                     theme="light"
+                     previewTheme="arknights"
+                     :showCodeRowNumber="true"
+          />
           <div class="copyright my-5 p-5 rounded-b-xl">
             <p v-html="authorInfo.copyright"></p>
           </div>
-          <!--   文章跳转     -->
           <div class="column-list flex flex-col overflow-hidden relative">
             <ArticleColumn
                 v-for="(column, index) in columnList"
-                v-show="index===nowIndex"
+                v-show="index === nowIndex"
                 :column="column"
             />
-            <!--     推荐文章       -->
             <div class="w-full flex flex-row justify-center m-1">
-              <OuoPagination v-if="columnList.length>=3" :total=3 :type="'dotted'" @onclick="switchColumn"/>
-              <OuoPagination v-if="columnList.length===2" :total=2 :type="'dotted'" @onclick="switchColumn"/>
+              <OuoPagination v-if="columnList.length >= 3" :total="3" :type="'dotted'" @onclick="switchColumn"/>
+              <OuoPagination v-if="columnList.length === 2" :total="2" :type="'dotted'" @onclick="switchColumn"/>
             </div>
           </div>
-          <!--    评论     -->
           <div class="box mt-3">
             <!--<Comment/>-->
           </div>
@@ -220,7 +196,6 @@ onUnmounted(() => {
           </ClientOnly>
         </div>
       </div>
-
     </div>
   </div>
 </template>
@@ -285,30 +260,10 @@ onUnmounted(() => {
     overflow-x: hidden;
     overflow-y: scroll;
     width: 23%;
-    height: -moz-fit-content;
     height: fit-content;
     max-height: calc(100vh - 100px);
     min-width: 200px;
-    margin-left: 39px
-  }
-
-  @media (min-width: 1201px) {
-    .article__aside {
-      width: 17%;
-      margin-left: 50px
-    }
-  }
-
-  @media (min-width: 600px) and (max-width: 767px) {
-    .article__aside {
-      display: none
-    }
-  }
-
-  @media (min-width: 0) and (max-width: 599px) {
-    .article__aside {
-      display: none
-    }
+    margin-left: 39px;
   }
 
   &__info {
@@ -359,10 +314,12 @@ onUnmounted(() => {
     margin-top: 0;
   }
 }
-</style>
 
-<style lang="scss">
 .article__content {
+  min-width: 55vw;
+  width: 90vh;
+  max-width: 60vw;
+
   a {
     padding: 0 3px;
     font-weight: 600;
@@ -402,10 +359,29 @@ onUnmounted(() => {
   max-width: 1200px;
 }
 
-@media (min-width: 0) and (max-width: 599px) {
-  .article-content {
-    margin: 0 auto;
-    width: 95% !important;
+@media (max-width: 768px) {
+  .article__content {
+    width: 50vh !important;
+    min-height: 50vh !important;
+    max-width: 52vh !important;
   }
+  .article-content {
+    width: 45vh !important;
+    margin: 0 auto;
+    min-height: 50vh !important;
+    max-width: 52vh !important;
+  }
+}
+::v-deep(.md-editor-catalog-active > span ){
+  color: rgb(var(--z-primary-color));
+  &:hover {
+    color: rgb(var(--z-primary-color));
+  }
+}
+::v-deep(.md-editor-catalog-link span:hover){
+  color: rgb(var(--z-primary-color));
+}
+.article__aside{
+  //color: rgb(var(--z-fontcolor-gray));;
 }
 </style>
