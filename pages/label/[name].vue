@@ -64,42 +64,44 @@ onMounted( () => {
 </script>
 
 <template>
-  <div class="w-full">
-    <Header/>
-  </div>
-  <!-- label 信息 -->
-  <div id="column-info" class="mb-2 mobile:hidden">
-    <!--  标题封面  -->
-    <title-cover
-        :title="columnInfo.title"
-        :subtitle="columnInfo.description"
-    />
-  </div>
-  <!-- label 文章列表 -->
-  <div id="main" class="flex">
-    <div class="page-content w-full">
-      <div class="grid auto-grid gap-9 gap-y-7 pc:gap-5 screen">
-        <div v-for="article in articleList">
-          <ArticleItem :article="article"/>
+  <div>
+    <div class="w-full">
+      <Header/>
+    </div>
+    <!-- label 信息 -->
+    <div id="column-info" class="mb-2 ">
+      <!--  标题封面  -->
+      <title-cover
+          :title="columnInfo.title"
+          :subtitle="columnInfo.description"
+      />
+    </div>
+    <!-- label 文章列表 -->
+    <div id="main" class="flex">
+      <div class="page-content w-full">
+        <div class="grid auto-grid gap-9 gap-y-7 pc:gap-5 screen">
+          <div v-for="article in articleList">
+            <ArticleItem :article="article"/>
+          </div>
+        </div>
+        <div class="pagination flex justify-center w-full mt-4">
+          <el-pagination
+              background
+              layout="prev, pager, next"
+              :page-size="12"
+              :total="labelTotal"
+              @current-change="switchPage"
+          />
         </div>
       </div>
-      <div class="pagination flex justify-center w-full mt-4">
-        <el-pagination
-            background
-            layout="prev, pager, next"
-            :page-size="12"
-            :total="labelTotal"
-            @current-change="switchPage"
-        />
+      <div
+          v-if="!$viewport.isLessThan('tablet')"
+          class="profile-card-container"
+      >
+        <ProfileCard />
       </div>
-    </div>
-    <div
-        v-if="!$viewport.isLessThan('tablet')"
-        class="profile-card-container"
-    >
-      <ProfileCard />
-    </div>
 
+    </div>
   </div>
 </template>
 
@@ -107,5 +109,11 @@ onMounted( () => {
 @import "@/static/css/elementPlus.scss";
 #main {
   padding: 10px 5vw;
+}
+// 媒体查询：针对手机和小屏幕进行优化
+@media (max-width: 768px) {
+  #main {
+    padding: 10px 65px!important;
+  }
 }
 </style>

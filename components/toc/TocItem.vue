@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount } from "vue";
-import type { TocInterface } from "@/types/tocInterface";
-import { useArticleStore } from "@/store/articleStore";
+import {onBeforeUnmount, onMounted, ref} from "vue";
+import {useArticleStore} from "@/store/articleStore";
 import {debounce} from "lodash";
 
 const props = defineProps({
@@ -24,7 +23,7 @@ function scrollToTitle() {
 
   const target = document.getElementById(props.toc.id);
   if (target) {
-    target.scrollIntoView({ behavior: "smooth" });
+    target.scrollIntoView({behavior: "smooth"});
   }
 
   setTimeout(() => {
@@ -44,7 +43,7 @@ function setActiveToc(entries: IntersectionObserverEntry[]) {
 }
 
 onMounted(() => {
-  nextTick(debounce(async() => {
+  nextTick(debounce(async () => {
     // 创建IntersectionObserver实例
     observer.value = new IntersectionObserver(setActiveToc, {
       root: document.querySelector("#primary"), // 设置根元素
@@ -56,7 +55,7 @@ onMounted(() => {
     if (target) {
       observer.value?.observe(target);
     }
-  },300));
+  }, 300));
 });
 
 onBeforeUnmount(() => {
@@ -71,7 +70,9 @@ onBeforeUnmount(() => {
     :class="[toc.className, articleStore.selectTitle === toc.id ? 'active' : '']"
     @click="scrollToTitle"
   >
-    {{ toc.name }}
+    <text-ellipsis :placement="'right'">
+      {{ toc.name }}
+    </text-ellipsis>
   </div>
 </template>
 
@@ -86,21 +87,27 @@ onBeforeUnmount(() => {
     color: rgb(var(--z-primary-color));
   }
 }
+
 [data-theme="dark"] .active {
   color: #0084FF;
 }
+
 .toc-item-h2 {
   margin-left: 0.5em;
 }
+
 .toc-item-h3 {
   margin-left: 1em;
 }
+
 .toc-item-h4 {
   margin-left: 1.5em;
 }
+
 .toc-item-h5 {
   margin-left: 2em;
 }
+
 .toc-item-h6 {
   margin-left: 2.5em;
 }

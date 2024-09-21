@@ -114,7 +114,7 @@ useSeoMeta({
           <input
             v-model="usInp"
             type="text"
-            placeholder="发送弹幕(建议10个字以内...)"
+            placeholder="输入弹幕内容"
           >
           <button
             type="button"
@@ -173,8 +173,6 @@ useSeoMeta({
         font-size: 14px;
         color: #fff3ec;
         border-radius: 10px;
-        background: rgba(255, 255, 255, 0.1);
-
         &::placeholder {
           color: #fff3ec;
         }
@@ -224,7 +222,7 @@ useSeoMeta({
 }
 
 .bg-img {
-  background: rgba(110, 110, 110, 0.3);
+  //background: rgba(110, 110, 110, 0.3);
   background-size: cover;
   position: fixed;
   z-index: -10;

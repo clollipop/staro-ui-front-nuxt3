@@ -77,7 +77,7 @@ const {$viewport} = useNuxtApp();
       class="page flex"
     >
       <div class="page-content w-full">
-        <div class="scrollable .custom-tag-button box-header">
+        <div class="scrollable box-header">
           <div
             v-if="sortList.length > 0"
             class="box-header"
