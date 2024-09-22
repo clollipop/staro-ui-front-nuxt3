@@ -34,6 +34,7 @@ defineProps({
 <style scoped lang="scss">
 .friends {
   margin: 15px 15px 35px;
+  border: 1px solid #ffffff;
   padding: 0 11px 13px;
   font-weight: bold;
   color: rgb(var(--z-fontcolor-gray));

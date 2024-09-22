@@ -80,7 +80,7 @@ onBeforeUnmount(() => {
 .toc-list-item {
   overflow: hidden;
   white-space: nowrap;
-
+  color: var(--z-action-color);
   &.active {
     font-size: 100%;
     font-weight: 600;

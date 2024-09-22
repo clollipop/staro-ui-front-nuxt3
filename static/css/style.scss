@@ -85,7 +85,9 @@ input {
 }
 
 /*背景图片黑色蒙版*/
-[data-theme="dark"] #main {
+[data-theme="dark"] #main,
+[data-theme="dark"] #article,
+[data-theme="dark"] #primary {
   &::before {
     content: ""; /* 伪元素内容 */
     position: absolute; /* 绝对定位覆盖 */
@@ -94,6 +96,21 @@ input {
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.4); /* 淡黑色蒙版 */
+    z-index: -1; /* 确保蒙版在背景上 */
+  }
+}
+/*背景图片黑色蒙版*/
+#main,
+#article,
+#primary {
+  &::before {
+    content: ""; /* 伪元素内容 */
+    position: absolute; /* 绝对定位覆盖 */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(128, 128, 128, 0.1);
     z-index: -1; /* 确保蒙版在背景上 */
   }
 }

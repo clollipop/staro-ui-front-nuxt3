@@ -1,41 +1,68 @@
 /* 默认白天主题 */
 html {
-    /*主题色*/
-    --z-primary-color: 94, 114, 228;
-    --z-primary-select-color: 61, 85, 223;
-    --z-gray-color: 231, 234, 237;
-    --z-deep-color: 18, 20, 22;
-    /*字体颜色*/
-    --z-fontcolor: 255,255,255;
-    --z-search-fontcolor: 153, 164, 178;
-    --z-fontcolor-gray: 153, 164, 178;
-    --z-primary-fontcolor: 255, 255, 255;
-    --z-basic-input-color: 233, 237, 242;
-    --z-basic-color: 255, 255, 255;
-    --z-global-bg: 242, 243, 246;
-    --z-common-bg: 247, 248, 249;
-    --z-select-bg: 231, 235, 240;
-    --z-header-height: 60px;
-    --ahzoo-menu-shadow: 4px 4px 6px 0 rgba(0, 0, 0, .1), -4px -4px 6px rgb(var(--z-common-bg));
-    --title-font-hover-color: #39c5bb;
-    --bg-img: url('https://cdn.staro.cc/blog/pic/bg/A7545BD33A89DAB6F995462E48FBB02E.webp');
-    --heard-text-color: #39c5bb;
-}
-/* 夜间模式 */
-[data-theme="dark"] {
-    --z-primary-color: 67, 75, 77;
-    --z-primary-select-color: 43, 50, 51;
-    --z-gray-color: 59, 63, 66;
-    --z-fontcolor: 167, 177, 190;
-    --z-search-fontcolor:167, 177, 190;
-    --z-primary-fontcolor: 114, 132, 156;
-    --z-basic-input-color: 72, 82, 92;
-    --z-basic-color: 34, 34, 34;
-    --z-global-bg: 29, 34, 36;
-    --z-common-bg: 40, 44, 47;
-    --z-select-bg: 42, 46, 47;
-    --ahzoo-menu-shadow: 4px 4px 6px 0 rgba(48, 48, 48, .1), -4px -4px 6px rgb(var(--z-common-bg));
-    --heard-text-color: #39c5bb;
-    --bg-img: url('https://cdn.staro.cc/blog/pic/bg/965DB4D7CBE85E8C82BB8F709D5E9575.webp');
+    /* 主题色 */
+    --z-primary-color: 94, 114, 228; /* 蓝色，主要用于按钮和突出元素 */
+    --z-primary-select-color: 61, 85, 223; /* 深蓝色，主要选中状态的颜色 */
+    --z-gray-color: 231, 234, 237; /* 浅灰色，用于背景或分隔线 */
+    --z-deep-color: 18, 20, 22; /* 非常深的色调，接近黑色，用于文本或底边 */
+
+    /* 字体颜色 */
+    --z-action-color: #3f4a54; /* 深灰色，文章内容的白天文字颜色 */
+    --z-fontcolor: 255, 255, 255; /* 白色，主要字体颜色 */
+    --z-search-fontcolor: 153, 164, 178; /* 浅灰色，搜索框文本颜色 */
+    --z-fontcolor-gray: 153, 164, 178; /* 浅灰色，用于辅助文本 */
+    --z-primary-fontcolor: 255, 255, 255; /* 白色，主要字体颜色 */
+
+    /* 输入和背景颜色 */
+    --z-basic-input-color: 233, 237, 242; /* 浅灰色，输入框背景颜色 */
+    --z-basic-color: 255, 255, 255; /* 白色，基础背景颜色 */
+    --z-global-bg: 242, 243, 246; /* 非常浅的灰色，整体布局背景 */
+    --z-common-bg: 247, 248, 249; /* 近乎白色，常用背景颜色 */
+    --z-select-bg: 231, 235, 240; /* 浅灰色，用于选中状态的背景颜色 */
+
+    --z-header-height: 60px; /* 头部的高度 */
+
+    /* 菜单阴影 */
+    --ahzoo-menu-shadow: 4px 4px 6px 0 rgba(0, 0, 0, .1), -4px -4px 6px rgb(var(--z-common-bg)); /* 阴影效果，增加层次感 */
+
+    /* 标题悬停颜色 */
+    --title-font-hover-color: #39c5bb; /* 清新的青色，标题在悬停时的颜色 */
+
+    /* 背景图片 */
+    --bg-img: url('https://cdn.staro.cc/blog/pic/bg/A7545BD33A89DAB6F995462E48FBB02E.webp'); /* 背景图片的URL */
+
+    /* 头部文字颜色 */
+    --heard-text-color: #39c5bb; /* 清新的青色，头部文字的颜色 */
 }
 
+/* 夜间模式 */
+[data-theme="dark"] {
+    /* 主题色 */
+    --z-primary-color: 67, 75, 77; /* 暗绿色，夜间主题主要颜色 */
+    --z-primary-select-color: 43, 50, 51; /* 深灰色，夜间主要选中颜色 */
+    --z-gray-color: 59, 63, 66; /* 深灰色，夜间模式灰色 */
+
+    /* 字体颜色 */
+    --z-fontcolor: 167, 177, 190; /* 温和的蓝灰色，夜间模式字体颜色 */
+    --z-search-fontcolor: 167, 177, 190; /* 夜间模式搜索框中的字体颜色 */
+    --z-primary-fontcolor: 114, 132, 156; /* 中度蓝色，夜间模式主要字体颜色 */
+
+    /* 输入和背景颜色 */
+    --z-basic-input-color: 72, 82, 92; /* 深灰色，夜间模式基础输入框颜色 */
+    --z-basic-color: 34, 34, 34; /* 非常深的灰色，夜间基础颜色 */
+    --z-global-bg: 29, 34, 36; /* 深灰色，夜间全球背景颜色 */
+    --z-common-bg: 40, 44, 47; /* 近于黑色的深灰背景颜色 */
+    --z-select-bg: 42, 46, 47; /* 深灰色，用于夜间选中状态的背景颜色 */
+
+    /* 文章颜色 */
+    --z-action-color: #A7B1BE; /* 温和的蓝灰色，夜间文章文字颜色 */
+
+    /* 菜单阴影 */
+    --ahzoo-menu-shadow: 4px 4px 6px 0 rgba(48, 48, 48, .1), -4px -4px 6px rgb(var(--z-common-bg)); /* 夜间菜单的阴影效果 */
+
+    /* 头部文字颜色 */
+    --heard-text-color: #39c5bb; /* 清新的青色，夜间头部文字颜色 */
+
+    /* 背景图片 */
+    --bg-img: url('https://cdn.staro.cc/blog/pic/bg/965DB4D7CBE85E8C82BB8F709D5E9575.webp'); /* 夜间背景图片的URL */
+}

@@ -50,6 +50,7 @@ function clickMenu(menuItem: Menu) {
       <ul class="menu-button-list backdrop-blur-2 -mr-3 -mt-11">
         <li
           v-for="menuItem in menuState.menu"
+          :key="menuItem.title"
           class="menu-button-list-item"
           @click="clickMenu(menuItem)"
         >

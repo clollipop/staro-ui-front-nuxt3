@@ -38,7 +38,6 @@ const calculateTop = () => {
 const barrageHand = async () => {
   num.value = 0; // 重新开始索引
   const data = await treeHoleList(); // 请求弹幕数据
-  console.log(data);
   barrageList.value = data; // 将数据保存到列表中
   if (barrageList.value.length === 0) return; // 数据为空则退出
 
@@ -222,7 +221,6 @@ useSeoMeta({
 }
 
 .bg-img {
-  //background: rgba(110, 110, 110, 0.3);
   background-size: cover;
   position: fixed;
   z-index: -10;

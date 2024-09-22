@@ -62,14 +62,12 @@ const request = async <T>(
       body: method === "POST" || method === "PUT" ? body : undefined,
       lazy: options?.lazy ?? true, // 默认为懒加载
       onRequest({ options }) {
-        console.log(`[${method}] Request to ${url} started.`);
         // 这里可以添加其他逻辑，比如设置自定义请求头
       },
       onRequestError({ error }) {
         handleError("请求出错", error);
       },
       onResponse({ response }) {
-        console.log(`[${method}] Response from ${url} received.`);
         return response._data;
       },
       onResponseError({ response }) {

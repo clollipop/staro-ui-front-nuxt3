@@ -80,7 +80,6 @@ const initToc = () => {
   const observer = new MutationObserver(() => {
     if (document.querySelector("#preview-only-preview")) {
       articleTocList.value = tocGenerate("#preview-only-preview");
-      console.log("articleTocList:", articleTocList.value);
       articleStore.setTocList(articleTocList.value);
       articleStore.setSelectTitle(articleTocList.value[0]?.id);
       observer.disconnect();
@@ -372,16 +371,23 @@ onUnmounted(() => {
     max-width: 52vh !important;
   }
 }
-::v-deep(.md-editor-catalog-active > span ){
-  color: rgb(var(--z-primary-color));
-  &:hover {
-    color: rgb(var(--z-primary-color));
+::v-deep(.md-editor .md-editor-preview){
+  --md-color: var(--z-action-color) !important;
+}
+
+/* 波浪效果 黑夜*/
+[data-theme="dark"] .waves-parallax {
+  &:nth-child(1) {
+    fill: rgba(167, 177, 190, 0.7); /* 第一层波浪 */
   }
-}
-::v-deep(.md-editor-catalog-link span:hover){
-  color: rgb(var(--z-primary-color));
-}
-.article__aside{
-  //color: rgb(var(--z-fontcolor-gray));;
+  &:nth-child(2) {
+    fill: rgba(167, 177, 190, 0.5); /* 第二层波浪 */
+  }
+  &:nth-child(3) {
+    fill: rgba(167, 177, 190, 0.3); /* 第三层波浪 */
+  }
+  &:nth-child(4) {
+    fill: rgb(167, 177, 190); /* 第四层波浪 */
+  }
 }
 </style>

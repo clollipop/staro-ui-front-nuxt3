@@ -102,4 +102,19 @@ const props = defineProps({
     fill: rgb(var(--z-basic-color));
   }
 }
+/* 波浪效果 黑夜*/
+[data-theme="dark"] .waves-parallax {
+  &:nth-child(1) {
+    fill: rgba(167, 177, 190, 0.7); /* 第一层波浪 */
+  }
+  &:nth-child(2) {
+    fill: rgba(167, 177, 190, 0.5); /* 第二层波浪 */
+  }
+  &:nth-child(3) {
+    fill: rgba(167, 177, 190, 0.3); /* 第三层波浪 */
+  }
+  &:nth-child(4) {
+    fill: rgb(167, 177, 190); /* 第四层波浪 */
+  }
+}
 </style>
