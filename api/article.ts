@@ -50,5 +50,14 @@ export const listArticleByLabelId = (labelId: number, pagination: number) => {
     pageSize: 12
   };
   return useDefaultRequest.get(BASE_URL + `/page/label/${labelId}`, params);
-}
+};
+/**
+ * 根据ID 增加文章阅读数
+ * @param id 文章ID
+ */
+export const addArticleViewCount = (id: number) => {
+  return useDefaultRequest.get(BASE_URL + "/addViewCount", {id});
+};
+
+
 

@@ -1,131 +1,376 @@
-<script setup lang="ts">
-import {listComment, saveComment} from "@/api/comment";
-import type {CommentItem, Comment} from "@/types/commentInterface";
-import {SuSComment, SuSList} from "@/static/modules/sus";
-import {useGlobalStore} from "@/store/globalStore";
-import {OuOMessage} from "@/static/modules/ouo";
-
-const {path} = useRoute();
-const articlePath = <string>path.split("/").pop();
-const globalStore = useGlobalStore();
-const commentList = ref<any>();
-const comment = reactive<Comment>({} as Comment);
-const replyComment = ref();
-const showLoading = ref(false);
-
-/**
- * 数据获取
- */
-await getCommentList(1);
-
-/**
- * 正常评论弹窗
- */
-function toShowComment() {
-  globalStore.setShowComment(true);
-}
-
-/**
- * 回复评论弹窗
- * @param comment
- */
-function toReplyComment(comment: CommentItem) {
-  replyComment.value = unref(comment);
-  globalStore.setShowComment(true);
-}
-function toCancelComment() {
-  globalStore.setShowComment(false);
-}
-
-/**
- * 保存评论
- * @param comment
- */
-async function toSaveComment(comment: Comment) {
-  const beforeContent = localStorage.getItem("content");
-  comment.articleId = articlePath;
-  const contentLength = comment.contentMD.length;
-  if (!comment) {
-    return;
-  }
-  if (beforeContent === comment.contentMD) {
-    OuOMessage.warning("请勿发送重复内容");
-    return;
-  }
-  if (!comment.userName) {
-    OuOMessage.warning("请先填写昵称");
-    return;
-  }
-  if (contentLength < 3) {
-    OuOMessage.warning("字数过少");
-    return;
-  }
-  if (contentLength > 800) {
-    OuOMessage.warning("字数超出限制");
-    return;
-  }
-  showLoading.value = true;
-  const res = await unref(saveComment(comment));
-  showLoading.value = false;
-  if (!!res) {
-    localStorage.setItem("content", comment.contentMD);
-    OuOMessage.success("评论成功");
-    globalStore.setShowComment(false);
-    await getCommentList(1);
-  }
-}
-
-async function getCommentList(pagination: number) {
-  const newColumnList = await listComment(articlePath, pagination);
-  commentList.value = unref(newColumnList);
-}
-</script>
-
 <template>
-  <Teleport to="body">
-    <div class="comment-mask flex flex-col items-center justify-center absolute top-0 left-0 w-full h-full"
-         v-show="globalStore.showComment">
-      <div class="comment-sus flex flex-col">
-        <div v-show="showLoading" class="w-full h-full">
-          <Loading/>
+  <div class="container">
+    <div
+      v-for="item in comments"
+      :key="item.id"
+      class="comment"
+    >
+      <div class="info">
+        <img
+          class="avatar"
+          :src="item.fromAvatar"
+          width="36"
+          height="36"
+          alt="头像"
+        >
+        <div class="right">
+          <div class="name">
+            {{ item.fromName }}
+          </div>
+          <div class="date">
+            {{ item.createTime }}
+          </div>
         </div>
-        <div class="stress my-3" v-show="replyComment.userName">回复@{{ replyComment?.userName }}：</div>
-        <SuSComment class="w-full h-auto" :cache="true" :replyComment="replyComment" :emoji="''"
-                    @onCancel="toCancelComment" @onSave="toSaveComment"/>
       </div>
-    </div>
-  </Teleport>
-  <div id="comment" class="relative h-full overflow-y-scroll">
-    <div class="box-header flex justify-end">
-      <div class="right cursor-pointer">
-        <span class="stress mx-2"
-              @click="toShowComment">
-          发表评论
+      <div class="content">
+        {{ item.commentContent }}
+      </div>
+      <div class="control">
+        <span
+          class="like"
+          :class="{ active: item.isLike }"
+          @click="likeClick(item)"
+        >
+          <i class="iconfont icon-like" />
+          <span class="like-num">{{ item.likeCount > 0 ? item.likeCount + '人赞' : '赞' }}</span>
         </span>
-        <i class="fa fa-send"></i>
+        <span
+          class="comment-reply"
+          @click="showCommentInput(item)"
+        >
+          <i class="iconfont icon-comment" />
+          <span>回复</span>
+        </span>
       </div>
-    </div>
-    <div class="comment-list">
-      <SuSList v-for="commentItem in commentList" :comment="commentItem" @onReply="toReplyComment"/>
+      <div class="reply">
+        <div
+          v-for="reply in item.reply"
+          :key="reply.id"
+          class="item"
+        >
+          <div class="reply-content">
+            <span class="from-name">{{ reply.fromName }}</span><span>: </span>
+            <span class="to-name">@{{ reply.toName }}</span>
+            <span>{{ reply.commentContent }}</span>
+          </div>
+          <div class="reply-bottom">
+            <span>{{ reply.createTime }}</span>
+            <span
+              class="reply-text"
+              @click="showCommentInput(item, reply)"
+            >
+              <i class="iconfont icon-comment" />
+              <span>回复</span>
+            </span>
+          </div>
+        </div>
+        <div
+          v-if="item.reply.length > 0"
+          class="write-reply"
+          @click="showCommentInput(item)"
+        >
+          <i class="el-icon-edit" />
+          <span class="add-comment">添加新评论</span>
+        </div>
+        <transition name="fade">
+          <div
+            v-if="showItemId === item.id"
+            class="input-wrapper"
+          >
+            <el-input
+              v-model="inputComment"
+              class="gray-bg-input"
+              type="textarea"
+              :rows="3"
+              autofocus
+              placeholder="写下你的评论"
+            />
+            <div class="btn-control">
+              <span
+                class="cancel"
+                @click="cancel"
+              >取消</span>
+              <el-button
+                class="btn"
+                type="success"
+                round
+                @click="commitComment"
+              >
+                确定
+              </el-button>
+            </div>
+          </div>
+        </transition>
+      </div>
     </div>
   </div>
 </template>
 
-<style scoped lang="scss">
-.comment {
-  &-mask {
-    z-index: 11;
-    background-color: rgba(var(--z-common-bg), .8);
-    -webkit-backdrop-filter: saturate(180%) blur(20px);
-    backdrop-filter: saturate(180%) blur(20px);
-    -webkit-transition: all .25s ease;
-    transition: all .25s ease;
-  }
+<script lang="ts" setup>
+import { ref, defineProps, watch } from "vue";
 
-  &-sus {
-    margin: 30px 15vw;
-    max-width: 700px;
-    min-width: 300px;
+const props = defineProps<{
+  comments: Array<{
+    id: string; // 评论id
+    fromAvatar: string; // 头像
+    fromName: string; // 评论人昵称
+    createTime: string; //   评论时间
+    commentContent: string; // 评论内容
+    isLike: boolean | null; // 是否点赞
+    likeCount: number; // 点赞数
+    reply: Array<{
+      id: string; // 回复id
+      fromName: string; // 回复人昵称
+      toName: string; // 被回复人昵称
+      commentContent: string; // 回复内容
+      createTime: string; // 回复时间
+    }>;
+  }>;
+}>();
+
+const inputComment = ref("");
+const showItemId = ref<string | null>(null);
+
+watch(() => props.comments, (newComments) => {
+  console.log(newComments);
+});
+
+const likeClick = (item: any) => {
+  if (item.isLike === null) {
+    item.isLike = true;
+    item.likeCount++;
+  } else {
+    item.isLike ? item.likeCount-- : item.likeCount++;
+    item.isLike = !item.isLike;
+  }
+};
+
+const cancel = () => {
+  showItemId.value = null;
+};
+
+const commitComment = () => {
+  console.log(inputComment.value);
+};
+
+const showCommentInput = (item: any, reply?: any) => {
+  inputComment.value = reply ? "@" + reply.fromName + " " : "";
+  showItemId.value = item.id;
+};
+</script>
+
+<style scoped lang="scss">
+$color-main: #409EFF;
+$color-success: #67C23A;
+$color-warning: #E6A23C;
+$color-danger: #F56C6C;
+$color-info: #909399;
+
+$text-main: #303133;
+$text-normal: #606266;
+$text-minor: #909399;  //次要文字
+$text-placeholder: #C0C4CC;
+$text-333: #333;
+
+$border-first: #DCDFE6;
+$border-second: #E4E7ED;
+$border-third: #EBEEF5;
+$border-fourth: #F2F6FC;
+
+$content-bg-color: #fff;
+
+
+.container {
+  padding: 0 10px;
+  box-sizing: border-box;
+  
+  .comment {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    border-bottom: 1px solid $border-fourth;
+    
+    .info {
+      display: flex;
+      align-items: center;
+      
+      .avatar {
+        border-radius: 50%;
+      }
+      
+      .right {
+        display: flex;
+        flex-direction: column;
+        margin-left: 10px;
+        
+        .name {
+          font-size: 16px;
+          color: $text-main;
+          margin-bottom: 5px;
+          font-weight: 500;
+        }
+        
+        .date {
+          font-size: 12px;
+          color: $text-minor;
+        }
+      }
+    }
+    
+    .content {
+      font-size: 16px;
+      color: $text-main;
+      line-height: 20px;
+      padding: 10px 0;
+    }
+    
+    .control {
+      display: flex;
+      align-items: center;
+      font-size: 14px;
+      color: $text-minor;
+      
+      .like {
+        display: flex;
+        align-items: center;
+        margin-right: 20px;
+        cursor: pointer;
+        
+        &.active,
+        &:hover {
+          color: $color-main;
+        }
+        
+        .iconfont {
+          font-size: 14px;
+          margin-right: 5px;
+        }
+      }
+      
+      .comment-reply {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        
+        &:hover {
+          color: $text-333;
+        }
+        
+        .iconfont {
+          font-size: 16px;
+          margin-right: 5px;
+        }
+      }
+    }
+    
+    .reply {
+      margin: 10px 0;
+      border-left: 2px solid $border-first;
+      
+      .item {
+        margin: 0 10px;
+        padding: 10px 0;
+        border-bottom: 1px dashed $border-third;
+        
+        .reply-content {
+          display: flex;
+          align-items: center;
+          font-size: 14px;
+          color: $text-main;
+          
+          .from-name {
+            color: $color-main;
+          }
+          
+          .to-name {
+            color: $color-main;
+            margin-left: 5px;
+            margin-right: 5px;
+          }
+        }
+        
+        .reply-bottom {
+          display: flex;
+          align-items: center;
+          margin-top: 6px;
+          font-size: 12px;
+          color: $text-minor;
+          
+          .reply-text {
+            display: flex;
+            align-items: center;
+            margin-left: 10px;
+            cursor: pointer;
+            
+            &:hover {
+              color: $text-333;
+            }
+            
+            .icon-comment {
+              margin-right: 5px;
+            }
+          }
+        }
+      }
+      
+      .write-reply {
+        display: flex;
+        align-items: center;
+        font-size: 14px;
+        color: $text-minor;
+        padding: 10px;
+        cursor: pointer;
+        
+        &:hover {
+          color: $text-main;
+        }
+        
+        .el-icon-edit {
+          margin-right: 5px;
+        }
+      }
+      
+      .fade-enter-active,
+      .fade-leave-active {
+        transition: opacity 0.5s;
+      }
+      
+      .fade-enter,
+      .fade-leave-to {
+        opacity: 0;
+      }
+      
+      .input-wrapper {
+        padding: 10px;
+        
+        .gray-bg-input,
+        .el-input__inner {
+          /* background-color: #67C23A; */
+        }
+        
+        .btn-control {
+          display: flex;
+          justify-content: flex-end;
+          align-items: center;
+          padding-top: 10px;
+          
+          .cancel {
+            font-size: 16px;
+            color: $text-normal;
+            margin-right: 20px;
+            cursor: pointer;
+            
+            &:hover {
+              color: $text-333;
+            }
+          }
+          
+          .confirm {
+            font-size: 16px;
+          }
+        }
+      }
+    }
   }
 }
 </style>
