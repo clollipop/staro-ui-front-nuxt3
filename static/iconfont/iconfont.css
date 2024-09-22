@@ -2,9 +2,9 @@
   font-family: "iconfont"; /* Project id 3800373 */
   /* Color fonts */
   src: 
-       url('./iconfont.woff2?t=1725348497311') format('woff2'),
-       url('./iconfont.woff?t=1725348497311') format('woff'),
-       url('./iconfont.ttf?t=1725348497311') format('truetype');
+       url('iconfont.woff2?t=1727003173072') format('woff2'),
+       url('iconfont.woff?t=1727003173072') format('woff'),
+       url('iconfont.ttf?t=1727003173072') format('truetype');
 }
 
 .iconfont {
@@ -13,6 +13,126 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-stop:before {
+  content: "\e95d";
+}
+
+.icon-guankan:before {
+  content: "\e608";
+}
+
+.icon-xiaoxi:before {
+  content: "\e609";
+}
+
+.icon-lianxi:before {
+  content: "\e60e";
+}
+
+.icon-jilu:before {
+  content: "\e60f";
+}
+
+.icon-buxihuan:before {
+  content: "\e610";
+}
+
+.icon-baocun:before {
+  content: "\e613";
+}
+
+.icon-diannao:before {
+  content: "\e616";
+}
+
+.icon-lubiao:before {
+  content: "\e620";
+}
+
+.icon-rili1:before {
+  content: "\e621";
+}
+
+.icon-shandian:before {
+  content: "\e622";
+}
+
+.icon-shanchu:before {
+  content: "\e623";
+}
+
+.icon-shoucang:before {
+  content: "\e624";
+}
+
+.icon-xihuan:before {
+  content: "\e626";
+}
+
+.icon-xiangji:before {
+  content: "\e627";
+}
+
+.icon-xinhaodeng:before {
+  content: "\e628";
+}
+
+.icon-rili11:before {
+  content: "\e69b";
+}
+
+.icon-buhang:before {
+  content: "\e683";
+}
+
+.icon-fengsvg:before {
+  content: "\e684";
+}
+
+.icon-qichuang:before {
+  content: "\e686";
+}
+
+.icon-shuijue:before {
+  content: "\e689";
+}
+
+.icon-feng:before {
+  content: "\e6ae";
+}
+
+.icon-duoyun1:before {
+  content: "\e6af";
+}
+
+.icon-baofengyu:before {
+  content: "\e6b0";
+}
+
+.icon-qing:before {
+  content: "\e6b1";
+}
+
+.icon-qing-:before {
+  content: "\e6b2";
+}
+
+.icon-settings__eas:before {
+  content: "\e600";
+}
+
+.icon-settings__eas1:before {
+  content: "\e601";
+}
+
+.icon-yanjing:before {
+  content: "\e62c";
+}
+
+.icon-play:before {
+  content: "\e95b";
 }
 
 .icon-lishi1:before {

@@ -6,6 +6,216 @@
   "description": "博客项目",
   "glyphs": [
     {
+      "icon_id": "41155328",
+      "name": "停止",
+      "font_class": "stop",
+      "unicode": "e95d",
+      "unicode_decimal": 59741
+    },
+    {
+      "icon_id": "1244711",
+      "name": "观看",
+      "font_class": "guankan",
+      "unicode": "e608",
+      "unicode_decimal": 58888
+    },
+    {
+      "icon_id": "1244712",
+      "name": "消息",
+      "font_class": "xiaoxi",
+      "unicode": "e609",
+      "unicode_decimal": 58889
+    },
+    {
+      "icon_id": "1244713",
+      "name": "练习",
+      "font_class": "lianxi",
+      "unicode": "e60e",
+      "unicode_decimal": 58894
+    },
+    {
+      "icon_id": "1244714",
+      "name": "记录",
+      "font_class": "jilu",
+      "unicode": "e60f",
+      "unicode_decimal": 58895
+    },
+    {
+      "icon_id": "1244719",
+      "name": "不喜欢",
+      "font_class": "buxihuan",
+      "unicode": "e610",
+      "unicode_decimal": 58896
+    },
+    {
+      "icon_id": "1244720",
+      "name": "保存",
+      "font_class": "baocun",
+      "unicode": "e613",
+      "unicode_decimal": 58899
+    },
+    {
+      "icon_id": "1244723",
+      "name": "电脑",
+      "font_class": "diannao",
+      "unicode": "e616",
+      "unicode_decimal": 58902
+    },
+    {
+      "icon_id": "1244748",
+      "name": "路标",
+      "font_class": "lubiao",
+      "unicode": "e620",
+      "unicode_decimal": 58912
+    },
+    {
+      "icon_id": "1244749",
+      "name": "日历",
+      "font_class": "rili1",
+      "unicode": "e621",
+      "unicode_decimal": 58913
+    },
+    {
+      "icon_id": "1244752",
+      "name": "闪电",
+      "font_class": "shandian",
+      "unicode": "e622",
+      "unicode_decimal": 58914
+    },
+    {
+      "icon_id": "1244753",
+      "name": "互联网",
+      "font_class": "shanchu",
+      "unicode": "e623",
+      "unicode_decimal": 58915
+    },
+    {
+      "icon_id": "1244754",
+      "name": "收藏",
+      "font_class": "shoucang",
+      "unicode": "e624",
+      "unicode_decimal": 58916
+    },
+    {
+      "icon_id": "1244758",
+      "name": "喜欢",
+      "font_class": "xihuan",
+      "unicode": "e626",
+      "unicode_decimal": 58918
+    },
+    {
+      "icon_id": "1244760",
+      "name": "相机",
+      "font_class": "xiangji",
+      "unicode": "e627",
+      "unicode_decimal": 58919
+    },
+    {
+      "icon_id": "1244761",
+      "name": "信号灯",
+      "font_class": "xinhaodeng",
+      "unicode": "e628",
+      "unicode_decimal": 58920
+    },
+    {
+      "icon_id": "1252034",
+      "name": "日历1",
+      "font_class": "rili11",
+      "unicode": "e69b",
+      "unicode_decimal": 59035
+    },
+    {
+      "icon_id": "1319338",
+      "name": "步行",
+      "font_class": "buhang",
+      "unicode": "e683",
+      "unicode_decimal": 59011
+    },
+    {
+      "icon_id": "1319340",
+      "name": "风svg",
+      "font_class": "fengsvg",
+      "unicode": "e684",
+      "unicode_decimal": 59012
+    },
+    {
+      "icon_id": "1319350",
+      "name": "起床",
+      "font_class": "qichuang",
+      "unicode": "e686",
+      "unicode_decimal": 59014
+    },
+    {
+      "icon_id": "1319372",
+      "name": "睡觉",
+      "font_class": "shuijue",
+      "unicode": "e689",
+      "unicode_decimal": 59017
+    },
+    {
+      "icon_id": "1709167",
+      "name": "风",
+      "font_class": "feng",
+      "unicode": "e6ae",
+      "unicode_decimal": 59054
+    },
+    {
+      "icon_id": "1709168",
+      "name": "多云",
+      "font_class": "duoyun1",
+      "unicode": "e6af",
+      "unicode_decimal": 59055
+    },
+    {
+      "icon_id": "1709169",
+      "name": "暴风雨",
+      "font_class": "baofengyu",
+      "unicode": "e6b0",
+      "unicode_decimal": 59056
+    },
+    {
+      "icon_id": "1709178",
+      "name": "晴",
+      "font_class": "qing",
+      "unicode": "e6b1",
+      "unicode_decimal": 59057
+    },
+    {
+      "icon_id": "1709180",
+      "name": "晴-1",
+      "font_class": "qing-",
+      "unicode": "e6b2",
+      "unicode_decimal": 59058
+    },
+    {
+      "icon_id": "1973165",
+      "name": "设置2",
+      "font_class": "settings__eas",
+      "unicode": "e600",
+      "unicode_decimal": 58880
+    },
+    {
+      "icon_id": "1973169",
+      "name": "设置3",
+      "font_class": "settings__eas1",
+      "unicode": "e601",
+      "unicode_decimal": 58881
+    },
+    {
+      "icon_id": "20529954",
+      "name": "眼睛",
+      "font_class": "yanjing",
+      "unicode": "e62c",
+      "unicode_decimal": 58924
+    },
+    {
+      "icon_id": "41155322",
+      "name": "播放",
+      "font_class": "play",
+      "unicode": "e95b",
+      "unicode_decimal": 59739
+    },
+    {
       "icon_id": "23949443",
       "name": "历史",
       "font_class": "lishi1",
