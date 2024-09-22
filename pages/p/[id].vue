@@ -1,12 +1,12 @@
 <script lang="ts" setup>
-import {type HeadList, MdCatalog, MdPreview} from "md-editor-v3";
+import {MdPreview} from "md-editor-v3";
 import "md-editor-v3/lib/preview.css";
 import "@/static/css/md-style.scss";
 import {nextTick, onMounted, reactive, ref} from "vue";
 import {formatDateTime, getAttribute, setAttribute, tocGenerate} from "@/static/modules/utils";
 import {AuthorImpl} from "@/types/impl/author";
 import ArticleColumn from "@/components/column/ArticleColumn.vue";
-import {getArticleDetail} from "@/api/article";
+import {addArticleViewCount, getArticleDetail} from "@/api/article";
 import {useMenuStore} from "@/store/menuStore";
 import {listLabelByArticleId} from "@/api/label";
 import {useArticleStore} from "@/store/articleStore";
@@ -50,7 +50,10 @@ const getArticleById = async (path: string) => {
   Object.assign(article, newArticle);
   return article;
 };
-
+// 增加阅读量
+const addViewCount = async () => {
+ await addArticleViewCount(article.id);
+}
 // 动态修改主题
 const setProperty = () => {
   const articleEle = document.getElementById("article");
@@ -85,12 +88,18 @@ const initToc = () => {
       observer.disconnect();
     }
   });
-  observer.observe(document.body, { childList: true, subtree: true });
+  observer.observe(document.body, {childList: true, subtree: true});
+};
+// 计算阅读时间
+const countReadTime = () => {
+  const time = article.content.length / 400;
+  return "大约阅读 " + (Math.round(time) > 1 ? Math.round(time) : Math.round(time)) + " 分钟";
 };
 // 组件挂载完成后执行获取文章数据的操作
 onMounted(() => {
   nextTick(debounce(async () => {
     await getArticleById(articleId);
+    await addViewCount();
     setProperty();
     initToc();
     initStyle();
@@ -108,7 +117,7 @@ onUnmounted(() => {
   </div>
   <div id="article" class="w-full">
     <Loading :show="!article.title"/>
-    <div v-if="article.title" class="article__mask relative h-[60vh] mobile:h-[280px]">
+    <div v-if="article.title" class="article__mask relative h-[60vh] mobile:h-[280px] text-center">
       <div class="article-cover h-full absolute">
         <img :src="article.cover || article.videoUrl" alt=""/>
       </div>
@@ -117,42 +126,111 @@ onUnmounted(() => {
           {{ article.title }}
         </div>
         <div class="font-size-small flex flex-col">
-          <span class="my-2">
-            <span>创建时间：{{ formatDateTime(article?.createTime) }}</span>
-            <span class="mx-2">|</span>
-            <span>最后更新：{{ formatDateTime(article?.updateTime) }}</span>
-          </span>
-          <span class="article-meta__sort">
-            <span class="sort-column">分类:
-              <span class="mr-1" style="color:#efdf00" v-for="(sort, index) in article.sortName" :key="index">
-                {{ sort }}
+          <!--    创建时候和更新时间      -->
+          <span class="my-2 article-time">
+            <span>
+              {{ formatDateTime(article?.createTime) }}
+              <span style="margin-left: 2px;">
+                : 发布时间
+                <SvgIcon
+                    style="font-size: 18px"
+                    class="icon-rili"
+                    icon="rili"
+                />
               </span>
             </span>
+            <span class="mx-2">|</span>
+            <span>
+              <SvgIcon
+                  style="font-size: 16px"
+                  class="icon-lishijilu"
+                  icon="lishijilu"
+              />
+              更新时间：{{ formatDateTime(article?.updateTime) }}</span>
           </span>
-          <span class="article-meta__label mt-2.5">
-            <span class="sort-column">标签:
+          <!--     分类和标签     -->
+          <span class="article-sort-label">
+            <!--     分类       -->
+            <span class="sort-column">
+              <span style="color:#efdf00" v-for="(sort, index) in article.sortName" :key="index">
+                {{ sort }}
+              </span>
+              <span style="margin-left: 2px;">
+                : 分类
+              <SvgIcon
+                  style="font-size: 14px"
+                  class="icon-fenlei1 article-tags text-sm text-gray-600"
+                  icon="fenlei1"
+              />
+              </span>
+            </span>
+            <!--     间隔符       -->
+            <span class="mx-2">|</span>
+            <!--     标签       -->
+            <span class="label-column">
+              <SvgIcon
+                  style="font-size: 16px"
+                  class="icon-biaoqian1 article-tags text-sm text-gray-600"
+                  icon="biaoqian1"
+              />
+              标签:
               <span class="mr-1" style="color:#efdf00" v-for="(label, index) in article.labelName" :key="index">
                 {{ label }}
               </span>
             </span>
           </span>
+          <!--     文字数量和阅读时间     -->
+          <span class="my-2">
+            <span>
+              {{ countReadTime() }}
+            <SvgIcon
+                style="font-size: 18px"
+                class="icon-yinliao"
+                icon="yinliao"
+            />
+            </span>
+            <!--     间隔符       -->
+            <span class="mx-2">|</span>
+             <span>
+                <SvgIcon
+                    style="font-size: 18px"
+                    class="icon-jilu"
+                    icon="jilu"
+                />
+              文章字数：{{ article.content.length }}
+            </span>
+          </span>
+          <!--     阅读数     -->
+          <span class="my-2">
+            <span>
+              <SvgIcon
+                  style="font-size: 18px"
+                  class="icon-yanjing"
+                  icon="yanjing"
+              />
+              阅读数：{{ article.viewCount }}
+            </span>
+          </span>
         </div>
       </div>
-      <svg v-if="$viewport.isGreaterThan('mobileMedium')" class="article-waves w-full absolute bottom-0"
-           preserveAspectRatio="none"
-           shape-rendering="auto" viewBox="0 24 150 28" xmlns="http://www.w3.org/2000/svg"
-           xmlns:xlink="http://www.w3.org/1999/xlink"
-      >
-        <defs>
-          <path id="waves-gentle" d="M-160 44c30 0 58-18 88-18s58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z"/>
-        </defs>
-        <g class="waves-parallax">
-          <use x="48" xlink:href="#waves-gentle" y="0"/>
-          <use x="48" xlink:href="#waves-gentle" y="3"/>
-          <use x="48" xlink:href="#waves-gentle" y="5"/>
-          <use x="48" xlink:href="#waves-gentle" y="7"/>
-        </g>
-      </svg>
+      <!--   波浪   -->
+      <div>
+        <svg v-if="$viewport.isGreaterThan('mobileMedium')" class="article-waves w-full absolute bottom-0"
+             preserveAspectRatio="none"
+             shape-rendering="auto" viewBox="0 24 150 28" xmlns="http://www.w3.org/2000/svg"
+             xmlns:xlink="http://www.w3.org/1999/xlink"
+        >
+          <defs>
+            <path id="waves-gentle" d="M-160 44c30 0 58-18 88-18s58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z"/>
+          </defs>
+          <g class="waves-parallax">
+            <use x="48" xlink:href="#waves-gentle" y="0"/>
+            <use x="48" xlink:href="#waves-gentle" y="3"/>
+            <use x="48" xlink:href="#waves-gentle" y="5"/>
+            <use x="48" xlink:href="#waves-gentle" y="7"/>
+          </g>
+        </svg>
+      </div>
     </div>
     <div class="article__container rounded-tr-3xl">
       <div class="basic__container flex justify-center w-full">
@@ -276,11 +354,30 @@ onUnmounted(() => {
   filter: brightness(0.9);
 }
 
-.sort-category, .sort-column {
-  padding: 4px 8px;
-  margin-right: 6px;
-  background: #ffffff52;
+/* 文章分类标签*/
+.article-sort-label {
+  display: flex; /* 使用flex布局 */
+  margin: 0 auto;
+
+}
+
+.sort-column {
+  margin-right: 2px;
+  text-align: right; /* 右对齐 */
+}
+
+.label-column {
+  margin-left: 2px;
+  text-align: left; /* 左对齐 */
+}
+
+.sort-column, .label-column {
+  min-width: 100px;
+  max-width: 1000px;
+  width: 400px;
   border-radius: 5px;
+  justify-content: center;
+  align-items: center;
 }
 
 .waves-parallax {
@@ -370,8 +467,15 @@ onUnmounted(() => {
     min-height: 50vh !important;
     max-width: 52vh !important;
   }
+  .article-time {
+    width: 330px;
+  }
+  .sort-column{
+    width: 154px;
+  }
 }
-::v-deep(.md-editor .md-editor-preview){
+
+::v-deep(.md-editor .md-editor-preview) {
   --md-color: var(--z-action-color) !important;
 }
 
@@ -380,12 +484,15 @@ onUnmounted(() => {
   &:nth-child(1) {
     fill: rgba(167, 177, 190, 0.7); /* 第一层波浪 */
   }
+
   &:nth-child(2) {
     fill: rgba(167, 177, 190, 0.5); /* 第二层波浪 */
   }
+
   &:nth-child(3) {
     fill: rgba(167, 177, 190, 0.3); /* 第三层波浪 */
   }
+
   &:nth-child(4) {
     fill: rgb(167, 177, 190); /* 第四层波浪 */
   }
