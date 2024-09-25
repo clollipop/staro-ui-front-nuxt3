@@ -8,9 +8,9 @@ import {AuthorImpl} from "@/types/impl/author";
 import ArticleColumn from "@/components/column/ArticleColumn.vue";
 import {addArticleViewCount, getArticleDetail} from "@/api/article";
 import {useMenuStore} from "@/store/menuStore";
-import {listLabelByArticleId} from "@/api/label";
 import {useArticleStore} from "@/store/articleStore";
 import {debounce} from "lodash";
+import { listTypeComment} from "@/api/comment";
 
 const {path} = useRoute();
 const menuState = useMenuStore();
@@ -20,12 +20,10 @@ menuState.setWithComment();
 const {$viewport} = useNuxtApp();
 const article = reactive<any>({});
 const columnList = reactive([]);
-const articleTocList = ref<any>([]);
+const articleTocList = ref<any>(null);
 const authorInfo = new AuthorImpl();
 const nowIndex = ref(0);
 const articleId = <string>path.split("/").pop();
-// 获取评论
-// await getColumnByArticleId(article.id);
 
 // 切换底部相关专栏滑窗
 const switchColumn = (page: any) => {
@@ -33,8 +31,9 @@ const switchColumn = (page: any) => {
 };
 
 // 获取与文章ID相关的专栏
-const getColumnByArticleId = async (articleId: string) => {
-  const newColumn = await listLabelByArticleId(articleId);
+const getColumnByArticleId = async (articleId: number) => {
+  const newColumn = await listTypeComment(articleId,20);
+  console.log("newColumn", newColumn);
   if (newColumn) {
     Object.assign(columnList, newColumn);
   }
@@ -52,7 +51,7 @@ const getArticleById = async (path: string) => {
 };
 // 增加阅读量
 const addViewCount = async () => {
- await addArticleViewCount(article.id);
+  await addArticleViewCount(article.id);
 }
 // 动态修改主题
 const setProperty = () => {
@@ -79,17 +78,15 @@ useSeoMeta({
   description: () => `${article.description ?? authorInfo.description[1]}`
 });
 // 初始化目录
+// 自定义事件
 const initToc = () => {
-  const observer = new MutationObserver(() => {
-    if (document.querySelector("#preview-only-preview")) {
-      articleTocList.value = tocGenerate("#preview-only-preview");
-      articleStore.setTocList(articleTocList.value);
-      articleStore.setSelectTitle(articleTocList.value[0]?.id);
-      observer.disconnect();
-    }
+  document.addEventListener("contentLoaded", () => {
+    articleTocList.value = tocGenerate("#preview-only-preview");
+    articleStore.setTocList(articleTocList.value);
+    articleStore.setSelectTitle(articleTocList.value[0]?.id);
   });
-  observer.observe(document.body, {childList: true, subtree: true});
 };
+
 // 计算阅读时间
 const countReadTime = () => {
   const time = article.content.length / 400;
@@ -97,12 +94,16 @@ const countReadTime = () => {
 };
 // 组件挂载完成后执行获取文章数据的操作
 onMounted(() => {
+  const event = new Event("contentLoaded");
   nextTick(debounce(async () => {
     await getArticleById(articleId);
+    await getColumnByArticleId(articleId as any);
     await addViewCount();
-    setProperty();
     initToc();
+    document.dispatchEvent(event);
+    setProperty();
     initStyle();
+    // 获取评论
   }, 300));
 });
 onUnmounted(() => {
@@ -116,7 +117,7 @@ onUnmounted(() => {
     <Header/>
   </div>
   <div id="article" class="w-full">
-    <Loading :show="!article.title"/>
+    <Loading :show="!articleTocList"/>
     <div v-if="article.title" class="article__mask relative h-[60vh] mobile:h-[280px] text-center">
       <div class="article-cover h-full absolute">
         <img :src="article.cover || article.videoUrl" alt=""/>
@@ -244,9 +245,13 @@ onUnmounted(() => {
                      previewTheme="arknights"
                      :showCodeRowNumber="true"
           />
-          <div class="copyright my-5 p-5 rounded-b-xl">
-            <p v-html="authorInfo.copyright"></p>
+          <!--     评论区     -->
+          <div class="box mt-3 mb-2">
+            <div>
+              <Comment :comments="columnList"/>
+            </div>
           </div>
+          <!--    文章上下      -->
           <div class="column-list flex flex-col overflow-hidden relative">
             <ArticleColumn
                 v-for="(column, index) in columnList"
@@ -258,8 +263,9 @@ onUnmounted(() => {
               <OuoPagination v-if="columnList.length === 2" :total="2" :type="'dotted'" @onclick="switchColumn"/>
             </div>
           </div>
-          <div class="box mt-3">
-            <!--<Comment/>-->
+          <!--     文章声明     -->
+          <div class="copyright my-5 p-5 rounded-b-xl">
+            <p v-html="authorInfo.copyright"></p>
           </div>
         </div>
         <!--   文章导航     -->
