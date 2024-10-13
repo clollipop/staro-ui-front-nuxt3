@@ -248,7 +248,7 @@ onUnmounted(() => {
           <!--     评论区     -->
           <div class="box mt-3 mb-2">
             <div>
-              <Comment :comments="columnList"/>
+              <Comment :comments="columnList" :articleId="article.id"/>
             </div>
           </div>
           <!--    文章上下      -->

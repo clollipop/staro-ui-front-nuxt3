@@ -14,7 +14,7 @@ interface webInfoStore {
   randomName: []
   randomCover: []
 }
-export const useWebInfoStore = defineStore("useWebInfoStore", () => {
+export const useWebInfoStore = defineStore("webInfo", () => {
   const webInfo = ref() as Ref<webInfoStore>;
 
   const setWebInfoStore = (webInfoData:any) => {

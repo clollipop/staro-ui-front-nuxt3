@@ -11,6 +11,7 @@
         :rows="5"
         type="textarea"
         placeholder="请输入你的评论"
+        @focus="cancel"
       />
       <div class="action-buttons">
         <el-popover
@@ -193,7 +194,7 @@ import {useWebInfoStore} from "@/store/webInfoStore";
 import appData from "@/assets/images/emojis.json";
 import {ChatBubbleOvalLeftEllipsisIcon, FaceSmileIcon} from "@heroicons/vue/24/solid";
 import {HandThumbUpIcon} from "@heroicons/vue/16/solid";
-import { likeCountComment} from "~/api/comment";
+import { likeCountComment} from "@/api/comment";
 
 const webInfoStore = useWebInfoStore();
 
@@ -213,7 +214,9 @@ const props = defineProps<{
       commentContent: string; // 回复内容
       createTime: string; // 回复时间
     }>;
-  }>;
+  }>,
+  // 文章ID
+  articleId: number,
 }>();
 const inputComment = ref("");
 const showItemId = ref<string | null>(null);
@@ -221,7 +224,7 @@ const showItemId = ref<string | null>(null);
 const faceList = ref([]);
 const loadEmojis = () => {
   for (const i in appData) {
-    faceList.value.push(appData[i].char);
+    faceList.value.push((appData[i].char) as never);
   }
 };
 loadEmojis();
@@ -259,7 +262,9 @@ const cancel = () => {
 };
 // 提交评论
 const commitComment = () => {
-  console.log(inputComment.value);
+  console.log(inputComment.value); // 评论内容
+  console.log(showItemId.value); // 评论父ID
+  console.log(props.articleId); // 文章ID
 };
 // 显示评论输入框
 const showCommentInput = (item: any, reply?: any) => {

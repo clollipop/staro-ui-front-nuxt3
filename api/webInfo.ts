@@ -1,5 +1,4 @@
 import {useDefaultRequest} from "@/utils/request";
-import type {Article, PreviewArticle} from "@/types/articleInterface";
 
 export interface WebInfoVo {
   id: number
