@@ -232,3 +232,9 @@ svg {
 .box-header {
   margin-bottom: 13px;
 }
+
+/*element-ui*/
+//  fix el-message弹框被el-dialog覆盖的问题。
+.el-message {
+  z-index: 99999999 !important;
+}

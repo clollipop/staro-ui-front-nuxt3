@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import {useGlobalStore} from "@/store/globalStore";
+import {useUserStore} from "@/store/userStore";
+import {useTokenStore} from "@/store/tokenStore";
 
 const globalState = useGlobalStore();
 
@@ -23,9 +25,43 @@ const isHovered = ref(false);
 function openSearch() {
   globalState.setShowSearch(true);
 }
+
+/**
+ * 登录 打开弹窗
+ */
+const loginRef = ref();
+const openLogin = async () => {
+  loginRef.value.open();
+};
+/**
+ * 登录成功回调
+ */
+const userStore = useUserStore();
+const tokenStore = useTokenStore();
+/* 登录成功回调 */
+const successLogin = async () => {
+  
+};
+/**
+ * 下拉框点击事件
+ */
+const commandHandle = (command: string | number | object) => {
+  /* 退出登录 */
+  if (command === "logout") {
+    userStore.reset();
+    tokenStore.reset();
+  }else if (command === "info") {
+    // 个人信息
+    skip("userInfo");
+  }
+};
 </script>
 <template>
   <Search />
+  <login
+    ref="loginRef"
+    @success="successLogin"
+  />
   <div
     id="nav"
     class="ss-font stress bottom-line-1 fixed flex items-center justify-center top-0 rounded-b-xl"
@@ -83,8 +119,9 @@ function openSearch() {
         友 链
       </span>
     </div>
-    <!--  搜索  -->
-    <div class="right cursor-pointer absolute right-7">
+
+    <div class="right cursor-pointer absolute right-7 flex items-center">
+      <!--  搜索  -->
       <span
         class="normal-svg right__item hover-shadow hvr-icon-scale-shake"
         @click="openSearch()"
@@ -95,6 +132,40 @@ function openSearch() {
         />
         搜索
       </span>
+      <!--  登录    -->
+      <span
+        v-if="!userStore.userData?.id"
+        class="ml-4 hover-shadow hvr-icon-scale-shake"
+        @click="openLogin()"
+      >
+        <SvgIcon
+          style="font-size: 18px"
+          class="icon-shuijue hvr-icon text-lg"
+          icon="shuijue"
+        />
+        登录
+      </span>
+      <!-- 登录成功-->
+      <el-dropdown
+        v-else
+        @command="commandHandle"
+      >
+        <el-avatar
+          class="ml-6"
+          :src="'https://q1.qlogo.cn/g?b=qq&nk=1792945133&s=640'"
+        />
+        <template #dropdown>
+          <el-dropdown-menu>
+            <el-dropdown-item command="logout">
+              退出登录
+            </el-dropdown-item>
+            <el-dropdown-item command="info">
+              个人信息
+            </el-dropdown-item>
+          </el-dropdown-menu>
+        </template>
+      </el-dropdown>
+      <div />
     </div>
   </div>
 </template>
