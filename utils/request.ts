@@ -3,7 +3,8 @@ import { OuOMessage } from "@/static/modules/ouo";
 import type { UseFetchOptions } from "#app";
 import type { KeysOf, PickFrom } from "#app/composables/asyncData";
 import type {Ref} from "vue";
-
+import {useTokenStore} from "@/store/tokenStore";
+import { ElMessage } from "element-plus";
 type MethodType = "GET" | "POST" | "PUT" | "DELETE";
 type UrlType = string | Request | Ref<string | Request> | (() => string | Request);
 
@@ -22,20 +23,32 @@ const BASE_URL = "/blog-api";
 // 统一处理错误
 const handleError = (message: string, error: any) => {
   console.error(message, error);
-  OuOMessage.error(message);
+  ElMessage({
+    showClose: true,
+    message: message,
+    type: "error"
+  });
 };
 
 // 格式化结果工具函数
 const formatResult = <T>(res: any, handleData: boolean): T | null => {
   if (!res) {
-    OuOMessage.error("未获取到有效数据");
+    ElMessage({
+      showClose: true,
+      message: "未获取到有效数据",
+      type: "error"
+    });
     return null;
   }
   const { data, code, msg } = res;
   if (code == 0) {
     return handleData ? toRaw(data) : toRaw(res);
   } else {
-    OuOMessage.error(msg || "操作失败");
+    ElMessage({
+      showClose: true,
+      message: msg || "操作失败",
+      type: "error"
+    });
     console.error("请求失败：", data);
     return null;
   }
@@ -52,7 +65,7 @@ const request = async <T>(
   try {
     // 生成唯一请求缓存Key
     const cacheKey = hash(url + method + JSON.stringify(params) + JSON.stringify(body));
-
+    const token = useTokenStore();
     const { pending, data, error } = await useFetch(url, {
       baseURL: BASE_URL,
       key: cacheKey, // 防止重复请求
@@ -62,7 +75,9 @@ const request = async <T>(
       body: method === "POST" || method === "PUT" ? body : undefined,
       lazy: options?.lazy ?? true, // 默认为懒加载
       onRequest({ options }) {
-        // 这里可以添加其他逻辑，比如设置自定义请求头
+        // 设置请求头
+        options.headers = new Headers(options.headers);
+        options.headers.set("Authorization",  "Bearer "+token.tokenData?.accessToken as any || {});
       },
       onRequestError({ error }) {
         handleError("请求出错", error);
