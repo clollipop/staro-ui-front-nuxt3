@@ -12,9 +12,6 @@ export const useGlobalStore = defineStore("globalStoreId", {
     setShowSearch(showSearch: boolean) {
       this.showSearch = showSearch;
     },
-    setShowComment(showComment: boolean) {
-      this.showComment = showComment;
-    },
     setShowFriendForm(showFriendForm: boolean) {
       this.showFriendForm = showFriendForm;
     }

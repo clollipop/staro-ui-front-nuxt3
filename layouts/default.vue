@@ -84,7 +84,7 @@ nextTick(async () => {
         id="primary"
         class="w-full overflow-y-scroll"
       >
-        <NuxtPage />
+        <NuxtPage v-if="webInfoStore.webInfo" />
         <Footer />
       </div>
       <Menu />
