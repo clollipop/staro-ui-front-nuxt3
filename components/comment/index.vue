@@ -561,4 +561,7 @@ $content-bg-color: #fff;
 .emoji-button {
   margin: 8px 15px 0 0;
 }
+.el-textarea {
+  --el-input-bg-color: rgb(var(--z-common-bg), 0.9);
+}
 </style>
