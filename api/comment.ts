@@ -1,9 +1,18 @@
 import {useDefaultRequest} from "@/utils/request";
 import type {CommentItem, TopCommentItem, Comment} from "@/types/commentInterface";
-enum Type {
+export enum Type {
   Comment     = 0, // 评论
   Leave    = 1, // 2:树洞留言
   Love      = 2 // 3：家庭情感
+}
+export interface CommentInterface {
+  source: number; // 文章id
+  content: string; // 评论内容
+  userId: number; // 用户id
+  parentUserId: number; // 父评论用户id
+  type: Type; // 评论类型
+  parentCommentId: number; // 父评论id
+  commentContent: string; // 回复内容
 }
 
 /**
@@ -37,8 +46,15 @@ export function topComment(){
   return useDefaultRequest.get<TopCommentItem[]>(BASE_URL + "/top");
 }
 
-export function saveComment(comment: Comment) {
-  return useDefaultRequest.post(BASE_URL, comment);
+export function saveComment(comment: {
+  parentUserId: null | number;
+  parentCommentId: any;
+  commentContent: string;
+  source: number
+  type: number;
+}) {
+  comment.type  = Type.Comment;
+  return useDefaultRequest.post(BASE_URL+"/create", comment);
 }
 
 

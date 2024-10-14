@@ -1,5 +1,8 @@
 <template>
-  <div class="container">
+  <div
+    id="comment"
+    class="container"
+  >
     <!--  标题  -->
     <div class="text-2xl border-gray-300 mb-2 pb-2">
       评论
@@ -44,7 +47,7 @@
           class="submit-btn"
           type="primary"
           :disabled="content == ''"
-          @click="submitMessage"
+          @click="commitComment(0,null)"
         >
           发送
         </el-button>
@@ -59,14 +62,14 @@
       <div class="info">
         <img
           class="avatar"
-          :src="item.fromAvatar||webInfoStore.getRandomAvatar()"
+          :src="item.avatar ||webInfoStore.getRandomAvatar()"
           width="36"
           height="36"
           alt="头像"
         >
         <div class="right">
           <div class="name">
-            {{ item.fromName }}
+            {{ item.nikeName }}
           </div>
           <div class="date">
             {{ formatDateTime(item.createTime as any, 2) }}
@@ -93,19 +96,20 @@
           <span>回复</span>
         </span>
       </div>
+      <!--  子评论列表    -->
       <div class="reply">
         <div
-          v-for="reply in item.reply"
+          v-for="reply in item.child"
           :key="reply.id"
           class="item"
         >
           <div class="reply-content">
-            <span class="from-name">{{ reply.fromName }}</span><span>: </span>
-            <span class="to-name">@{{ reply.toName }}</span>
+            <span class="from-name">{{ reply.nikeName }}</span><span>: </span>
+            <span class="to-name">@{{ reply.parentNikeName }}</span>
             <span>{{ reply.commentContent }}</span>
           </div>
           <div class="reply-bottom">
-            <span>{{ reply.createTime }}</span>
+            <span> {{ formatDateTime(reply.createTime as any, 2) }}</span>
             <span
               class="reply-text"
               @click="showCommentInput(item, reply)"
@@ -116,7 +120,7 @@
           </div>
         </div>
         <div
-          v-if="item.reply?.length > 0"
+          v-if="item.child?.length > 0"
           class="write-reply"
           @click="showCommentInput(item)"
         >
@@ -175,7 +179,7 @@
                 class="btn"
                 type="success"
                 round
-                @click="commitComment"
+                @click="commitComment(1,item)"
               >
                 确定
               </el-button>
@@ -194,23 +198,27 @@ import {useWebInfoStore} from "@/store/webInfoStore";
 import appData from "@/assets/images/emojis.json";
 import {ChatBubbleOvalLeftEllipsisIcon, FaceSmileIcon} from "@heroicons/vue/24/solid";
 import {HandThumbUpIcon} from "@heroicons/vue/16/solid";
-import { likeCountComment} from "@/api/comment";
+import {likeCountComment, saveComment, Type} from "@/api/comment";
 
 const webInfoStore = useWebInfoStore();
 
 const props = defineProps<{
   comments: Array<{
     id: string; // 评论id
-    fromAvatar: string; // 头像
-    fromName: string; // 评论人昵称
+    avatar: string; // 头像
+    nikeName: string; // 评论人昵称
     createTime: string; //   评论时间
     commentContent: string; // 评论内容
+    userId: number; // 评论人id
     isLike: boolean | null; // 是否点赞
+    parentUserId: number | null; // 父评论人id
     likeCount: number; // 点赞数
-    reply: Array<{
+    child: Array<{
       id: string; // 回复id
-      fromName: string; // 回复人昵称
-      toName: string; // 被回复人昵称
+      userId: number; // 评论人id
+      parentUserId: number | null; // 父评论人id
+      nikeName: string; // 回复人昵称
+      parentNikeName: string; // 被回复人昵称
       commentContent: string; // 回复内容
       createTime: string; // 回复时间
     }>;
@@ -261,14 +269,26 @@ const cancel = () => {
   showItemId.value = null;
 };
 // 提交评论
-const commitComment = () => {
-  console.log(inputComment.value); // 评论内容
-  console.log(showItemId.value); // 评论父ID
-  console.log(props.articleId); // 文章ID
+const commitComment = async (type:number,comment:any) => {
+  console.log("comment:");
+  console.log(comment);
+  const data = await saveComment({
+    commentContent:type==0 ? content.value : inputComment.value,
+    source: props.articleId,
+    parentCommentId: type==0 ? 0 :childCommentId.value ? childCommentId.value : showItemId.value as any ,
+    parentUserId: type==0 ? null : comment.parentUserId as number,
+    type: Type.Comment
+  });
 };
 // 显示评论输入框
+const childCommentId = ref(null);
 const showCommentInput = (item: any, reply?: any) => {
-  inputComment.value = reply ? "@" + reply.fromName + " " : "";
+  if (reply) {
+    childCommentId.value = reply.id;
+  }else{
+    childCommentId.value = null;
+  }
+  inputComment.value = "";
   showItemId.value = item.id;
 };
 </script>
