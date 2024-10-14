@@ -9,6 +9,7 @@ import {scrollSetToc, setAttribute} from "@/static/modules/utils";
 import {useArticleStore} from "@/store/articleStore";
 import {getWebInfo} from "@/api/webInfo";
 import {useWebInfoStore} from "@/store/webInfoStore";
+import {switchThemeType} from "~/utils/utils";
 
 const {$viewport} = useNuxtApp();
 const articleStore = useArticleStore();
@@ -56,13 +57,20 @@ function scrollHandler() {
     console.log(e);
   }
 }
-
+const now = new Date();
+const hour = ref(now.getHours());
 onMounted(() => {
   if (process.client) {
     if ($viewport.isLessThan("tablet")) {
       setAttribute("scroll", "scroll");
     } else {
       scrollHandler();
+    }
+    // 判断当前时间
+    if (hour.value >= 6 && hour.value < 20) {
+      switchThemeType("light");
+    } else {
+      switchThemeType("dark");
     }
   }
 });
@@ -75,7 +83,8 @@ nextTick(async () => {
 <template>
   <div>
     <NuxtLoadingIndicator />
-    <loading :show="!webInfoStore.webInfo" />
+    <loading :show="(!webInfoStore.webInfo)&&(hour >= 7 && hour <= 20)" />
+    <loadingDark :show="(!webInfoStore.webInfo)&&(hour < 7||hour > 20)" />
     <div
       id="basic"
       class="hm-font font-size-medium w-full h-screen flex flex-col relative"
