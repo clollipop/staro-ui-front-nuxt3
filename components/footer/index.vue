@@ -5,7 +5,10 @@ const authorInfo = new AuthorImpl();
 
 </script>
 <template>
-  <footer class="font-size-small rounded-t-lg w-full mt-7">
+  <footer
+    id="footer"
+    class="font-size-small rounded-t-lg w-full mt-7"
+  >
     <div class="footer-container flex justify-between w-full">
       <ul class="text-left">
         <li>

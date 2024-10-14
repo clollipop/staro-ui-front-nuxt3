@@ -6,6 +6,20 @@
   "description": "博客项目",
   "glyphs": [
     {
+      "icon_id": "1241246",
+      "name": "多云",
+      "font_class": "sun",
+      "unicode": "e62d",
+      "unicode_decimal": 58925
+    },
+    {
+      "icon_id": "36983378",
+      "name": "睡眠",
+      "font_class": "shuimian",
+      "unicode": "e62e",
+      "unicode_decimal": 58926
+    },
+    {
       "icon_id": "41155328",
       "name": "停止",
       "font_class": "stop",

@@ -7,10 +7,15 @@ export const useMenuStore = defineStore("menuStoreId", {
       menu: [{
         title: "置顶",
         icon: "ArrowUpCircleIcon"
-      }, {
-        title: "主题",
-        icon: "SparklesIcon"
-      } as Menu]
+      },
+      {
+        title: "底部",
+        icon: "ArrowDownCircleIcon"
+      },
+        {
+          title: "主题",
+          icon: "SparklesIcon"
+        } as Menu]
     };
   },
   actions: {
@@ -19,12 +24,18 @@ export const useMenuStore = defineStore("menuStoreId", {
         {
           title: "置顶",
           icon: "ArrowUpCircleIcon"
-        }, {
-          title: "评论区",
-          icon: "ChatBubbleOvalLeftEllipsisIcon"
-        }, {
+        },
+        {
+          title: "底部",
+          icon: "ArrowDownCircleIcon"
+        },
+        {
           title: "主题",
           icon: "SparklesIcon"
+        },
+        {
+          title: "评论区",
+          icon: "ChatBubbleLeftEllipsisIcon"
         }
       ];
     },
@@ -33,7 +44,12 @@ export const useMenuStore = defineStore("menuStoreId", {
         {
           title: "置顶",
           icon: "ArrowUpCircleIcon"
-        }, {
+        },
+        {
+          title: "底部",
+          icon: "ArrowDownCircleIcon"
+        },
+        {
           title: "主题",
           icon: "SparklesIcon"
         }

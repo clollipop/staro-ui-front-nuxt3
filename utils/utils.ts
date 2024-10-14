@@ -3,7 +3,7 @@ export function goBack() {
 }
 
 /**
- * 切换主图
+ * 切换主题
  */
 export function switchTheme() {
   const theme = document.body.getAttribute("data-theme");
@@ -12,6 +12,18 @@ export function switchTheme() {
   } else {
     document.body.setAttribute("data-theme", "dark");
   }
+}
+/**
+ * 切换主题
+ */
+export function switchThemeType(type: "dark" | "light") {
+  document.body.setAttribute("data-theme", type);
+}
+/**
+ * 获取当前主题 true: dark false: light
+ */
+export function getTheme() {
+  return document?.body?.getAttribute("data-theme") === "dark";
 }
 
 /**
