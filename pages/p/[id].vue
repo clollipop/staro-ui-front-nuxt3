@@ -30,10 +30,9 @@ const switchColumn = (page: any) => {
   nowIndex.value = page.value - 1;
 };
 
-// 获取与文章ID相关的专栏
+// 获取与文章ID相关的评论
 const getColumnByArticleId = async (articleId: number) => {
   const newColumn = await listTypeComment(articleId,20);
-  console.log("newColumn", newColumn);
   if (newColumn) {
     Object.assign(columnList, newColumn);
   }
@@ -110,6 +109,10 @@ onUnmounted(() => {
   // 重置toc
   articleStore.setTocList([]);
 });
+// 评论区更新 0 评论 1 回复
+const handleUpdateComment = async () => {
+  await getColumnByArticleId(articleId as any);
+}
 </script>
 
 <template>
@@ -248,7 +251,7 @@ onUnmounted(() => {
           <!--     评论区     -->
           <div class="box mt-3 mb-2">
             <div>
-              <Comment :comments="columnList" :articleId="article.id"/>
+              <Comment :comments="columnList" :articleId="article.id"   @update-comment="handleUpdateComment"/>
             </div>
           </div>
           <!--    文章上下      -->

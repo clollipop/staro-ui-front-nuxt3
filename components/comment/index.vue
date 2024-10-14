@@ -238,10 +238,6 @@ const loadEmojis = () => {
 loadEmojis();
 const emojiShow = ref(false);
 const content = ref("");
-const submitMessage = () => {
-  console.log(content.value);
-  content.value = "";
-};
 const getBrow = (index: number) => {
   content.value += faceList.value[index];
   emojiShow.value = false;
@@ -268,17 +264,25 @@ const likeClick = async (item: any) => {
 const cancel = () => {
   showItemId.value = null;
 };
+const emit = defineEmits(["update-comment"]);
 // 提交评论
 const commitComment = async (type:number,comment:any) => {
-  console.log("comment:");
+  // 0 是评论 1 是回复
   console.log(comment);
-  const data = await saveComment({
+  const params = {
     commentContent:type==0 ? content.value : inputComment.value,
     source: props.articleId,
     parentCommentId: type==0 ? 0 :childCommentId.value ? childCommentId.value : showItemId.value as any ,
     parentUserId: type==0 ? null : comment.parentUserId as number,
-    type: Type.Comment
-  });
+    type: Type.Comment,
+    id:null
+  };
+  const data = await saveComment(params);
+  params.id = data.id;
+  emit("update-comment");
+  ElMessage.success("评论成功");
+  content.value = "";
+  showItemId.value = null;
 };
 // 显示评论输入框
 const childCommentId = ref(null);
