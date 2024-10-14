@@ -5,6 +5,7 @@ import type { KeysOf, PickFrom } from "#app/composables/asyncData";
 import type {Ref} from "vue";
 import {useTokenStore} from "@/store/tokenStore";
 import { ElMessage } from "element-plus";
+import {refreshToken} from "@/api/user/auth";
 type MethodType = "GET" | "POST" | "PUT" | "DELETE";
 type UrlType = string | Request | Ref<string | Request> | (() => string | Request);
 
@@ -19,9 +20,8 @@ type HttpOption<T> = UseFetchOptions<ResOptions<T>, T, KeysOf<T>, any>;
 
 // 基础配置
 const BASE_URL = "/blog-api";
-
 // 统一处理错误
-const handleError = (message: string, error: any) => {
+const handleError = async (message: string, error: any) => {
   console.error(message, error);
   ElMessage({
     showClose: true,
@@ -31,7 +31,7 @@ const handleError = (message: string, error: any) => {
 };
 
 // 格式化结果工具函数
-const formatResult = <T>(res: any, handleData: boolean): T | null => {
+const formatResult = async <T>(res: any, handleData: boolean, url?: UrlType, method?: MethodType, params?: Record<string, any>, body?: any, options?: HttpOption<T>): Promise<T | null> => {
   if (!res) {
     ElMessage({
       showClose: true,
@@ -44,11 +44,21 @@ const formatResult = <T>(res: any, handleData: boolean): T | null => {
   if (code == 0) {
     return handleData ? toRaw(data) : toRaw(res);
   } else {
-    ElMessage({
-      showClose: true,
-      message: msg || "操作失败",
-      type: "error"
-    });
+    if (code===401) {
+      const token = useTokenStore();
+      // 无感刷新token
+      const data = await refreshToken();
+      token.seTokenStore(data);
+      // 使用新的 token 重新发送请求
+      const newRes = await request<T>(url as any, method as any, params, body, options);
+      return formatResult<T>(newRes, handleData); // 递归调用 formatResult
+    }else{
+      ElMessage({
+        showClose: true,
+        message: msg || "操作失败",
+        type: "error"
+      });
+    }
     console.error("请求失败：", data);
     return null;
   }
@@ -65,7 +75,6 @@ const request = async <T>(
   try {
     // 生成唯一请求缓存Key
     const cacheKey = hash(url + method + JSON.stringify(params) + JSON.stringify(body));
-    const token = useTokenStore();
     const { pending, data, error } = await useFetch(url, {
       baseURL: BASE_URL,
       key: cacheKey, // 防止重复请求
@@ -75,6 +84,7 @@ const request = async <T>(
       body: method === "POST" || method === "PUT" ? body : undefined,
       lazy: options?.lazy ?? true, // 默认为懒加载
       onRequest({ options }) {
+        const token = useTokenStore();
         // 设置请求头
         options.headers = new Headers(options.headers);
         options.headers.set("Authorization",  "Bearer "+token.tokenData?.accessToken as any || {});
@@ -110,24 +120,24 @@ const request = async <T>(
 
 // 封装的请求方法
 export const useDefaultRequest = {
-  get: async <T=any>(url: string, params?: Record<string, any>, options?: HttpOption<T>): Promise<T | null> => {
+  get: async <T = any>(url: string, params?: Record<string, any>, options?: HttpOption<T>): Promise<T | null> => {
     const res = await request<T>(url, "GET", params, undefined, options);
-    return formatResult<T>(res, true);
+    return await formatResult<T>(res, true, url, "GET", params);
   },
-  post: async <T=any>(url: string, body: any, params?: Record<string, any>, options?: HttpOption<T>): Promise<T | null> => {
+  post: async <T = any>(url: string, body: any, params?: Record<string, any>, options?: HttpOption<T>): Promise<T | null> => {
     const res = await request<T>(url, "POST", params, body, options);
-    return formatResult<T>(res, true);
+    return await formatResult<T>(res, true, url, "POST", params, body);
   },
-  put: async <T=any>(url: string, body: any, params?: Record<string, any>, options?: HttpOption<T>): Promise<T | null> => {
+  put: async <T = any>(url: string, body: any, params?: Record<string, any>, options?: HttpOption<T>): Promise<T | null> => {
     const res = await request<T>(url, "PUT", params, body, options);
-    return formatResult<T>(res, true);
+    return await formatResult<T>(res, true, url, "PUT", params, body);
   },
-  delete: async <T=any>(url: string, body?: any, params?: Record<string, any>, options?: HttpOption<T>): Promise<T | null> => {
+  delete: async <T = any>(url: string, body?: any, params?: Record<string, any>, options?: HttpOption<T>): Promise<T | null> => {
     const res = await request<T>(url, "DELETE", params, body, options);
-    return formatResult<T>(res, true);
+    return await formatResult<T>(res, true, url, "DELETE", params, body);
   },
-  getRawData: async <T=any>(url: string, params?: Record<string, any>, options?: HttpOption<T>): Promise<T | null> => {
+  getRawData: async <T = any>(url: string, params?: Record<string, any>, options?: HttpOption<T>): Promise<T | null> => {
     const res = await request<T>(url, "GET", params, undefined, options);
-    return formatResult<T>(res, true);
+    return await formatResult<T>(res, true, url, "GET", params);
   }
 };

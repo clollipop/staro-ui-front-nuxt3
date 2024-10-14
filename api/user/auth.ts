@@ -1,4 +1,5 @@
-import {useDefaultRequest} from "~/utils/request";
+import {useDefaultRequest} from "@/utils/request";
+import {useTokenStore} from "@/store/tokenStore";
 
 /**
  * 邮箱验证码登录
@@ -39,4 +40,10 @@ export const loginMailCode = (body: LoginMailCode)=> {
 // 发送验证码
 export const sendCode = (body: {mail: string, scene: MailSceneEnum})=> {
   return useDefaultRequest.post(BASE_URL + "/send-email-code",body);
+};
+
+// 刷新令牌
+export const refreshToken = ()=> {
+  const refreshTokenLet = useTokenStore();
+  return useDefaultRequest.post(`${BASE_URL}/refresh-token?refreshToken=${refreshTokenLet.tokenData.refreshToken}`,{});
 };
