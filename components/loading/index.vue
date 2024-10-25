@@ -7,10 +7,6 @@
       <span class="text">Loading</span>
       <span class="spinner" />
     </div>
-    <!--    <div class="loading__animation flex relative items-center justify-center">
-      <div class="animation__1" />
-      <div class="animation__2" />
-    </div>-->
   </div>
 </template>
 

@@ -58,6 +58,12 @@ export const listArticleByLabelId = (labelId: number, pagination: number) => {
 export const addArticleViewCount = (id: number) => {
   return useDefaultRequest.get(BASE_URL + "/addViewCount", {id});
 };
+/**
+ * 查询推荐文章列表 最多6条
+ */
+export const recommendArticleListSix = () => {
+  return useDefaultRequest.get(BASE_URL + "/recommendArticleListSix", {});
+};
 
 
 
