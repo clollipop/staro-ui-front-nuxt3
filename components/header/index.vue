@@ -2,11 +2,13 @@
 import {useGlobalStore} from "@/store/globalStore";
 import {useUserStore} from "@/store/userStore";
 import {useTokenStore} from "@/store/tokenStore";
+import type {Ref} from "vue";
 
 const globalState = useGlobalStore();
 
 function back2Home() {
   navigateTo("/");
+
 }
 const {$viewport} = useNuxtApp();
 const isMobile = $viewport.isLessThan("tablet");
@@ -54,6 +56,15 @@ const commandHandle = (command: string | number | object) => {
     // 个人信息
     skip("userInfo");
   }
+};
+/**
+ * 打开侧边栏
+ */
+// 注入响应式的值
+// 注入父组件提供的drawer状态
+const drawer = inject("drawer") as Ref<boolean>; 
+const openDrawer = () => {
+  drawer.value = true;
 };
 </script>
 <template>
@@ -119,8 +130,7 @@ const commandHandle = (command: string | number | object) => {
         友 链
       </span>
     </div>
-
-    <div class="right cursor-pointer absolute right-7 flex items-center">
+    <div :class="`right cursor-pointer absolute flex items-center ${isMobile ? 'right-3' : 'right-7'}`">
       <!--  搜索  -->
       <span
         class="normal-svg right__item hover-shadow hvr-icon-scale-shake"
@@ -132,40 +142,51 @@ const commandHandle = (command: string | number | object) => {
         />
         搜索
       </span>
-      <!--  登录    -->
-      <span
-        v-if="!userStore.userData?.id"
-        class="ml-4 hover-shadow hvr-icon-scale-shake"
-        @click="openLogin()"
-      >
-        <SvgIcon
-          style="font-size: 18px"
-          class="icon-shuijue hvr-icon text-lg"
-          icon="shuijue"
-        />
-        登录
-      </span>
-      <!-- 登录成功-->
-      <el-dropdown
+      <div v-if="!isMobile">
+        <!--  登录    -->
+        <span
+          v-if="!userStore.userData?.id"
+          class="ml-4 hover-shadow hvr-icon-scale-shake"
+          @click="openLogin()"
+        >
+          <SvgIcon
+            style="font-size: 18px"
+            class="icon-shuijue hvr-icon text-lg"
+            icon="shuijue"
+          />
+          登录
+        </span>
+        <!-- 登录成功-->
+        <el-dropdown
+          v-else
+          @command="commandHandle"
+        >
+          <el-avatar
+            class="ml-6"
+            :src="'https://q1.qlogo.cn/g?b=qq&nk=1792945133&s=640'"
+          />
+          <template #dropdown>
+            <el-dropdown-menu>
+              <el-dropdown-item command="info">
+                个人信息
+              </el-dropdown-item>
+              <el-dropdown-item command="logout">
+                退出登录
+              </el-dropdown-item>
+            </el-dropdown-menu>
+          </template>
+        </el-dropdown>
+      </div>
+      <div
         v-else
-        @command="commandHandle"
+        @click="openDrawer()"
       >
-        <el-avatar
-          class="ml-6"
-          :src="'https://q1.qlogo.cn/g?b=qq&nk=1792945133&s=640'"
+        <Icon
+          class="hvr-icon text-2xl mt-1 ml-2"
+          name="line-md:menu-unfold-left"
         />
-        <template #dropdown>
-          <el-dropdown-menu>
-            <el-dropdown-item command="info">
-              个人信息
-            </el-dropdown-item>
-            <el-dropdown-item command="logout">
-              退出登录
-            </el-dropdown-item>
-          </el-dropdown-menu>
-        </template>
-      </el-dropdown>
-      <div />
+        <div />
+      </div>
     </div>
   </div>
 </template>

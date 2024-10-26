@@ -74,6 +74,8 @@ onMounted(() => {
     }
   }
 });
+const drawer = ref(false);
+provide("drawer", drawer);
 // 加载网站信息
 nextTick(async () => {
   const webInfo = await getWebInfo();
@@ -87,12 +89,19 @@ nextTick(async () => {
     <loadingDark :show="(!webInfoStore.webInfo)&&(hour < 7||hour > 20)" />
     <div
       id="basic"
-      class="hm-font font-size-medium w-full h-screen flex flex-col relative"
+      class="hm-font font-size-medium w-full flex flex-col relative"
     >
+      <Drawer
+        :model-value="drawer"
+        @update:model-value="drawer = $event"
+      />
       <div
         id="primary"
         class="w-full overflow-y-scroll"
       >
+        <div class="w-full">
+          <Header />
+        </div>
         <NuxtPage v-if="webInfoStore.webInfo" />
         <Footer />
       </div>
@@ -103,6 +112,7 @@ nextTick(async () => {
 
 <style lang="scss">
 #basic {
+  height: 913px;
   color: rgb(var(--z-fontcolor));
   transition: all .3s;
 }

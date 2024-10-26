@@ -4,18 +4,19 @@ import PCPage from "@/layouts/PcHome.vue";
 import MobilePage from "@/layouts/MobileHome.vue";
 // 获取Nuxt应用实例中的$viewport对象
 const {$viewport} = useNuxtApp();
-
 </script>
 
 <template>
-  <!-- 根据视口大小选择显示移动端或PC端页面 -->
-  <div v-if="$viewport.isLessThan('tablet')">
-    <!-- 如果视口小于平板尺寸，显示移动端页面 -->
-    <MobilePage />
-  </div>
-  <div v-else>
-    <!-- 否则，显示PC端页面 -->
-    <PCPage />
+  <div>
+    <!-- 根据视口大小选择显示移动端或PC端页面 -->
+    <div v-if="$viewport.isLessThan('tablet')">
+      <!-- 如果视口小于平板尺寸，显示移动端页面 -->
+      <MobilePage />
+    </div>
+    <div v-else>
+      <!-- 否则，显示PC端页面 -->
+      <PCPage />
+    </div>
   </div>
 </template>
 

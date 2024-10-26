@@ -11,14 +11,11 @@ useSeoMeta({
 
 <template>
   <div>
-    <div class="w-full">
-      <Header />
-    </div>
     <div
       id="main"
       class="page flex"
     >
-      <div class="comment-content w-full h-screen p-5 rounded-lg">
+      <div class="comment-content w-full p-5 rounded-lg">
         <Comment />
       </div>
       <Sidebar />
@@ -27,6 +24,7 @@ useSeoMeta({
 </template>
 <style lang="scss" scoped>
 .comment-content {
+  height: 100vw;
   background: rgba(var(--z-common-bg), .6);
 }
 </style>

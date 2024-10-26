@@ -110,6 +110,9 @@ onMounted(async () => {
     getRecommendArticles();
   });
 });
+const showArticleDetail = (article: any) => {
+  navigateTo(`/p/${article.id}`);
+};
 </script>
 
 <template>
@@ -138,7 +141,10 @@ onMounted(async () => {
             v-for="item in recommendArticles"
             :key="item.id"
           >
-            <div class="carousel-card">
+            <div
+              class="carousel-card"
+              @click="showArticleDetail(item)"
+            >
               <img
                 :src="item?.image || webInfoStore.getRandomAvatar()"
                 alt="Image"
@@ -229,6 +235,7 @@ onMounted(async () => {
     gap: 15px;
   }
   .carousel-container {
+    max-width: 295px;
     height: 300px !important;
     background: rgba(var(--z-global-bg), 0.9) !important;
   }
@@ -284,7 +291,7 @@ onMounted(async () => {
   border-radius: 20px;
   border: 1px solid #ffffff;
   overflow: hidden;
-  width: 96.8%;
+  width: 64.2rem;
   background: rgba(var(--z-global-bg), 0.6);
 }
 

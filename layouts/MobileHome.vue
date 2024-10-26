@@ -1,8 +1,5 @@
 <template>
   <div>
-    <div class="w-full">
-      <Header />
-    </div>
     <Welcome />
     <main id="main">
       <Post />

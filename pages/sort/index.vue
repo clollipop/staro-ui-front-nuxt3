@@ -64,9 +64,6 @@ const {$viewport} = useNuxtApp();
 
 <template>
   <div>
-    <div class="w-full">
-      <Header />
-    </div>
     <!--  标题封面  -->
     <title-cover
       :title="'分类'"
@@ -74,7 +71,7 @@ const {$viewport} = useNuxtApp();
     <!--  内容  -->
     <div
       id="main"
-      class="page flex"
+      class="page-sort flex"
     >
       <div class="page-content w-full">
         <div class="scrollable box-header">
@@ -129,8 +126,8 @@ const {$viewport} = useNuxtApp();
 
 <style lang="scss" scoped>
 @import "@/static/css/elementPlus.scss";
-.page{
- padding-top: 10px;
+.page-sort {
+  padding: 10px 20px;
 }
 .sort_mask{
   min-height: 300px;

@@ -465,16 +465,18 @@ const handleUpdateComment = async () => {
 }
 
 @media (max-width: 768px) {
+  .article__info-title {
+    margin-top: 30px;
+  }
   .article__content {
-    width: 50vh !important;
-    min-height: 50vh !important;
-    max-width: 52vh !important;
+    width: 20vw !important;
+    min-width: 97vw !important;
+    min-height: 20vw !important;
+    max-width: 20vw !important;
   }
   .article-content {
-    width: 45vh !important;
+    width: 97vw !important;
     margin: 0 auto;
-    min-height: 50vh !important;
-    max-width: 52vh !important;
   }
   .article-time {
     width: 330px;

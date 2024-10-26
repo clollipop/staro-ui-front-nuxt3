@@ -98,9 +98,6 @@ useSeoMeta({
 
 <template>
   <div>
-    <div class="w-full">
-      <Header />
-    </div>
     <!-- 背景图片 -->
     <div class="bg-img" />
     <div class="barrage">

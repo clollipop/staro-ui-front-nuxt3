@@ -1,8 +1,5 @@
 <template>
   <div>
-    <div class="w-full mb-32">
-      <Header />
-    </div>
     <div id="userInfo" class="profile-container relative">
       <div class="avatar">
         <el-avatar
