@@ -10,7 +10,6 @@ import {useArticleStore} from "@/store/articleStore";
 import {getWebInfo} from "@/api/webInfo";
 import {useWebInfoStore} from "@/store/webInfoStore";
 import {switchThemeType} from "~/utils/utils";
-
 const {$viewport} = useNuxtApp();
 const articleStore = useArticleStore();
 const webInfoStore = useWebInfoStore();
@@ -77,9 +76,13 @@ onMounted(() => {
 const drawer = ref(false);
 provide("drawer", drawer);
 // 加载网站信息
+const env = useRuntimeConfig().public.env;
 nextTick(async () => {
   const webInfo = await getWebInfo();
   webInfoStore.setWebInfoStore(webInfo);
+  if (env === "production") {
+    await import ("@/utils/banDebug");
+  }
 });
 </script>
 <template>
@@ -92,6 +95,7 @@ nextTick(async () => {
       class="hm-font font-size-medium w-full flex flex-col relative"
     >
       <Drawer
+        v-if="webInfoStore.webInfo"
         :model-value="drawer"
         @update:model-value="drawer = $event"
       />
@@ -100,7 +104,7 @@ nextTick(async () => {
         class="w-full overflow-y-scroll"
       >
         <div class="w-full">
-          <Header />
+          <Header v-if="webInfoStore.webInfo" />
         </div>
         <NuxtPage v-if="webInfoStore.webInfo" />
         <Footer />

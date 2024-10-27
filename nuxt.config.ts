@@ -1,6 +1,13 @@
 import prismjs from "vite-plugin-prismjs";
 
 export default defineNuxtConfig({
+  runtimeConfig: {
+    // 这里定义的  这个属性只能在服务端获取到
+    // public对象中的属性，服务端和客户端都能获取到
+    public: {
+      env: "development"  // 环境变量 production 或者 development
+    }
+  },
   app: {
     head: {
       title: "Star博客",
