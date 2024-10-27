@@ -247,4 +247,14 @@ function onCancel() {
     }
   }
 }
+@media (max-width: 768px) {
+  .friend {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    min-height: 80vh;
+  }
+
+}
 </style>
