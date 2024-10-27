@@ -37,3 +37,11 @@ export function generateNumericUUID(length = 12) {
   }
   return numericUUID;
 }
+
+/**
+ * 跳转到指定url
+ * @param url
+ */
+export function hrefToUrl(url: string) {
+  window.open(url,"_blank");
+}
