@@ -136,7 +136,7 @@ function showArticleDetail(article: any) {
               class="icon-shequpinglun article-tags text-sm text-gray-600"
               icon="shequpinglun"
             />
-            0 条评论
+            {{ article.commentCount }} 条评论
           </span>
         </span>
       </p>

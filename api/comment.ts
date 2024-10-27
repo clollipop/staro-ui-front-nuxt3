@@ -1,9 +1,9 @@
 import {useDefaultRequest} from "@/utils/request";
 import type {CommentItem, TopCommentItem, Comment} from "@/types/commentInterface";
 export enum Type {
-  Comment     = 0, // 评论
-  Leave    = 1, // 2:树洞留言
-  Love      = 2 // 3：家庭情感
+  Comment     = 1, // 评论
+  Leave    = 2, // 2:树洞留言
+  Love      = 3 // 3：家庭情感
 }
 export interface CommentInterface {
   source: number; // 文章id

@@ -1,6 +1,9 @@
 <template>
   <div>
-    <div id="userInfo" class="profile-container relative">
+    <div
+      id="userInfo"
+      class="profile-container relative"
+    >
       <div class="avatar">
         <el-avatar
           :src="'https://q1.qlogo.cn/g?b=qq&nk=1792945133&s=640'"
@@ -9,11 +12,17 @@
         />
       </div>
       <div class="user-info">
-        <h2 class="user-name">Star</h2>
-        <p class="user-email">star@qq.com</p>
-        <p class="user-bio">小菜鸡~~~</p>
+        <h2 class="user-name">
+          Star
+        </h2>
+        <p class="user-email">
+          star@qq.com
+        </p>
+        <p class="user-bio">
+          小菜鸡~~~
+        </p>
         <div class="user-stats">
-          <div class="stat">
+          <div class="stat" style="width: 100%; text-align: center;">
             <strong>等级: </strong> 青铜
           </div>
           <div class="stat">
@@ -44,7 +53,7 @@
   position: relative;
   text-align: center;
   padding: 60px 20px 40px;
-  margin: 0 auto;
+  margin: 150px auto 90px ;
 }
 
 .avatar-center {

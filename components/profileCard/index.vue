@@ -20,18 +20,21 @@
         <div class="stats">
           <div>
             <span>文章</span>
-            <div>20</div>
+            <div>{{ data.articleCount }}</div>
           </div>
           <div>
             <span>标签</span>
-            <div>20</div>
+            <div>{{ data.labelCount }}</div>
           </div>
           <div>
             <span>分类</span>
-            <div>20</div>
+            <div>{{ data.sortCount }}</div>
           </div>
         </div>
-        <button class="action-button flex">
+        <button
+          class="action-button flex"
+          @click="hrefToUrl('https://www.baidu.com')"
+        >
           前往小家...
           <span
             class="moving-icon"
@@ -46,7 +49,7 @@
       <div class="card-footer">
         <div class="icon-buttons">
           <a
-            href="https://github.com/yourusername"
+            href="mailto:1792945133@qq.com"
             class="icon-button"
             style="background-color:#f6f8fa;"
           >
@@ -56,7 +59,7 @@
             />
           </a>
           <a
-            href="mailto:your.email@example.com"
+            href="https://github.com/clollipop"
             class="icon-button"
             style="background-color:#f6f8fa;"
           >
@@ -81,6 +84,7 @@ nextTick(async () => {
   // 直接从 store 获取数据
   data.value = webInfoStore.webInfo;
 });
+
 </script>
 
 <style scoped lang="scss">
