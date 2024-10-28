@@ -9,7 +9,7 @@ import {scrollSetToc, setAttribute} from "@/static/modules/utils";
 import {useArticleStore} from "@/store/articleStore";
 import {getWebInfo} from "@/api/webInfo";
 import {useWebInfoStore} from "@/store/webInfoStore";
-import {switchThemeType} from "~/utils/utils";
+import {switchThemeType} from "@/utils/utils";
 const {$viewport} = useNuxtApp();
 const articleStore = useArticleStore();
 const webInfoStore = useWebInfoStore();
@@ -107,7 +107,9 @@ nextTick(async () => {
           <Header v-if="webInfoStore.webInfo" />
         </div>
         <NuxtPage v-if="webInfoStore.webInfo" />
-        <Footer />
+        <div class="w-full">
+          <Footer />
+        </div>
       </div>
       <Menu />
     </div>
@@ -115,6 +117,14 @@ nextTick(async () => {
 </template>
 
 <style lang="scss">
+* {
+  padding: 0;
+  margin: 0;
+}
+body {
+  // 隐藏滚动条
+  overflow: hidden;
+}
 #basic {
   height: 913px;
   color: rgb(var(--z-fontcolor));

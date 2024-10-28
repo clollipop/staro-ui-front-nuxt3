@@ -7,11 +7,13 @@ import type {Ref} from "vue";
 const globalState = useGlobalStore();
 
 function back2Home() {
+  isHovered.value = false;
   navigateTo("/");
-
 }
+
 const {$viewport} = useNuxtApp();
 const isMobile = $viewport.isLessThan("tablet");
+
 /**
  * 界面跳转
  * @param path
@@ -21,6 +23,7 @@ function skip(path: string) {
 }
 
 const isHovered = ref(false);
+
 /**
  * 打开搜索功能
  */
@@ -42,7 +45,7 @@ const userStore = useUserStore();
 const tokenStore = useTokenStore();
 /* 登录成功回调 */
 const successLogin = async () => {
-  
+
 };
 /**
  * 下拉框点击事件
@@ -52,7 +55,13 @@ const commandHandle = (command: string | number | object) => {
   if (command === "logout") {
     userStore.reset();
     tokenStore.reset();
-  }else if (command === "info") {
+    // 保存用户信息
+    ElMessage.success({
+      message: "退出登录成功",
+      type: "success",
+      duration: 100000
+    });
+  } else if (command === "info") {
     // 个人信息
     skip("userInfo");
   }
@@ -62,7 +71,7 @@ const commandHandle = (command: string | number | object) => {
  */
 // 注入响应式的值
 // 注入父组件提供的drawer状态
-const drawer = inject("drawer") as Ref<boolean>; 
+const drawer = inject("drawer") as Ref<boolean>;
 const openDrawer = () => {
   drawer.value = true;
 };
@@ -75,7 +84,7 @@ const openDrawer = () => {
   />
   <div
     id="nav"
-    class="ss-font stress bottom-line-1 fixed flex items-center justify-center top-0 rounded-b-xl"
+    class="ss-font stress bottom-line-1 fixed flex items-center justify-center top-0 "
   >
     <!--  网站名  -->
     <div
@@ -196,12 +205,14 @@ const openDrawer = () => {
   border: 1px solid rgba(0, 0, 0, 0.1); /* 添加轻微的实线边框 */
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* 添加虚化的阴影 */
 }
+
 #nav {
   height: 58px;
   width: inherit;
   z-index: 9;
   letter-spacing: 0.08em;
   color: rgb(var(--z-fontcolor));
+  border-radius: 0 0 5px 5px; ;
 }
 
 /* 添加背景渐变的动画 */
@@ -216,6 +227,7 @@ const openDrawer = () => {
     background: linear-gradient(120deg, #ffd1dc 0%, #a1eafb 50%, #ffcef3 100%);
   }
 }
+
 /* 添加黑夜背景渐变的动画 */
 @keyframes backgroundGradientDark {
   0% {
@@ -228,6 +240,7 @@ const openDrawer = () => {
     background: linear-gradient(120deg, #2c3e50 0%, #4ca1af 50%, #2c3e50 100%);
   }
 }
+
 // 滚动
 [scroll="scroll"] #nav {
   border-bottom: 1px solid rgba(102, 102, 102, .05);
