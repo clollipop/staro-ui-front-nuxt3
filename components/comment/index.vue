@@ -55,14 +55,14 @@
     </div>
     <!-- 评论展示和评论回复列表   -->
     <div
-      v-for="item in comments"
+      v-for="item in commentList"
       :key="item.id"
       class="comment"
     >
       <div class="info">
         <img
           class="avatar"
-          :src="item.avatar ||webInfoStore.getRandomAvatar()"
+          :src="item.avatar"
           width="36"
           height="36"
           alt="头像"
@@ -177,7 +177,7 @@
               >取消</span>
               <el-button
                 class="btn"
-                type="success"
+                type="primary"
                 round
                 @click="commitComment(1,item)"
               >
@@ -249,6 +249,22 @@ const getBrowInputComment = (index: number) => {
 watch(() => props.comments, (newComments) => {
   console.log(newComments);
 });
+
+// 为评论分配随机头像
+const commentList = ref();
+const assignRandomAvatars = () => {
+  const avatars = props.comments.map((comment : any) => {
+    return {
+      ...comment,
+      avatar: comment.avatar || webInfoStore.getRandomAvatar() // 保持原有头像，若无则随机分配
+    };
+  });
+  commentList.value = avatars;
+};
+watchEffect(() => {
+  assignRandomAvatars();
+});
+
 // 点赞
 const likeClick = async (item: any) => {
   if (item.isLike === null) {
@@ -304,7 +320,7 @@ $color-warning: #E6A23C;
 $color-danger: #F56C6C;
 $color-info: #909399;
 
-$text-main: #303133;
+$text-main: #909399;
 $text-normal: #606266;
 $text-minor: #909399; //次要文字
 $text-placeholder: #C0C4CC;
