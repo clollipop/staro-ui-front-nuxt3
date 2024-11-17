@@ -59,7 +59,7 @@ const commandHandle = (command: string | number | object) => {
     ElMessage.success({
       message: "退出登录成功",
       type: "success",
-      duration: 100000
+      duration: 1000
     });
   } else if (command === "info") {
     // 个人信息

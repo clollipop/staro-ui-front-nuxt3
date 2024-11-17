@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from "vue";
+import { ref } from "vue";
 import { MagnifyingGlassIcon, XMarkIcon } from "@heroicons/vue/24/solid";
 import { useGlobalStore } from "@/store/globalStore";
 import { useSearchStore } from "@/store/searchStore";
@@ -59,6 +59,7 @@ function goSearch(item: string) {
           <div class="search-container__select">
             <div
               v-for="item in selectList"
+              :key="item"
               class="hover-transparent select-item flex items-center justify-between cursor-pointer"
               @click="goSearch(item)"
             >

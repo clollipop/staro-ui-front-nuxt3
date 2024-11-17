@@ -8,3 +8,10 @@
 ::v-deep(.el-pagination li) {
     border-radius: 5px;
 }
+/**
+消息提示框样式
+ */
+::v-deep(.el-message--success) {
+    --el-message-text-color: #2db7f5;
+    border:1px dashed  blue;
+}
